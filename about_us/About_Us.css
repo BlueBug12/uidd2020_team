@@ -2,6 +2,7 @@ html, body{
   position:absolute;
   height: 100%;
   width:100%;
+  z-index:0;
 }
 *{
   margin: 0;
@@ -10,10 +11,10 @@ html, body{
 #section_1{
   position:absolute;
   background-color:#F4DF62;
-  top:15%;
   bottom:0;
-  height:85%;
+  height:100%;
   width:100%;
+  z-index:-1;
 }
 #section_2{
 
@@ -24,7 +25,7 @@ html, body{
 nav {
   position:absolute;
   margin: 15px 50px 0px 50px;
-
+  z-index:10;
 }
 nav a{
   color: inherit;
@@ -38,13 +39,16 @@ nav a{
 }
 
 #navbar{
-  border-bottom:#799FB4 solid 4px;
-  top:20px;
+  position:absolute;
+  width:92%;
+  border-bottom:#799FB4 solid 3px;
+  margin:15px 4% 0px 4%;
+  
 }
 nav > ul{
   position:absolute;
   list-style:none;
-  right:10px;
+  right:0;
   margin:0;
   color:#799FB4;
   padding:0;
@@ -60,8 +64,73 @@ nav a:hover{
 
 .nav-bg{
   position:fixed;
-  height:15%;;
+  height:80px;
   width:100%;
   background-color: #F7F6E4;
-  padding:0;
+
 }
+
+#house{
+ text-align: center;
+ 
+}
+#top-house{
+  position:absolute;
+  left:31%;
+  z-index:2;
+  bottom:34%;
+}
+#bottom-house{
+  position:absolute;
+  left:33%;
+  bottom:14%;
+  z-index:0;
+}
+#topic{
+  position:absolute;
+  left:10%;
+  bottom:25%;
+  z-index:3;
+}
+#know-more{
+  position:absolute;
+  left:10%;
+  bottom:20%;
+  z-index:3;
+}
+#know-more:hover{
+  filter: drop-shadow(5px 5px 20px white);
+  cursor:pointer;
+}
+#houseworks{
+  position:absolute;
+  width:100%;
+  height:100%;
+  visibility:hidden;
+  z-index:1;
+}
+.works{
+  position:absolute;
+	animation-delay:700ms;
+}
+#w1{
+  top:50%;
+  left:10%
+}
+#w2{
+  top:40%;
+  left:30%
+}
+#w3{
+  top:50%;
+  left:45%
+}
+#w4{
+  top:40%;
+  left:70%
+}
+#w5{
+  top:50%;
+  left:80%
+}
+
