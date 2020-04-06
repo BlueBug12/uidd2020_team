@@ -1,4 +1,8 @@
-html, body{
+@font-face{
+  font-family:;
+  src: url("./font/.ttf");
+}
+html,body{
   position:absolute;
   height: 100%;
   width:100%;
@@ -49,7 +53,7 @@ nav a{
 }
 #logo{
   position:absolute;
-
+  bottom:25%;
 }
 
 #navbar{
@@ -90,9 +94,9 @@ li{
 }
 #top-house{
   position:absolute;
-  left:31vw;
+  left:32vw;
   z-index:2;
-  bottom:34vh;
+  bottom:32vh;
 }
 #bottom-house{
   position:absolute;
@@ -100,12 +104,14 @@ li{
   bottom:14vh;
   z-index:0;
 }
+
 #base{
   position:absolute;
-  left:35vw;
+  left:32vw;
   bottom:4vh;
   z-index:-1;
 }
+
 #topic{
   position:absolute;
   left:10vw;
@@ -134,24 +140,24 @@ li{
 	animation-delay:700ms;
 }
 #w1{
-  top:50vh;
-  left:10vw;
+  top:50%;
+  left:10%;
 }
 #w2{
-  top:40vh;
-  left:30vw;
+  top:40%;
+  left:30%;
 }
 #w3{
-  top:50vh;
-  left:45vw;
+  top:54%;
+  left:49%;
 }
 #w4{
-  top:40vh;
-  left:70vw;
+  top:40%;
+  left:70%;
 }
 #w5{
-  top:50vh;
-  left:80vw;
+  top:50%;
+  left:80%;
 }
 #darker-bg{
   position:absolute;
@@ -168,4 +174,43 @@ li{
   height:100%;
 }
 
+#sub-section-2{
+  position:absolute;
+  width:50%;
+  height:100%;
+  z-index:1;
+}
+.pg2-house{
+  width:40%;
+  position:absolute;
+  height:100%;
+  left:35%;
+}
+#top2{
+  left:32%;
+  top:27vh;
+  z-index:3;
+}
+#bottom2{
+  left:33%;
+  top:44vh;
+  z-index:2;
+}
+#base2{
+  left:32%;
+  width:41%;
+  top:55vh;
+  z-index:1;
+}
 
+#houseworks-pg2{
+  position:absolute;
+  width:35%;
+  z-index:2;
+}
+
+.works2{
+  position:absolute;
+  width:10%;
+  z-index:2;
+}

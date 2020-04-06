@@ -1,19 +1,26 @@
 $(function(){
   $('#know-more').on('click',function(){
-    $('#topic').transition('fade',300)
-    $(this).transition('fade',300)
+    $('#topic,#know-more').addClass('animated fadeOut')
+//    $('#topic').transition('fade',300)
+  //  $(this).transition('fade',300)
     $('#darker-bg').animate({opacity:"0"}).css("z-index","-1")
-    $('#top-house').animate({bottom:"40%"})
-    $('#bottom-house').animate({bottom:"0%"})
-    $('#base').animate({bottom:"-7%"})
-    $('#houseworks').delay(300).css('visibility','visible')
-		$('.works').delay(300).addClass('animated fadeIn')
-   // $('#bottom-house,#top-house,#base').delay(2000).animate({width:"30vw"})
-   // $('#w1,#w2,#w3,#w4,#w5').delay(2000).animate({width:"1vw"})
-   // $('#top-house').delay(2000).animate({width:"30vw"}) 
-   // $('#base').delay(2000).animate({width:"30vw"})
+    $('#top-house').animate({bottom:"40%"},1000)
+    $('#bottom-house').animate({bottom:"0%"},1000)
+    $('#base').animate({bottom:"-7%"},1000)
+    $('#houseworks').delay(1400).css('visibility','visible')
+		$('#w1').delay(1400).addClass('animated fadeInUp')
+		$('#w2').delay(1400).addClass('animated fadeInDown')
+		$('#w3').delay(1400).addClass('animated fadeInUp')
+		$('#w4').delay(1400).addClass('animated fadeInDown')
+		$('#w5').delay(1400).addClass('animated fadeInUp')
+    $('#sub-section-2').css('visibility','hidden')
 
-    $('html, body').delay(2000).animate({ scrollTop: $('#section_2').offset().top}, 500, 'linear');
+    $('html, body').delay(2500).animate({ scrollTop: $('#section_2').offset().top}, 500, 'linear',function(){ 
+      setTimeout(function(){
+        $('#sub-section-2').addClass('animated bounceInDown').css('visibility','visible')
+      },100);
+    })
+    //$('#house').delay(2300).css('visibility','visible')
 		
 		/*
     $('#section_1_sub').delay(2000).animate({
@@ -24,6 +31,12 @@ $(function(){
   })
 })
 
+$(function () {
+  $(window).scroll(function () {
+    var scrollVal = $(this).scrollTop();
+    console.log(scrollVal);
+  });
+});
 /*
 $(function() {
     $('a[href*=\\#]').on('click', function(e) {
