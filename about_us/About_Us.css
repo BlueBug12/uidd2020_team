@@ -37,7 +37,9 @@ img{
   overflow:hidden;
 }
 #section_3{
-
+  position: relative;
+  width: 100vw;
+  height: 100vh;
 }
 nav {
   position:absolute;
@@ -408,4 +410,128 @@ li{
   top: 25%;
   position: absolute;
   opacity: 0;
+}
+
+#title{
+  display: block;
+  position: absolute;
+  width: 15%;
+  height: 15%;
+  top: 0.8vh;
+  left:2vw;
+  z-index: 1;
+}
+#titleImg {
+  width: 20vw;
+  height: auto;;
+  position: absolute;
+  
+}
+#content_3{
+  background-color: #799FB4;
+  display: block;
+  position: absolute;
+  width: 100vw;
+  height: 75vh;
+  top:15vh;
+}
+#row_1{
+  display: flex;
+  position: relative;
+  width: 90vw;
+  height: 30vh;
+  left:5vw;
+  top:4vw;
+}
+#row_2{
+  display: flex;
+  position: relative;
+  width: 90vw;
+  height: 30vh;
+  left:5vw;
+  top:4vw;
+}
+.column{
+  display: inline-block;
+  position: absolute;
+  width: 20vw;
+  height: 30vh;
+  padding-right: 10vw;
+}
+.teammemberName{
+  display: inline-block;
+  height: auto;
+  width:14vw;
+  max-width:100%;
+  position: absolute;
+  margin-left: 1vw;
+  z-index: 1;
+}
+.teammemberPic{
+  display: inline-block;
+  height: auto;
+  width: 8.5vw;
+  max-width:100%;
+  position: absolute;
+  z-index: 2;
+  top:6vh;
+  left:3.7vw;
+}
+.teammemberPic2{
+  display: inline-block;
+  visibility: hidden;
+  height: auto;
+  width: 8.5vw;
+  max-width:100%;
+  position: absolute;
+  z-index: 3;
+  top:6vh;
+  left:3.7vw;
+}
+.column:hover .teammemberPic2 {
+  visibility: visible;
+  cursor: pointer;
+}
+.intro{
+  display: inline-block;
+  height: auto;
+  width: 16vw;
+  max-width:100%;
+  position: absolute;
+  top:7vh;
+}
+@font-face {
+  font-family: GenJyuuGothic-Medium;
+  src: url("./font/GenJyuuGothic-Medium.ttf") 
+}
+@font-face {
+  font-family: GenJyuuGothic-Light;
+  src: url("./font/GenJyuuGothic-Light.ttf") 
+}
+.Name{
+  font-family: 'GenJyuuGothic-Medium';
+  font-size: 3vmin;
+  position: absolute;
+  top:3vh;
+  left: 3vw;
+  color: #F7F6E4;
+}
+.line{
+  font-family: 'GenJyuuGothic-Medium';
+  font-size: 3vmin;
+  position: absolute;
+  top:3vh;
+  left:7.5vw;
+  color: #F4DF62;
+}
+.intro_text{
+  display: inline-block;
+  text-align: left;
+  font-family: 'GenJyuuGothic-Light';
+  font-size:2vmin;
+  position: absolute;
+  top: 12vh;
+  margin-left: 3.5vw;
+  width: 12vw;
+  color: #F7F6E4;
 }
