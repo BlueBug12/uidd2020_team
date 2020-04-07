@@ -1,4 +1,5 @@
 $(function(){
+  $('body').css({"overflow-y": "hidden"})
   $('#know-more').on('click',function(){
     $('#topic,#know-more').addClass('animated fadeOut')
     $('#darker-bg').animate({opacity:"0"}).css("z-index","-1")
@@ -13,7 +14,10 @@ $(function(){
 		$('#w5').delay(1400).addClass('animated fadeInUp')
     $('#sub-section-2').css('visibility','hidden')
 
-    $('html, body').delay(2500).animate({ scrollTop: $('#section_2').offset().top}, 500, 'linear',function(){ 
+    setTimeout(() => {
+        $('body').css("overflow-y", "scroll")
+    }, 2400)
+    $('html, body').delay(2000).animate({ scrollTop: $('#section_2').offset().top}, 500, 'linear',function(){ 
         $('#sub-section-2').addClass('animated bounceInDown').css('visibility','visible')
     })
     $('#know-more').transition('fade');
