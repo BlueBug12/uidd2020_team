@@ -27,63 +27,60 @@ $(function(){
 
 $(function() {
   var state = 0;
-  var trash_pos = $('#w4_orange').position();
 
   const track = document.querySelector('.carousel_track');
   const slides = Array.from(track.children);
   const nextButton = document.querySelector('.carousel_button')
-  const slideWidth = slides[0].getBoundingClientRect().width;
 
 
   const setSlidePosition = (slide, index) => {
-      slide.style.left = slideWidth * index + 'px'
+      slide.style.left = 24.6 * index + 'vw'
   }
   slides.forEach(setSlidePosition);
 
 
-  const moveToSlide = (track, currentSlide, targetSlide) => {
+  const moveToSlide = async (track, currentSlide, targetSlide) => {
+      $('.carousel_track').css({transition: "transform 2s ease-in"});
       track.style.transform = 'translateX(-' + targetSlide.style.left + ')';
       currentSlide.classList.remove('current-slide');
       targetSlide.classList.add('current-slide');
+      return new Promise(resolve => {
+          setTimeout(() => {
+              resolve();
+          }, 2000);
+      })
   }
 
-  ;
-  nextButton.addEventListener('click', e => {
+  
+  nextButton.addEventListener('click', async e => {
       const currentSlide = track.querySelector('.current-slide');
       const nextSlide = currentSlide.nextElementSibling;
-      moveToSlide(track, currentSlide, nextSlide);
       if (state == 0) {
           $('#w4_orange').css({opacity: 1});
           $('#w4_orange').css("z-index", "20");
           $('#w4_orange').css("transform", "scale(3.0)");
           $('.disappear').transition({ animation: 'fade left', duration: '3s' });
           $('.fadeout').css({"transform": "scale(3.0)", opacity: 0, transition: '3s'});
+          await moveToSlide(track, currentSlide, nextSlide);
+          $('.carousel_track').css({transition: "0s"});
           state = 1;
           return;
       }
       if (state == 1) {
           $('.example').animate({ opacity: 1.0 }, 2000);
-          var x = trash_pos.left - (parseInt($(document).width()) / 3.5);
-          var y = trash_pos.top - (parseInt($(document).height()) / 2.8);
-          x = -x;
-          y = -y;
-          $('#w4_orange').css("transform", "translate3d(" + x + "px," + y + "px,0)");
-          var x_per = (2 / 3.5) * 100;
-          var y_per = (1 / 2.8) * 100;
-          $('#w4_orange').css("left", x_per + "%");
-          $('#w4_orange').css("top", y_per + "%");
-          $('.fadeout').css({"transform": "scale(3.0)", opacity: 0, transition: '3s'});
+          $('#w4_orange').css({
+              "transform": "scale(1.4)",
+              left: "27.5vw",
+              top: "42vh"
+          });
+          setTimeout(() => {
+              $('#w4_orange').css({transition: "0s"});
+          }, 3000);
+          await moveToSlide(track, currentSlide, nextSlide);
+          $('.carousel_track').css({transition: "0s"});
           state = 2;
           return;
       }
   })
-
-  var back_1 = document.getElementById('back_1');
-  back_1.style.width = document.querySelector('.fir').getBoundingClientRect().width + 'px';
-  var back_2 = document.getElementById('back_2');
-  console.log(back_2);
-  back_2.style.width = document.querySelector('.seco').getBoundingClientRect().width + 'px';
-  var back_3 = document.getElementById('back_3');
-  back_3.style.width = document.querySelector('.thr').getBoundingClientRect().width + 'px';
 
 })

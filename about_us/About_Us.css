@@ -39,7 +39,7 @@ img{
 #section_3{
   position: relative;
   width: 100vw;
-  height: 100vh;
+  height: 90vh;
 }
 nav {
   position:absolute;
@@ -155,15 +155,17 @@ li{
 .background {
     position: absolute;
     top: 20%;
-    bottom: 20%;
+    bottom: 10%;
     width: 100%;
     background-color: #F7F6E4;
 }
 
 .vision {
+    width: 12vw;
+    height: 12vh;
     position: absolute;
     top: 13.5%;
-    left: 2%;
+    left: 4%;
 }
 #w1{
   width: 9.5%;
@@ -199,27 +201,27 @@ li{
   left:80%;
 }
 #w1small{
-  /* width: 9.5%; */
+  width: 10%;
   top:50%;
   left:10%;
 }
 #w2small{
-  /* width: 6%; */
+  width: 10%;
   top:40%;
   left:30%;
 }
 #w3small{
-  /* width: 6%; */
+  width: 10%;
   top:54%;
   left:49%;
 }
 #w4small{
-  /* width: 6%; */
+  width: 10%;
   top:40%;
   left:70%;
 }
 #w5small{
-  /* width: 6%; */
+  width: 10%;
   top:50%;
   left:80%;
 }
@@ -298,14 +300,16 @@ li{
 
 .carousel_track-container {
   position: absolute;
-  width: 100%;
+  width: 24.7vw;
   height: 100%;
   overflow: hidden;
 }
 
 .leftLine {
+  min-width: 0.2vw;
+  height: 40vh;
   position: absolute;
-  bottom: 0;
+  top: 10vh;
 }
 
 .carousel_track {
@@ -345,18 +349,18 @@ li{
 .header {
   align-self: flex-start;
   font-family: GenJyuuGothic-Medium;
-  font-size: 28.12px;
+  font-size: 1.7vw;
   letter-spacing: 0.2em;
   margin-top: 10px;
 }
 
 .text {
-  align-self: center;
   margin-top: 15%;
-  font-size: 18px;
+  font-size: 1.2vw;
   letter-spacing: 0.2em;
-  line-height: 36px;
+  line-height: 5vh;
   font-family: GenJyuuGothic-Light;
+  padding-left: 3vw;
 }
 
 #back_1 {
@@ -364,8 +368,8 @@ li{
   left: 0;
   height: 0.5em;
   position: absolute;
-  width: 0px;
-  top: 0.4em;
+  width: 17vw;
+  top: 13px;
   z-index: -1;
 }
 
@@ -374,8 +378,8 @@ li{
   left: 0;
   height: 0.5em;
   position: absolute;
-  width: 390px;
-  top: 0.4em;
+  width: 23vw;
+  top: 13px;
   z-index: -1;
 }
 
@@ -384,28 +388,31 @@ li{
   left: 0;
   height: 0.5em;
   position: absolute;
-  width: 300px;
-  top: 0.4em;
+  width: 17.5vw;
+  top: 13px;
   z-index: -1;
 }
 
 .rightLine {
+  min-width: 0.2vw;
+  height: 50vh;
   position: absolute;
   z-index: 2;
-  right: -1px;
-  bottom: 0;
+  left: 24.5vw;
+  top: 0;
 }
 
 .carousel_button {
   position: absolute;
-  right: 0;
-  top: 40%;
-  margin-right: -17px;
+  left: calc(24.5vw - 14px);
+  top: 18vh;
   cursor: pointer;
   z-index: 3;
 }
 
 .example {
+  width: 18vw;
+  height: 56vh;
   left: 50%;
   top: 25%;
   position: absolute;
@@ -415,15 +422,15 @@ li{
 #title{
   display: block;
   position: absolute;
-  width: 15%;
-  height: 15%;
-  top: 0.8vh;
-  left:2vw;
+  width: 25%;
+  height: 25%;
+  top:calc(3.4vh - 40px);
+  left:1.5vw;
   z-index: 1;
 }
 #titleImg {
-  width: 20vw;
-  height: auto;;
+  width: 18vw;
+  height: 21vh;
   position: absolute;
   
 }
@@ -433,7 +440,7 @@ li{
   position: absolute;
   width: 100vw;
   height: 75vh;
-  top:15vh;
+  top:calc(15vh - 40px);
 }
 #row_1{
   display: flex;
@@ -522,6 +529,7 @@ li{
   position: absolute;
   top:3vh;
   left:7.5vw;
+  margin: 0;
   color: #F4DF62;
 }
 .intro_text{
