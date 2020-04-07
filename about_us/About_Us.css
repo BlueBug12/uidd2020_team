@@ -118,7 +118,7 @@ li{
 }
 
 #topic{
-  max-width: 70vw;
+  width: 46vw;
   height: 36vh;
   position:absolute;
   left:10vw;
