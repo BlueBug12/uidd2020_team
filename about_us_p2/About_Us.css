@@ -45,6 +45,12 @@ img {
     background-color: #F7F6E4;
 }
 
+.vision {
+    position: absolute;
+    top: 13.5%;
+    left: 2%;
+}
+
 #w1 {
     top: 50%;
     left: 10%;
