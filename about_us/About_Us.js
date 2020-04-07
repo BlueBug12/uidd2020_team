@@ -21,17 +21,17 @@ $(function(){
 })
 
 $(function() {
-  var touch = document.body;
-  var click = 0;
+  // var touch = document.body;
+  // var click = 0;
   var state = 0;
   var trash_pos = $('#w4_orange').position();
-  touch.onclick = function() {
-      if (click == 0) {
-          document.getElementById('w4').style.visibility = 'hidden';
-          click = 1;
-          return;
-      }
-  };
+  // touch.onclick = function() {
+  //     if (click == 0) {
+  //         document.getElementById('w4_orange').style.visibility = 'hidden';
+  //         click = 1;
+  //         return;
+  //     }
+  // };
 
   const track = document.querySelector('.carousel_track');
   const slides = Array.from(track.children);
@@ -57,9 +57,11 @@ $(function() {
       const nextSlide = currentSlide.nextElementSibling;
       moveToSlide(track, currentSlide, nextSlide);
       if (state == 0) {
+          $('#w4_orange').css({opacity: 1});
           $('#w4_orange').css("z-index", "20");
           $('#w4_orange').css("transform", "scale(3.0)");
           $('.disappear').transition({ animation: 'fade left', duration: '3s' });
+          $('.fadeout').css({"transform": "scale(3.0)", opacity: 0, transition: '3s'});
           state = 1;
           return;
       }

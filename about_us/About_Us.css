@@ -173,6 +173,7 @@ li{
   transition: 3s;
   z-index: 0;
   transform: translate3d(0, 0, 0);
+  opacity: 0;
 }
 #w5{
   top:50%;
