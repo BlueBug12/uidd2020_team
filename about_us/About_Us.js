@@ -71,6 +71,7 @@ $(function() {
           return;
       }
       if (state == 1) {
+          $('.fadeout').transition({animation: 'fade', duration: '0s'});
           $('.example').animate({ opacity: 1.0 }, 2000);
           $('#w4_orange').css({
               "transform": "scale(1.4)",
