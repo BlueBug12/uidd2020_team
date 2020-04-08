@@ -497,7 +497,6 @@ li{
 }
 .column:hover .teammemberPic2 {
   visibility: visible;
-  cursor: pointer;
 }
 .intro{
   display: inline-block;
@@ -530,12 +529,12 @@ li{
   font-size: 3vmin;
   position: absolute;
   top:3vh;
-  left: calc(3vw + 9.5vmin);
+  left:calc(3vw + 9.5vmin);
   margin: 0;
   color: #F4DF62;
 }
 .intro_text{
-  display: inline-block;
+  letter-spacing: 0.1em;
   text-align: left;
   font-family: 'GenJyuuGothic-Light';
   font-size:2vmin;
