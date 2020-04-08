@@ -516,6 +516,7 @@ li{
   src: url("./font/GenJyuuGothic-Light.ttf") 
 }
 .Name{
+  display: inline-block;
   font-family: 'GenJyuuGothic-Medium';
   font-size: 3vmin;
   position: absolute;
@@ -524,6 +525,7 @@ li{
   color: #F7F6E4;
 }
 .line{
+  display: inline-block;
   font-family: 'GenJyuuGothic-Medium';
   font-size: 3vmin;
   position: absolute;
