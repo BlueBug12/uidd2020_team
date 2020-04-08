@@ -60,6 +60,7 @@ $(function() {
       const currentSlide = track.querySelector('.current-slide');
       const nextSlide = currentSlide.nextElementSibling;
       if (state == 0) {
+          state = 1;
           $('#w4_orange').css({opacity: 1});
           $('#w4_orange').css("z-index", "20");
           $('#w4_orange').css("transform", "scale(3.0)");
@@ -67,7 +68,6 @@ $(function() {
           $('.fadeout').css({"transform": "scale(3.0)", opacity: 0, transition: '3s'});
           await moveToSlide(track, currentSlide, nextSlide);
           $('.carousel_track').css({transition: "0s"});
-          state = 1;
           return;
       }
       if (state == 1) {
