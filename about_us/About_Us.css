@@ -503,6 +503,7 @@ li{
   height: auto;
   width: 290px;
   max-width:100%;
+  margin-left:1vmin;
   position: absolute;
   top:7vh;
 }
