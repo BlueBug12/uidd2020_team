@@ -461,14 +461,14 @@ li{
 .column{
   display: inline-block;
   position: absolute;
-  width: 20vw;
+  width: 30vh;
   height: 30vh;
   padding-right: 10vw;
 }
 .teammemberName{
   display: inline-block;
   height: auto;
-  width:14vw;
+  width:220px;
   max-width:100%;
   position: absolute;
   margin-left: 1vw;
@@ -477,23 +477,23 @@ li{
 .teammemberPic{
   display: inline-block;
   height: auto;
-  width: 8.5vw;
+  width: 140px;
   max-width:100%;
   position: absolute;
   z-index: 2;
-  top:6vh;
-  left:3.7vw;
+  margin-top:5.5vh;
+  margin-left:calc(1vw + 40px);
 }
 .teammemberPic2{
   display: inline-block;
   visibility: hidden;
   height: auto;
-  width: 8.5vw;
+  width: 140px;
   max-width:100%;
   position: absolute;
   z-index: 3;
-  top:6vh;
-  left:3.7vw;
+  margin-top:5.5vh;
+  margin-left:calc(1vw + 40px);
 }
 .column:hover .teammemberPic2 {
   visibility: visible;
@@ -501,7 +501,7 @@ li{
 .intro{
   display: inline-block;
   height: auto;
-  width: 16vw;
+  width: 270px;
   max-width:100%;
   position: absolute;
   top:7vh;
@@ -549,8 +549,8 @@ li{
   font-family: 'GenJyuuGothic-Light';
   font-size:2vmin;
   position: absolute;
-  top: calc(7vh + 5vmin);
-  margin-left: 7.5vmin;
-  width: 12vw;
+  top: calc(7vh + 3vmin);
+  margin-left: 7vmin;
+  width:  170px;
   color: #F7F6E4;
 }
