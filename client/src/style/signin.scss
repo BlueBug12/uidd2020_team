@@ -1,0 +1,81 @@
+div#signin {
+    width: 100vw;
+    height: 100vh;
+    background-color: #f4df62;
+    text-align: center;
+    div#align {
+        width: 34vw;
+        height: 70vh;
+        display: inline-block;
+        div#title {
+            width: inherit;
+            height: 28vh;
+            position: absolute;
+            margin-top: 20vh;
+            padding-left: 1vw;
+            text-align: start;
+            font-family: GenJyuuGothic-Medium;
+            font-size: 5vh;
+            letter-spacing: 0.5vw;
+            color: #4b515f;
+        }
+        div#container {
+            background-color: #f7f6e4;
+            width: inherit;
+            height: 43vh;
+            position: absolute;
+            margin-top: 28vh;
+            border-radius: 28px;
+            text-align: center;
+            div.text {
+                display: inline-block;
+                width: 26vw;
+                height: 5vh;
+                padding-top: 4vh;
+                font-family: GenJyuuGothic-Medium;
+                font-size: 4.5vh;
+                letter-spacing: 0.5vw;
+                color: #4b515f;
+                text-align: start;
+            }
+            input {
+                display: inline-block;
+                width: 26vw;
+                height: 5vh;
+                border: none;
+                border-bottom: 0.3vh solid #4b515f;
+                background-color: #f7f6e4;
+                font-size: 3vh;
+                padding-top: 1vh;
+            }
+            input:focus {
+                outline: none;
+            }
+            div#button {
+                display: inline-block;
+                width: 7vw;
+                height: 7vh;
+                background-color: #4b515f;
+                border-radius: 10px;
+                position: inherit;
+                margin-left: 17vw;
+                margin-top: 3vh;
+                font-family: GenJyuuGothic-Medium;
+                font-size: 4.5vh;
+                color: #f7f6e4;
+            }
+            div#button:hover {
+                cursor: pointer;
+            }
+        }
+    }
+    div#logo {
+        position: absolute;
+        padding-left: 3vw;
+        padding-top: 5vh;
+        img {
+            width: 30vw;
+            height: 16vh;
+        }
+    }
+}
