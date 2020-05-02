@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
+    <link rel="stylesheet" href="./style.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <title>Project</title>
+</head>
+
+<body>
+    <div class="container-fluid">
+
+        <div class="banner">
+        </div>
+
+        <div class="row  topic">
+            <div class="left">
+                <h3>家中格局</h3>
+            </div>
+            <div class="right">
+                <h3>家事進度</h3>
+            </div>
+        </div>
+
+        <div class="row justify-content-between ">
+
+            <div class="left-floorplan">
+            </div>
+
+            <div class="right-mission">
+
+                <button class="request-btn active">發任務</button>
+                <button class="solve-btn">解任務</button>
+
+                <div class="requestContainer request-mission ">
+                    <div class="reqPanel">
+                        <div class="head">我要發任務</div>
+
+                        <form class="formset">
+                            <div class="content">
+                                <label class="content-label" for="inputcontent">任務內容</label>
+                                <input type="text" id="inputcontent">
+                            </div>
+                            <div class="suggest">
+                                <label class="suggest-label" for="inputsuggest">任務建議</label>
+                                <textarea id="inputsuggest" rows="3" cols="20"></textarea>
+                            </div>
+                            <div class="deadline">
+                                <label class="deadline-date-label" for="datepicker">任務期限</label>
+                                <input type="text" id="datepicker">
+                                <label class="deadline-time-label" for="timepicker"></label>
+                                <input type="text" id="timepicker">
+                            </div>
+                            <div class="confirm">
+                                <button type="submit" class="btn accept">確定</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="tabContainer solve-mission">
+                    <div class="buttonContainer">
+                        <button onclick="showPanel(0)"></button>
+                        <button onclick="showPanel(1)"></button>
+                    </div>
+                    <div class="tabPanel">
+                        <img src="./image/sister.png" alt="" class="exhibit">
+                        <div class="dialogue">
+                            <img src="./image/dialogue.png" alt="" class="dialogue-img">
+                            <p class="dialogue-text">廁所有蜘蛛</p>
+                        </div>
+
+                        <div class="mission-div">
+                            <span class="mission-text">任務建議</span>
+                            <span class="white-block"></span>
+                        </div>
+                        <div class="mission-div">
+                            <span class="mission-text">成員邀請</span>
+                            <img src="./image/brother.png" alt="">
+                            <img src="./image/father.png" alt="">
+                            <img src="./image/grandfather.png" alt="">
+                            <img src="./image/mother.png" alt="">
+                        </div>
+                        <div class="mission-div">
+                            <span class="mission-text">剩餘時間</span>
+                            <span class="white-block"> </span>
+                        </div>
+                        <div class="confirm">
+                            <button type="button" class="btn accept">接案</button>
+                        </div>
+                    </div>
+                    <div class="tabPanel">
+                        <img src="./image/sister.png" alt="" class="exhibit">
+                        <div class="dialogue">
+                            <img src="./image/dialogue.png" alt="" class="dialogue-img">
+                            <p class="dialogue-text">廁所有螞蟻</p>
+                        </div>
+
+                        <div class="mission-div">
+                            <span class="mission-text">任務建議</span>
+                            <span class="white-block"></span>
+                        </div>
+                        <div class="mission-div">
+                            <span class="mission-text">成員邀請</span>
+                            <img src="./image/brother.png" alt="">
+                            <img src="./image/father.png" alt="">
+                            <img src="./image/grandfather.png" alt="">
+                            <img src="./image/mother.png" alt="">
+                        </div>
+                        <div class="mission-div">
+                            <span class="mission-text">剩餘時間</span>
+                            <span class="white-block"> </span>
+                        </div>
+                        <div class="confirm">
+                            <button type="button" class="btn accept">接案</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js " integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo " crossorigin="anonymous "></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js " integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut " crossorigin="anonymous "></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js " integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k " crossorigin="anonymous "></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
+    <script>
+        $('.request-btn').css("opacity", "1");
+        $('.solve-btn').click(function() {
+            $(this).addClass('active');
+            $('.request-btn').removeClass('active');
+            $(this).css("opacity", "1");
+            $('.request-btn').css("opacity", "0.69");
+            $('.request-mission').css("display", "none");
+            $('.solve-mission').css("display", "block");
+        })
+
+        $('.request-btn').click(function() {
+            $(this).addClass('active');
+            $('.solve-btn').removeClass('active');
+            $(this).css("opacity", "1");
+            $('.solve-btn').css("opacity", "0.69");
+            $('.solve-mission').css("display", "none");
+            $('.request-mission').css("display", "block");
+        })
+
+
+
+        var count = $(".buttonContainer").children().length;
+        $('.solve-btn').attr('data-before', count);
+        var tabButtons = document.querySelectorAll(".tabContainer .buttonContainer button");
+        var tabPanels = document.querySelectorAll(".tabContainer  .tabPanel");
+
+        function showPanel(panelIndex) {
+            tabButtons.forEach(function(node) {
+                node.style.backgroundColor = "#F2D7AD";
+                node.style.color = "";
+            });
+            tabButtons[panelIndex].style.backgroundColor = "#F7F6E4";
+            tabButtons[panelIndex].style.color = "white";
+            tabPanels.forEach(function(node) {
+                node.style.display = "none";
+            });
+            tabPanels[panelIndex].style.display = "block";
+            tabPanels[panelIndex].style.backgroundColor = "#F7F6E4";
+        }
+        showPanel(0);
+        $("#datepicker").datepicker({
+            showOn: "both",
+            buttonText: '<i class="fa fa-calendar"></i>'
+        });
+        $('#timepicker').timepicker({
+            timeFormat: 'h:mm p',
+            interval: 60,
+            // minTime: '10',
+            // maxTime: '6:00pm',
+            defaultTime: '',
+            startTime: '13:00',
+            dynamic: false,
+            dropdown: true,
+            scrollbar: true,
+
+        });
+    </script>
+
+</body>
+
+</html>

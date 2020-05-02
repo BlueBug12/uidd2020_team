@@ -1,0 +1,350 @@
+@media (max-width: 575px) {
+    html {
+        font-size: 0.6rem;
+    }
+}
+
+@media (min-width: 576px) {
+    html {
+        font-size: 0.8rem;
+    }
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 1.0rem;
+    }
+}
+
+@media (min-width: 992px) {
+    html {
+        font-size: 1.2rem;
+    }
+}
+
+@media (min-width: 1200px) {
+    html {
+        font-size: 1.4rem;
+    }
+}
+
+@font-face {
+    font-family: GenJyuuGothic-Medium;
+    src: url("./font/GenJyuuGothic-Medium.ttf")
+}
+
+@font-face {
+    font-family: GenJyuuGothic-Light;
+    src: url("./font/GenJyuuGothic-Light.ttf")
+}
+
+.container-fluid {
+    padding: 0;
+}
+
+.banner {
+    background-color: #F7F6E4;
+    height: 13vh;
+}
+
+.row {
+    justify-content: space-between;
+    margin: 0px;
+}
+
+.topic {
+    margin-bottom: 0.5vh;
+}
+
+.topic .left {
+    display: flex;
+    align-items: center;
+    background-color: #4B515F;
+    width: 64%;
+    height: 10vh;
+    padding-left: 3%;
+}
+
+.topic .right {
+    display: flex;
+    align-items: center;
+    background-color: #4B515F;
+    width: 35%;
+    height: 10vh;
+    padding-left: 3%;
+}
+
+.topic .left h3,
+.topic .right h3 {
+    font-family: GenJyuuGothic-Medium;
+    color: #F7F6E3;
+}
+
+.left-floorplan {
+    height: 70vh;
+}
+
+.right-mission {
+    width: 35%;
+    height: 70vh;
+    background-color: #4B515F;
+}
+
+.solve-btn,
+.request-btn {
+    background-color: #F7F6E3;
+    border: none;
+    color: #4B515F;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 20px;
+    opacity: 0.69;
+    position: relative;
+    margin-top: 10%;
+    width: 25%;
+    height: 7%;
+    font-family: GenJyuuGothic-Medium;
+}
+
+.request-btn {
+    margin-left: 10%;
+}
+
+.solve-btn {
+    margin-left: 2%;
+}
+
+.request-btn:focus {
+    outline: 0;
+}
+
+.solve-btn:focus {
+    outline: 0;
+}
+
+.solve-btn::before {
+    content: attr(data-before);
+    position: absolute;
+    color: #F7F6E3;
+    right: 0;
+    top: 0;
+    height: 3vh;
+    width: 3vh;
+    border-radius: 50%;
+    background-color: #FC9D5D;
+    transform: translateY(-50%);
+}
+
+.requestContainer {
+    width: 90%;
+    height: 75%;
+    padding: 1rem;
+    margin: auto;
+}
+
+.request-mission {
+    display: block;
+}
+
+.reqPanel {
+    width: 100%;
+    height: 100%;
+    background-color: #F7F6E4;
+    color: #4B515F;
+    font-family: GenJyuuGothic-Medium;
+    border-radius: 10px;
+    padding-left: 0.5rem;
+    margin: auto;
+}
+
+.head {
+    width: 100%;
+    height: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.formset {
+    height: 12%;
+    width: 100%;
+}
+
+.formset div {
+    margin-top: 0.5rem;
+    padding-left: 0.5rem;
+}
+
+.content {
+    height: 100%;
+    display: flex;
+}
+
+.content-label {
+    margin-right: 3%;
+    align-self: center;
+    margin-bottom: 0;
+}
+
+#inputcontent {
+    width: 60%;
+    height: 100%;
+}
+
+.suggest {
+    display: flex;
+}
+
+.suggest-label {
+    margin-right: 3%;
+    align-self: center;
+    margin-bottom: 0;
+}
+
+#inputsuggest {
+    width: 60%;
+    resize: none;
+    vertical-align: top;
+}
+
+.deadline {
+    display: flex;
+}
+
+.deadline-date-label {
+    margin-right: 3%;
+    align-self: center;
+    margin-bottom: 0;
+}
+
+#datepicker {
+    width: 25%;
+    font-size: 60%;
+}
+
+.ui-datepicker-trigger {
+    background-color: #FFCA28;
+    outline: none;
+    border: none;
+    cursor: pointer;
+}
+
+.deadline-time-label {
+    margin-right: 3%;
+    align-self: center;
+    margin-bottom: 0;
+}
+
+#timepicker {
+    width: 20%;
+    font-size: 60%;
+}
+
+.ui-timepicker-viewport {
+    font-size: 62.5%;
+}
+
+.confirm {
+    text-align: center;
+}
+
+.tabContainer {
+    width: 90%;
+    height: 75%;
+    padding: 1rem;
+    margin: auto;
+}
+
+.solve-mission {
+    display: none;
+}
+
+.tabContainer .buttonContainer {
+    height: 5%;
+    width: 100%;
+    display: flex;
+    position: relative;
+    left: 0.8rem;
+}
+
+.tabContainer .buttonContainer button {
+    width: 20%;
+    height: 100%;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+}
+
+.tabContainer .tabPanel {
+    height: 95%;
+    color: #4B515F;
+    display: none;
+    font-family: GenJyuuGothic-Medium;
+    border-radius: 10px;
+    display: flex;
+}
+
+.tabContainer .tabPanel * {
+    margin-top: 0.5rem;
+    /* padding: 0.5rem; */
+    padding-left: 0.5rem;
+}
+
+.exhibit {
+    width: 25%;
+    height: 25%;
+}
+
+.dialogue {
+    position: relative;
+    text-align: center;
+    display: inline-block;
+    height: 25%;
+    width: 70%;
+}
+
+.dialogue-img {
+    height: 100%;
+    width: 100%;
+}
+
+.dialogue-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.mission-div {
+    height: 12%;
+    display: flex;
+}
+
+.mission-text {
+    margin-right: 3%;
+    align-self: center;
+}
+
+.mission-div img {
+    width: 15%;
+    height: 100%;
+}
+
+.white-block {
+    width: 60%;
+    background-color: #fff;
+    height: 100%;
+}
+
+.btn {
+    border-radius: 20px;
+}
+
+.accept {
+    background-color: #4B515F;
+    color: #F7F6E3;
+    height: 12%;
+    width: 35%;
+}
