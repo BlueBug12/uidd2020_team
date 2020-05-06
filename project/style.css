@@ -81,6 +81,7 @@
 }
 
 .left-floorplan {
+  width: 60%;
     height: 70vh;
 }
 
@@ -347,4 +348,7 @@
     color: #F7F6E3;
     height: 12%;
     width: 35%;
+}
+#floorplan{
+  
 }
