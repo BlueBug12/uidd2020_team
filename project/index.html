@@ -41,29 +41,29 @@
             <div class="right-mission">
 
                 <button class="request-btn active">發任務</button>
-                <button class="solve-btn">解任務</button>
+                <button class="solve-btn" id="solve_btn">解任務</button>
 
                 <div class="requestContainer request-mission ">
                     <div class="reqPanel">
                         <div class="head">我要發任務</div>
 
-                        <form class="formset">
+                        <form class="formset" id="addTasks">
                             <div class="content">
                                 <label class="content-label" for="inputcontent">任務內容</label>
-                                <input type="text" id="inputcontent">
+                                <input type="text" id="inputcontent" name="content">
                             </div>
                             <div class="suggest">
                                 <label class="suggest-label" for="inputsuggest">任務建議</label>
-                                <textarea id="inputsuggest" rows="3" cols="20"></textarea>
+                                <textarea id="inputsuggest" rows="3" cols="20" name="advise"></textarea>
                             </div>
                             <div class="deadline">
                                 <label class="deadline-date-label" for="datepicker">任務期限</label>
-                                <input type="text" id="datepicker">
+                                <input type="text" id="datepicker" name="date">
                                 <label class="deadline-time-label" for="timepicker"></label>
-                                <input type="text" id="timepicker">
+                                <input type="text" id="timepicker" name="time">
                             </div>
                             <div class="confirm">
-                                <button type="submit" class="btn accept">確定</button>
+                                <button type="submit" class="btn accept" id = "task_btn">確定</button>
                             </div>
                         </form>
                     </div>
@@ -137,6 +137,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js " integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut " crossorigin="anonymous "></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js " integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k " crossorigin="anonymous "></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
+    <script src="index.js"></script>
 
     <script>
         $('.request-btn').css("opacity", "1");
