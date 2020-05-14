@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
     <link rel="stylesheet" href="./style.css">
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
@@ -22,6 +21,26 @@
     <div class="container-fluid">
 
         <div class="banner">
+            <div class="nav-bg">
+                <nav class="navbar " id="navbar">
+                    <a href="About_Us.html" class="navbar-brand">
+                        <span id="logo">
+                            <img src="./image/s_topic.png" class="d-inline-block align-top">
+                        </span>
+                    </a>
+                    <ul class="list-inline">
+                        <li class="list-inline-item">
+                            <a href="#">關於我們</a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="#">使用教學</a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="#">開始使用!</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
         </div>
 
         <div class="row  topic">
@@ -35,35 +54,62 @@
 
         <div class="row justify-content-between ">
 
-            <div id="floorplan" class="left-floorplan" >
+            <div id="floorplan" class="left-floorplan">
             </div>
 
             <div class="right-mission">
 
-                <button class="request-btn active">發任務</button>
-                <button class="solve-btn" id="solve_btn">解任務</button>
+                <button class="request-btn active space">發任務</button>
+                <button class="solve-btn space" id="solve_btn">解任務</button>
+
+
 
                 <div class="requestContainer request-mission ">
                     <div class="reqPanel">
-                        <div class="head">我要發任務</div>
+                        <div class="head space">我要發任務</div>
 
                         <form class="formset" id="addTasks">
                             <div class="content">
-                                <label class="content-label" for="inputcontent">任務內容</label>
+                                <label class="content-label space" for="inputcontent">任務內容</label>
                                 <input type="text" id="inputcontent" name="content">
                             </div>
                             <div class="suggest">
-                                <label class="suggest-label" for="inputsuggest">任務建議</label>
+                                <label class="suggest-label space" for="inputsuggest">任務建議</label>
                                 <textarea id="inputsuggest" rows="3" cols="20" name="advise"></textarea>
                             </div>
                             <div class="deadline">
-                                <label class="deadline-date-label" for="datepicker">任務期限</label>
+                                <label class="deadline-date-label space" for="datepicker">任務期限</label>
                                 <input type="text" id="datepicker" name="date">
                                 <label class="deadline-time-label" for="timepicker"></label>
-                                <input type="text" id="timepicker" name="time">
+                                <select id="timepicker" name="time">
+                                    <option value="1:00 PM">1:00 PM</option>
+                                    <option value="2:00 PM">2:00 PM</option>
+                                    <option value="3:00 PM">3:00 PM</option>
+                                    <option value="4:00 PM">4:00 PM</option>
+                                    <option value="5:00 PM">5:00 PM</option>
+                                    <option value="6:00 PM">6:00 PM</option>
+                                    <option value="7:00 PM">7:00 PM</option>
+                                    <option value="8:00 PM">8:00 PM</option>
+                                    <option value="9:00 PM">9:00 PM</option>
+                                    <option value="10:00 PM">10:00 PM</option>
+                                    <option value="11:00 PM">11:00 PM</option>
+                                    <option value="12:00 PM">12:00 PM</option>
+                                    <option value="1:00 AM">1:00 AM</option>
+                                    <option value="2:00 AM">2:00 AM</option>
+                                    <option value="3:00 AM">3:00 AM</option>
+                                    <option value="4:00 AM">4:00 AM</option>
+                                    <option value="5:00 AM">5:00 AM</option>
+                                    <option value="6:00 AM">6:00 AM</option>
+                                    <option value="7:00 AM">7:00 AM</option>
+                                    <option value="8:00 AM">8:00 AM</option>
+                                    <option value="9:00 AM">9:00 AM</option>
+                                    <option value="10:00 AM">10:00 AM</option>
+                                    <option value="11:00 AM">11:00 AM</option>
+                                    <option value="12:00 AM">12:00 AM</option>
+                                </select>
                             </div>
-                            <div class="confirm">
-                                <button type="submit" class="btn accept" id = "task_btn">確定</button>
+                            <div class="confirm-request">
+                                <button type="submit" class="btn getcase space" id="task_btn">確定</button>
                             </div>
                         </form>
                     </div>
@@ -82,48 +128,50 @@
                         </div>
 
                         <div class="mission-div">
-                            <span class="mission-text">任務建議</span>
+                            <span class="mission-text space">任務建議</span>
                             <span class="white-block"></span>
                         </div>
                         <div class="mission-div">
-                            <span class="mission-text">成員邀請</span>
-                            <img src="./image/brother.png" alt="">
-                            <img src="./image/father.png" alt="">
-                            <img src="./image/grandfather.png" alt="">
-                            <img src="./image/mother.png" alt="">
+                            <span class="mission-text space">成員邀請</span>
+                            <img class="member" src="./image/brother.png" alt="">
+                            <img class="member" src="./image/father.png" alt="">
+                            <img class="member" src="./image/grandfather.png" alt="">
+                            <img class="member" src="./image/mother.png" alt="">
                         </div>
                         <div class="mission-div">
-                            <span class="mission-text">剩餘時間</span>
+                            <span class="mission-text space">剩餘時間</span>
                             <span class="white-block"> </span>
                         </div>
-                        <div class="confirm">
-                            <button type="button" class="btn accept">接案</button>
+                        <div class="confirm-solve">
+                            <button type="button" class="btn accept space">接案</button>
+                            <button type="button" class="btn judge space"> 送出審核</button>
                         </div>
                     </div>
                     <div class="tabPanel">
                         <img src="./image/sister.png" alt="" class="exhibit">
                         <div class="dialogue">
                             <img src="./image/dialogue.png" alt="" class="dialogue-img">
-                            <p class="dialogue-text">廁所有螞蟻</p>
+                            <p class="dialogue-text">廁所有蜘蛛</p>
                         </div>
 
                         <div class="mission-div">
-                            <span class="mission-text">任務建議</span>
+                            <span class="mission-text space">任務建議</span>
                             <span class="white-block"></span>
                         </div>
                         <div class="mission-div">
-                            <span class="mission-text">成員邀請</span>
-                            <img src="./image/brother.png" alt="">
-                            <img src="./image/father.png" alt="">
-                            <img src="./image/grandfather.png" alt="">
-                            <img src="./image/mother.png" alt="">
+                            <span class="mission-text space">成員邀請</span>
+                            <img class="member" src="./image/brother.png" alt="">
+                            <img class="member" src="./image/father.png" alt="">
+                            <img class="member" src="./image/grandfather.png" alt="">
+                            <img class="member" src="./image/mother.png" alt="">
                         </div>
                         <div class="mission-div">
-                            <span class="mission-text">剩餘時間</span>
+                            <span class="mission-text space">剩餘時間</span>
                             <span class="white-block"> </span>
                         </div>
-                        <div class="confirm">
-                            <button type="button" class="btn accept">接案</button>
+                        <div class="confirm-solve">
+                            <button type="button" class="btn accept space"> 接案</button>
+                            <button type="button" class="btn judge space"> 送出審核</button>
                         </div>
                     </div>
                 </div>
@@ -136,16 +184,15 @@
     <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js " integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo " crossorigin="anonymous "></script> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js " integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut " crossorigin="anonymous "></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js " integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k " crossorigin="anonymous "></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
     <script src="index.js"></script>
-
+    <script src="floorplan.js"></script>
     <script>
         $('.request-btn').css("opacity", "1");
         $('.solve-btn').click(function() {
             $(this).addClass('active');
             $('.request-btn').removeClass('active');
             $(this).css("opacity", "1");
-            $('.request-btn').css("opacity", "0.69");
+            $('.request-btn').css("opacity", "0.5");
             $('.request-mission').css("display", "none");
             $('.solve-mission').css("display", "block");
         })
@@ -154,9 +201,27 @@
             $(this).addClass('active');
             $('.solve-btn').removeClass('active');
             $(this).css("opacity", "1");
-            $('.solve-btn').css("opacity", "0.69");
+            $('.solve-btn').css("opacity", "0.5");
             $('.solve-mission').css("display", "none");
             $('.request-mission').css("display", "block");
+        })
+
+        $('.accept').click(function() {
+            $(this).addClass('press');
+            $(this).css("opacity", "0.5");
+            $(this).siblings('.judge').removeClass('press');
+            $(this).siblings('.judge').css("opacity", "1");
+        })
+
+        $('.judge').click(function() {
+            $(this).addClass('press');
+            $(this).css("opacity", "0.5");
+            $(this).siblings('.accept').removeClass('press');
+            $(this).siblings('.accept').css("opacity", "1");
+        })
+
+        $('.member').click(function() {
+            $(this).toggleClass("on");
         })
 
 
@@ -184,20 +249,10 @@
             showOn: "both",
             buttonText: '<i class="fa fa-calendar"></i>'
         });
-        $('#timepicker').timepicker({
-            timeFormat: 'h:mm p',
-            interval: 60,
-            // minTime: '10',
-            // maxTime: '6:00pm',
-            defaultTime: '',
-            startTime: '13:00',
-            dynamic: false,
-            dropdown: true,
-            scrollbar: true,
 
-        });
+        document.getElementById("timepicker").selectedIndex = -1;
     </script>
-    <script src="floorplan.js"></script>
+
 </body>
 
 </html>

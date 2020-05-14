@@ -1,30 +1,65 @@
 @media (max-width: 575px) {
-    html {
-        font-size: 0.6rem;
+    .right-mission {
+        font-size: 0.5rem;
+    }
+    .btn {
+        font-size: 0.5rem;
+    }
+    .space {
+        letter-spacing: 1.8px;
+        text-indent: 0.9px;
     }
 }
 
 @media (min-width: 576px) {
-    html {
-        font-size: 0.8rem;
+    .right-mission {
+        font-size: 0.6rem;
+    }
+    .btn {
+        font-size: 0.6rem;
+    }
+    .space {
+        letter-spacing: 2.8px;
+        text-indent: 1.4px;
     }
 }
 
 @media (min-width: 768px) {
-    html {
-        font-size: 1.0rem;
+    .right-mission {
+        font-size: 0.8rem;
+    }
+    .btn {
+        font-size: 0.8rem;
+    }
+    .space {
+        letter-spacing: 3.8px;
+        text-indent: 1.9px;
     }
 }
 
 @media (min-width: 992px) {
-    html {
-        font-size: 1.2rem;
+    .right-mission {
+        font-size: 1.0rem;
+    }
+    .btn {
+        font-size: 0.8rem;
+    }
+    .space {
+        letter-spacing: 4.8px;
+        text-indent: 2.4px;
     }
 }
 
 @media (min-width: 1200px) {
-    html {
-        font-size: 1.4rem;
+    .right-mission {
+        font-size: 1.3rem;
+    }
+    .btn {
+        font-size: 1.3rem;
+    }
+    .space {
+        letter-spacing: 5.8px;
+        text-indent: 2.9px;
     }
 }
 
@@ -42,10 +77,101 @@
     padding: 0;
 }
 
+nav {
+    position: absolute;
+    margin: 15px 50px 0px 50px;
+    z-index: 10;
+    margin-top: 20%;
+}
+
+nav a {
+    color: inherit;
+    font-size: 19.5pt;
+    font-family: GenJyuuGothic-Medium;
+    bottom: 10px;
+    text-decoration: none;
+}
+
+#logo {
+    position: absolute;
+    bottom: 25%;
+}
+
+#navbar {
+    position: absolute;
+    width: 92%;
+    border-bottom: #799FB4 solid 3px;
+    margin: 30px 4% 0px 4%;
+}
+
+nav>ul {
+    position: absolute;
+    list-style: none;
+    right: 0;
+    margin: 0;
+    color: #799FB4;
+    padding: 0;
+    bottom: 10px;
+}
+
+li {
+    margin: 0 10px;
+}
+
+.nav-bg {
+    height: 80px;
+    width: 100%;
+    background-color: #F7F6E4;
+}
+
+
+/* 
 .banner {
     background-color: #F7F6E4;
     height: 13vh;
+    display: flex;
+    justify-content: center;
 }
+
+.inner-banner {
+    width: 95%;
+    height: 70%;
+    align-self: center;
+    display: flex;
+    align-items: center;
+    border-bottom: 3px solid #789FB3;
+}
+
+.s_topic {
+    max-width: 100%;
+}
+
+.banner-list { 
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    right: 5%;
+    width: 40%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.banner-list>li {
+    margin-left: 5%;
+}
+
+.banner-href {
+    text-decoration: none;
+    font-family: GenJyuuGothic-Medium;
+    color: #799FB4;
+    font-size: 1rem;
+}
+
+.banner-href:hover {
+    text-decoration: none;
+}
+*/
 
 .row {
     justify-content: space-between;
@@ -77,11 +203,12 @@
 .topic .left h3,
 .topic .right h3 {
     font-family: GenJyuuGothic-Medium;
+    letter-spacing: 7.6px;
     color: #F7F6E3;
 }
 
 .left-floorplan {
-  width: 60%;
+    width: 60%;
     height: 70vh;
 }
 
@@ -99,12 +226,13 @@
     text-decoration: none;
     cursor: pointer;
     border-radius: 20px;
-    opacity: 0.69;
+    opacity: 0.5;
     position: relative;
     margin-top: 10%;
     width: 25%;
     height: 7%;
     font-family: GenJyuuGothic-Medium;
+    letter-spacing: 5.8px;
 }
 
 .request-btn {
@@ -139,8 +267,10 @@
 .requestContainer {
     width: 90%;
     height: 75%;
-    padding: 1rem;
+    padding: 4%;
     margin: auto;
+    position: relative;
+    z-index: 3;
 }
 
 .request-mission {
@@ -156,6 +286,9 @@
     border-radius: 10px;
     padding-left: 0.5rem;
     margin: auto;
+    position: relative;
+    z-index: 4;
+    box-shadow: 5px 10px #FFCA28;
 }
 
 .head {
@@ -241,18 +374,19 @@
     font-size: 60%;
 }
 
-.ui-timepicker-viewport {
-    font-size: 62.5%;
+.confirm-request {
+    text-align: center;
 }
 
-.confirm {
-    text-align: center;
+.confirm-solve {
+    display: flex;
+    justify-content: center;
 }
 
 .tabContainer {
     width: 90%;
     height: 75%;
-    padding: 1rem;
+    padding: 4%;
     margin: auto;
 }
 
@@ -285,6 +419,8 @@
     font-family: GenJyuuGothic-Medium;
     border-radius: 10px;
     display: flex;
+    position: relative;
+    box-shadow: 5px 10px #FFCA28;
 }
 
 .tabContainer .tabPanel * {
@@ -316,6 +452,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    letter-spacing: 6.6px;
 }
 
 .mission-div {
@@ -339,16 +476,70 @@
     height: 100%;
 }
 
-.btn {
-    border-radius: 20px;
+.member {
+    opacity: 0.5;
 }
 
-.accept {
+.member:hover {
+    cursor: pointer;
+}
+
+.member.on {
+    opacity: 1;
+}
+
+.btn {
+    border-radius: 20px;
+    margin: 5px;
+}
+
+.btn:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.btn:hover {
+    color: #fff;
+    text-decoration: none;
+}
+
+.accept,
+.judge,
+.getcase {
     background-color: #4B515F;
     color: #F7F6E3;
     height: 12%;
     width: 35%;
 }
-#floorplan{
-  
+
+.accept {
+    opacity: 1;
+}
+
+.judge {
+    opacity: 0.5;
+}
+
+.accept.press,
+.judge.press {
+    opacity: 0.5;
+}
+
+#floorplan {}
+
+.floor-item:hover {
+    cursor: pointer;
+}
+
+.floor-item.border {
+    stroke: #789FB3;
+    stroke-width: 3px;
+    stroke-linejoin: round;
+}
+
+select {
+    -webkit-appearance: none;
+    text-indent: 1px;
+    text-overflow: '';
+    cursor: text;
 }
