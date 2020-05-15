@@ -28,8 +28,10 @@ function drawline(d) {
 
 	// document.getElementsByTagName("svg")[0].removeEventListener('mousemove', previewWall);
 
-	let x = (((event.clientX) % gridSize) > (gridSize / 2) || ((event.clientX) % gridSize) <= 0) * gridSize + d.x;
-	let y = (((event.clientY+2) % gridSize) > (gridSize / 2) || ((event.clientY) % gridSize) <= 1) * gridSize + d.y;
+	let x = ((event.clientX % gridSize) > (gridSize / 2) || (event.clientX % gridSize) <= 0) * gridSize + d.x;
+	let y = ((event.clientY % gridSize) > (gridSize / 2) || (event.clientY % gridSize) <= 0) * gridSize + d.y;
+	if (event.clientX - d.x == gridSize) x = event.clientX;
+	if (event.clientY - d.y == gridSize) y = event.clientY;
 	let newCorner = {
 		id: Math.random().toString(36).slice(-8),
 		x: x,
@@ -83,7 +85,8 @@ function drawline(d) {
 		.attr("cy", (d) => { return d.y; })
 		.attr("r", (d) => { return d.r; })
 		.attr("stroke-width", 0)
-		.attr("fill", "blue");
+		.attr("fill", "blue")
+		.on('click', (d) => { drawline(d); });
 	d3.select("#corners")
 		.selectAll("circle")
 		.data(corners)
