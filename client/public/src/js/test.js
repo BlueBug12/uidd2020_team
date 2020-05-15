@@ -13,57 +13,127 @@ let panel = {
     width: 1000,
     height: 600
 };
+let gridSize = 20;
 
-let activate = false;
 let corners = [];
 let walls = [];
-let nowCorner = "";
+let previewedWall = [];
+let nowCorner = {
+	id: "",
+	x: 0,
+	y: 0
+};
 
 function drawline(d) {
-	console.log(d);
 
+	// document.getElementsByTagName("svg")[0].removeEventListener('mousemove', previewWall);
+
+	let x = (((event.clientX) % gridSize) > (gridSize / 2) || ((event.clientX) % gridSize) <= 0) * gridSize + d.x;
+	let y = (((event.clientY+2) % gridSize) > (gridSize / 2) || ((event.clientY) % gridSize) <= 1) * gridSize + d.y;
 	let newCorner = {
 		id: Math.random().toString(36).slice(-8),
-		x: d.x,
-		y: d.y,
+		x: x,
+		y: y,
 		r: 5
 	};
 	corners = corners.map(corner => {
 		if (corner.x == newCorner.x && corner.y == newCorner.y) {
 			return false;
 		} else {
-			corner.r = 4;
+			corner.r = 3;
 			return corner;
 		}
 	}).filter(ele => {
 		return ele;
 	});
-	corners.push(newCorner);
-	nowCorner = newCorner.id;
-
-	if (!activate) {
-		d3.select("#corners")
-			.selectAll(".corner")
-			.data(corners)
-			.enter().append("circle")
-			.attr("class", "corner")
-			.attr("cx", (d) => { return d.x; })
-			.attr("cy", (d) => { return d.y; })
-			.attr("r", (d) => { return d.r; })
-			.attr("stroke-width", 0)
-			.attr("fill", "blue")
-			.exit().remove();
-		d3.select("#corners")
-			.selectAll("circle")
-			.data(corners)
-			.attr("cx", (d) => { return d.x; })
-			.attr("cy", (d) => { return d.y; })
-			.attr("r", (d) => { return d.r; })
-			.exit().remove();
-		// activate = true;
+	if (nowCorner.x == newCorner.x && nowCorner.y == newCorner.y) {
+		newCorner.r = 3;
+		nowCorner.id = "";
+		nowCorner.x = 0;
+		nowCorner.y = 0;
+		// previewedWall = [];
+		// d3.select("#previewWall")
+		// 	.selectAll(".wall")
+		// 	.data(previewedWall)
+		// 	.attr("x1", (d) => { return d.corner1.x; })
+		// 	.attr("y1", (d) => { return d.corner1.y; })
+		// 	.attr("x2", (d) => { return d.corner2.x; })
+		// 	.attr("y2", (d) => { return d.corner2.y; })
+		// 	.exit().remove();
 	} else {
-
+		// document.getElementsByTagName("svg")[0].addEventListener('mousemove', previewWall);
+		// if (!(nowCorner.x == 0 && nowCorner.y == 0)) {
+		// 	// walls.push({
+		// 	// 	corner1: previewedWall[0].corner1,
+		// 	// 	corner2: nowCorner
+		// 	// });
+		// }
+		nowCorner.id = newCorner.id;
+		nowCorner.x = newCorner.x;
+		nowCorner.y = newCorner.y;
 	}
+	corners.push(newCorner);
+
+	d3.select("#corners")
+		.selectAll(".corner")
+		.data(corners)
+		.enter().append("circle")
+		.attr("class", "corner")
+		.attr("cx", (d) => { return d.x; })
+		.attr("cy", (d) => { return d.y; })
+		.attr("r", (d) => { return d.r; })
+		.attr("stroke-width", 0)
+		.attr("fill", "blue");
+	d3.select("#corners")
+		.selectAll("circle")
+		.data(corners)
+		.attr("cx", (d) => { return d.x; })
+		.attr("cy", (d) => { return d.y; })
+		.attr("r", (d) => { return d.r; })
+		.exit().remove();
+
+	// d3.select("#walls")
+	// 	.selectAll(".wall")
+	// 	.data(walls)
+	// 	.enter().append("line")
+	// 	.attr("class", "wall")
+	// 	.attr("x1", (d) => { return d.corner1.x; })
+	// 	.attr("y1", (d) => { return d.corner1.y; })
+	// 	.attr("x2", (d) => { return d.corner2.x; })
+	// 	.attr("y2", (d) => { return d.corner2.y; })
+	// 	.attr("stroke", "blue")
+	// 	.attr("stroke-width", 3);
+
+}
+
+function previewWall() {
+	// previewedWall = [{
+	// 	corner1: nowCorner,
+	// 	corner2: {
+	// 		x: event.clientX,
+	// 		y: event.clientY
+	// 	}
+	// }];
+	d3.select("#previewWall")
+		.selectAll(".wall")
+		.data(previewedWall)
+		.enter().append("line")
+		.attr("class", "wall")
+		.attr("x1", (d) => { return d.corner1.x; })
+		.attr("y1", (d) => { return d.corner1.y; })
+		.attr("x2", (d) => { return d.corner2.x; })
+		.attr("y2", (d) => { return d.corner2.y; })
+		.attr("stroke", "blue")
+		.attr("stroke-width", 2)
+		.style("opacity", 0.5);
+	d3.select("#previewWall")
+		.selectAll(".wall")
+		.data(previewedWall)
+		.attr("x1", (d) => { return d.corner1.x; })
+		.attr("y1", (d) => { return d.corner1.y; })
+		.attr("x2", (d) => { return d.corner2.x; })
+		.attr("y2", (d) => { return d.corner2.y; })
+		.exit().remove();
 }
 
 function drawrect(d) {
@@ -81,8 +151,8 @@ function drawrect(d) {
 		var data = new Array();
 		var xpos = 1; //starting xpos and ypos at 1 so the stroke will show when we make the grid below
 		var ypos = 1;
-		var width = 20;
-		var height = 20;
+		var width = gridSize;
+		var height = gridSize;
 		
 		// iterate for rows	
 		for (var row = 0; row < panel.height / height; row++) {
@@ -111,8 +181,8 @@ function drawrect(d) {
 	
 	var grid = d3.select("#grid")
 		.append("svg")
-		.attr("width", panel.width+10)
-		.attr("height", panel.height+10);
+		.attr("width", panel.width+gridSize)
+		.attr("height", panel.height+gridSize);
 		
 	var row = grid.selectAll(".row")
 		.data(gridData)
@@ -136,9 +206,13 @@ function drawrect(d) {
 			} else {
 				drawrect(d);
 			}
+		})
+		.on('dbclick', () => {
+			console.log("db");
 		});
 
 	grid.append("g").attr("id", "corners");
 	grid.append("g").attr("id", "walls");
+	grid.append("g").attr("id", "previewWall");
 
 })();
