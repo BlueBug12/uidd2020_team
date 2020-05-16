@@ -24,14 +24,20 @@ let nowCorner = {
 	y: 0
 };
 
-function drawline(d) {
+function drawline(d, isDot) {
 
 	// document.getElementsByTagName("svg")[0].removeEventListener('mousemove', previewWall);
 
-	let x = ((event.clientX % gridSize) > (gridSize / 2) || (event.clientX % gridSize) <= 0) * gridSize + d.x;
-	let y = ((event.clientY % gridSize) > (gridSize / 2) || (event.clientY % gridSize) <= 0) * gridSize + d.y;
-	if (event.clientX - d.x == gridSize) x = event.clientX;
-	if (event.clientY - d.y == gridSize) y = event.clientY;
+	let x, y;
+	if (isDot) {
+		x = d.x;
+		y = d.y;
+	} else {
+		x = ((event.clientX % gridSize) > (gridSize / 2) || (event.clientX % gridSize) <= 0) * gridSize + d.x;
+		y = ((event.clientY % gridSize) > (gridSize / 2) || (event.clientY % gridSize) <= 0) * gridSize + d.y;
+		if (event.clientX - d.x == gridSize) x = event.clientX;
+		if (event.clientY - d.y == gridSize) y = event.clientY;
+	}
 	let newCorner = {
 		id: Math.random().toString(36).slice(-8),
 		x: x,
@@ -40,6 +46,7 @@ function drawline(d) {
 	};
 	corners = corners.map(corner => {
 		if (corner.x == newCorner.x && corner.y == newCorner.y) {
+			newCorner.id = corner.id;
 			return false;
 		} else {
 			corner.r = 3;
@@ -86,7 +93,7 @@ function drawline(d) {
 		.attr("r", (d) => { return d.r; })
 		.attr("stroke-width", 0)
 		.attr("fill", "blue")
-		.on('click', (d) => { drawline(d); });
+		.on('click', (d) => { drawline(d, true); });
 	d3.select("#corners")
 		.selectAll("circle")
 		.data(corners)
@@ -205,7 +212,7 @@ function drawrect(d) {
 		.style("stroke-width", 0.3)
 		.on('click', function(d) {
 			if (mode === "line") {
-				drawline(d);
+				drawline(d, false);
 			} else {
 				drawrect(d);
 			}
