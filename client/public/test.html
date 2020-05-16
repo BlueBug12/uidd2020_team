@@ -1,6 +1,7 @@
 <html>
     <head>
         <title>floorplan test</title>
+        <link href="./src/css/test.css" rel="stylesheet" >
         <style>
             body {
                 margin: 0;
@@ -13,11 +14,19 @@
                 margin-left: 80vw;
             }
         </style>
+
         <script src="https://d3js.org/d3.v4.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     </head>
     <body>
         <div id="grid"></div>
-        <button id="button">switch mode</div>
+        <button id="button">switch mode</button>
+        <button id="undo">undo</button>
+        <div id="color_picker">
+          <input id = "color_canvas" class="jscolor {closable:true,closeText:'Close me!'}" value="2C93E8">
+        </div>
+
         <script src="./src/js/test.js" type="text/javascript"></script>
+        <script src="./src/js/jscolor.js" type="text/javascript"></script>
     </body>
 </html>
