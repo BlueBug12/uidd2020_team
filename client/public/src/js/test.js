@@ -24,14 +24,17 @@ let nowCorner = {
 	y: 0
 };
 
-function drawline(d, isDot) {
+function drawline(d, isDot, isLine) {
 
-	// document.getElementsByTagName("svg")[0].removeEventListener('mousemove', previewWall);
+	document.getElementsByTagName("svg")[0].removeEventListener('mousemove', previewWall);
 
 	let x, y;
 	if (isDot) {
 		x = d.x;
 		y = d.y;
+	} else if (isLine) {
+		x = (parseInt(d.corner2.x / gridSize) + ((d.corner2.x % gridSize) > (gridSize / 2))) * gridSize + 1;
+		y = (parseInt(d.corner2.y / gridSize) + ((d.corner2.y % gridSize) > (gridSize / 2))) * gridSize + 1;
 	} else {
 		x = ((event.clientX % gridSize) > (gridSize / 2) || (event.clientX % gridSize) <= 0) * gridSize + d.x;
 		y = ((event.clientY % gridSize) > (gridSize / 2) || (event.clientY % gridSize) <= 0) * gridSize + d.y;
@@ -44,6 +47,7 @@ function drawline(d, isDot) {
 		y: y,
 		r: 5
 	};
+
 	corners = corners.map(corner => {
 		if (corner.x == newCorner.x && corner.y == newCorner.y) {
 			newCorner.id = corner.id;
@@ -60,23 +64,33 @@ function drawline(d, isDot) {
 		nowCorner.id = "";
 		nowCorner.x = 0;
 		nowCorner.y = 0;
-		// previewedWall = [];
-		// d3.select("#previewWall")
-		// 	.selectAll(".wall")
-		// 	.data(previewedWall)
-		// 	.attr("x1", (d) => { return d.corner1.x; })
-		// 	.attr("y1", (d) => { return d.corner1.y; })
-		// 	.attr("x2", (d) => { return d.corner2.x; })
-		// 	.attr("y2", (d) => { return d.corner2.y; })
-		// 	.exit().remove();
+		previewedWall = [];
+		d3.select("#previewWall")
+			.selectAll(".wall")
+			.data(previewedWall)
+			.exit().remove();
 	} else {
-		// document.getElementsByTagName("svg")[0].addEventListener('mousemove', previewWall);
-		// if (!(nowCorner.x == 0 && nowCorner.y == 0)) {
-		// 	// walls.push({
-		// 	// 	corner1: previewedWall[0].corner1,
-		// 	// 	corner2: nowCorner
-		// 	// });
-		// }
+		document.getElementsByTagName("svg")[0].addEventListener('mousemove', previewWall);
+		if (!(nowCorner.x == 0 && nowCorner.y == 0)) {
+			let newWall = {
+				corner1: previewedWall[0].corner1,
+				corner2: newCorner
+			};
+			walls = walls.map(wall => {
+				if ((wall.corner1.x == newWall.corner1.x && wall.corner1.y == newWall.corner1.y) &&
+					(wall.corner2.x == newWall.corner2.x && wall.corner2.y == newWall.corner2.y)) {
+					return false;
+				} else if ((wall.corner1.x == newWall.corner2.x && wall.corner1.y == newWall.corner2.y) &&
+						   (wall.corner2.x == newWall.corner1.x && wall.corner2.y == newWall.corner1.y)) {
+					return false;
+				} else {
+					return wall;
+				}
+			}).filter(ele => {
+				return ele;
+			});
+			walls.push(Object.assign({}, newWall));
+		}
 		nowCorner.id = newCorner.id;
 		nowCorner.x = newCorner.x;
 		nowCorner.y = newCorner.y;
@@ -93,7 +107,7 @@ function drawline(d, isDot) {
 		.attr("r", (d) => { return d.r; })
 		.attr("stroke-width", 0)
 		.attr("fill", "blue")
-		.on('click', (d) => { drawline(d, true); });
+		.on('click', (d) => { drawline(d, true, false); });
 	d3.select("#corners")
 		.selectAll("circle")
 		.data(corners)
@@ -102,28 +116,28 @@ function drawline(d, isDot) {
 		.attr("r", (d) => { return d.r; })
 		.exit().remove();
 
-	// d3.select("#walls")
-	// 	.selectAll(".wall")
-	// 	.data(walls)
-	// 	.enter().append("line")
-	// 	.attr("class", "wall")
-	// 	.attr("x1", (d) => { return d.corner1.x; })
-	// 	.attr("y1", (d) => { return d.corner1.y; })
-	// 	.attr("x2", (d) => { return d.corner2.x; })
-	// 	.attr("y2", (d) => { return d.corner2.y; })
-	// 	.attr("stroke", "blue")
-	// 	.attr("stroke-width", 3);
+	d3.select("#walls")
+		.selectAll(".wall")
+		.data(walls)
+		.enter().append("line")
+		.attr("class", "wall")
+		.attr("x1", (d) => { console.log(d); return d.corner1.x; })
+		.attr("y1", (d) => { return d.corner1.y; })
+		.attr("x2", (d) => { return d.corner2.x; })
+		.attr("y2", (d) => { return d.corner2.y; })
+		.attr("stroke", "blue")
+		.attr("stroke-width", 2);
 
 }
 
 function previewWall() {
-	// previewedWall = [{
-	// 	corner1: nowCorner,
-	// 	corner2: {
-	// 		x: event.clientX,
-	// 		y: event.clientY
-	// 	}
-	// }];
+	previewedWall = [{
+		corner1: Object.assign({}, nowCorner),
+		corner2: {
+			x: event.clientX,
+			y: event.clientY
+		}
+	}];
 	d3.select("#previewWall")
 		.selectAll(".wall")
 		.data(previewedWall)
@@ -135,7 +149,8 @@ function previewWall() {
 		.attr("y2", (d) => { return d.corner2.y; })
 		.attr("stroke", "blue")
 		.attr("stroke-width", 2)
-		.style("opacity", 0.5);
+		.style("opacity", 0.5)
+		.on('click', (d) => { drawline(d, false, true); });
 	d3.select("#previewWall")
 		.selectAll(".wall")
 		.data(previewedWall)
@@ -212,7 +227,7 @@ function drawrect(d) {
 		.style("stroke-width", 0.3)
 		.on('click', function(d) {
 			if (mode === "line") {
-				drawline(d, false);
+				drawline(d, false, false);
 			} else {
 				drawrect(d);
 			}
