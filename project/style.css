@@ -79,7 +79,9 @@
 
 nav {
     position: absolute;
-    margin: 15px 50px 0px 50px;
+    margin-left: 4%;
+    margin-right: 4%;
+    bottom: 15%;
     z-index: 10;
     margin-top: 20%;
 }
@@ -119,9 +121,10 @@ li {
 }
 
 .nav-bg {
-    height: 80px;
+    height: 13vh;
     width: 100%;
     background-color: #F7F6E4;
+    position: relative;
 }
 
 
