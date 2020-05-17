@@ -62,6 +62,8 @@ function drawline(d, isDot, isLine) {
 		y: y,
 		r: 6
 	};
+	let newStep = [];
+	lineChangeStep.push(newStep);
 
 	// update lines
 	if (!(nowCorner.x == 0 && nowCorner.y == 0)) {
@@ -80,7 +82,14 @@ function drawline(d, isDot, isLine) {
 			}
 		});
 		if (newWall.corner1.x == newWall.corner2.x && newWall.corner1.y == newWall.corner2.y) isNewWall = false;
-		if (isNewWall) walls.push(Object.assign({}, newWall));
+		if (isNewWall) {
+			walls.push(Object.assign({}, newWall));
+			newStep.push({
+				operation: "new",
+				object: "wall",
+				target: newWall
+			});
+		}
 	}
 	walls = walls.map(wall => {
 		wall.width = 2;
@@ -115,8 +124,14 @@ function drawline(d, isDot, isLine) {
 		nowCorner.x = newCorner.x;
 		nowCorner.y = newCorner.y;
 		corners.push(newCorner);
+		newStep.push({
+			operation: "new",
+			object: "corner",
+			target: newCorner
+		});
 	}
 
+	if (newStep.length == 0) lineChangeStep.pop();
 	render("line");
 	previewWall(event);
 	
@@ -243,7 +258,59 @@ function render(type) {
 
 function undo() {
 	if (mode === "line") {
-		// TODO
+		let lastStep = lineChangeStep.pop();
+		if (!lastStep) return;
+		lastStep.forEach(step => {
+			if (step.operation === "new") {
+				if (step.object === "wall") {
+					walls = walls.map(wall => {
+						let target = step.target;
+						if (wall.corner1.x === target.corner1.x && wall.corner1.y == target.corner1.y &&
+							wall.corner2.x === target.corner2.x && wall.corner2.y == target.corner2.y) {
+							return false;
+						} else {
+							return wall;
+						}
+					}).filter(ele => {
+						return ele;
+					});
+				}
+				if (step.object === "corner") {
+					corners = corners.map(corner => {
+						let target = step.target;
+						if (corner.x === target.x && corner.y == target.y) {
+							return false;
+						} else {
+							return corner;
+						}
+					}).filter(ele => {
+						return ele;
+					});
+				}
+			}
+			if (step.operation === "delete") {
+				if (step.object === "wall") {
+					walls.splice(step.index, 0, step.target);
+				}
+				if (step.object === "corner") {
+					corners.splice(step.index, 0, step.target);
+				}
+			}
+			if (step.operation === "edit") {
+				// TODO
+			}
+		});
+		corners = corners.map(corner => {
+			corner.r = 4;
+			return corner;
+		});
+		walls = walls.map(wall => {
+			wall.width = 2;
+			return wall;
+		});
+		previewedWall = [];
+		render("line");
+		render("previewedWall");
 	}
 	if (mode === "rect") {
 		let class_name=room_stack.pop()
@@ -255,14 +322,23 @@ function undo() {
 }
 
 function deleteWall() {
+	let newStep = [];
+	lineChangeStep.push(newStep);
 	if (nowCorner.x != 0 || nowCorner.y != 0) {	// is dot
 		let x = nowCorner.x;
 		let y = nowCorner.y;
 		nowCorner.id = "";
 		nowCorner.x = 0;
 		nowCorner.y = 0;
-		corners = corners.map(corner => {
+		corners = corners.map((corner, key) => {
 			if (corner.x == x && corner.y == y) {
+				newStep.push({
+					operation: "delete",
+					object: "corner",
+					target: corner,
+					index: key
+				});
+				updateDeleteStepKey(key, "corner");
 				return false;
 			} else {
 				return corner;
@@ -271,12 +347,26 @@ function deleteWall() {
 			return ele;
 		});
 		let checkedCorners = [];
-		walls = walls.map(wall => {
+		walls = walls.map((wall, key) => {
 			if (wall.corner1.x == x && wall.corner1.y == y) {
 				checkedCorners.push(wall.corner2);
+				newStep.push({
+					operation: "delete",
+					object: "wall",
+					target: wall,
+					index: key
+				});
+				updateDeleteStepKey(key, "wall");
 				return false;
 			} else if (wall.corner2.x == x && wall.corner2.y == y) {
 				checkedCorners.push(wall.corner1);
+				newStep.push({
+					operation: "delete",
+					object: "wall",
+					target: wall,
+					index: key
+				});
+				updateDeleteStepKey(key, "wall");
 				return false;
 			} else {
 				return wall;
@@ -285,17 +375,24 @@ function deleteWall() {
 			return ele;
 		});
 		checkedCorners.forEach(corner => {
-			checkCornerNotConnected(corner);
+			checkCornerNotConnected(corner, newStep);
 		});
 		previewedWall = [];
 		render("line");
 		render("previewedWall");
 	} else {	// is line
 		let checkedCorners = [];
-		walls = walls.map(wall => {
+		walls = walls.map((wall, key) => {
 			if (wall.width == 4) {
 				checkedCorners.push(wall.corner1);
 				checkedCorners.push(wall.corner2);
+				newStep.push({
+					operation: "delete",
+					object: "wall",
+					target: wall,
+					index: key
+				});
+				updateDeleteStepKey(key, "wall");
 				return false;
 			} else {
 				return wall
@@ -304,13 +401,14 @@ function deleteWall() {
 			return ele;
 		});
 		checkedCorners.forEach(corner => {
-			checkCornerNotConnected(corner);
+			checkCornerNotConnected(corner, newStep);
 		});
 		render("line");
 	}
+	if (newStep.length == 0) lineChangeStep.pop();
 }
 
-function checkCornerNotConnected(target) {
+function checkCornerNotConnected(target, stepRecorder) {
 	let result = true;
 	walls.forEach(wall => {
 		if ((wall.corner1.x == target.x && wall.corner1.y == target.y) ||
@@ -319,8 +417,15 @@ function checkCornerNotConnected(target) {
 		}
 	});
 	if (result) {
-		corners = corners.map(corner => {
+		corners = corners.map((corner, key) => {
 			if (corner.x == target.x && corner.y == target.y) {
+				stepRecorder.push({
+					operation: "delete",
+					object: "corner",
+					target: corner,
+					index: key
+				});
+				updateDeleteStepKey(key, "corner");
 				return false;
 			} else {
 				return corner;
@@ -329,6 +434,25 @@ function checkCornerNotConnected(target) {
 			return ele;
 		});
 	}
+}
+
+function updateDeleteStepKey(key, object, isDelete=true) {
+	lineChangeStep.forEach(steps => {
+		steps.forEach(step => {
+			if (step.operation === "delete" && step.object === object) {
+				if (isDelete) {
+					if (step.index > key) {
+						step.index--;
+					}
+				} else {
+					if (step.index <= key) {
+						step.index++;
+					}
+				}
+			}
+		});
+	});
+	console.log(lineChangeStep)
 }
 
 function deleteRoom() {
