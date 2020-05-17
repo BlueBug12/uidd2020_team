@@ -1,15 +1,23 @@
 let mode = "line";
-let switchmode = document.getElementById("switch");
-switchmode.addEventListener('click', () => {
+document.getElementById("switch").addEventListener('click', () => {
 	if (mode === "line") {
 		mode = "rect";
 		document.getElementById("color_canvas").style.visibility = "visible";
-	} else {
+	} else
+	if (mode === "rect") {
 		mode = "line";
 		document.getElementById("color_canvas").style.visibility = "hidden";
 	}
 });
 document.getElementById("undo").addEventListener('click', undo);
+document.getElementById("delete").addEventListener('click', () => {
+	if (mode === "line") {
+		deleteWall();
+	}
+	if (mode === "rect") {
+		deleteRoom();
+	}
+});
 
 let panel = {
     width: 1000,
@@ -78,6 +86,7 @@ function drawline(d, isDot, isLine) {
 		// calculate line position
 		if (!(nowCorner.x == 0 && nowCorner.y == 0)) {
 			let newWall = {
+				width: 2,
 				corner1: previewedWall[0].corner1,
 				corner2: newCorner
 			};
@@ -102,10 +111,31 @@ function drawline(d, isDot, isLine) {
 		nowCorner.y = newCorner.y;
 	}
 	corners.push(newCorner);
+	walls = walls.map(wall => {
+		wall.width = 2;
+		return wall;
+	});
 
 	render("line");
 	previewWall(event);
 	
+}
+
+function selectWall(d) {
+	let index = walls.indexOf(d);
+	walls = walls.map((wall, key) => {
+		if (key == index) {
+			if (wall.width == 4) {
+				wall.width = 2;
+			} else {
+				wall.width = 4;
+			}
+		} else {
+			wall.width = 2;
+		}
+		return wall;
+	});
+	render("line");
 }
 
 function previewWall(event) {
@@ -113,6 +143,7 @@ function previewWall(event) {
 		previewedWall = [];
 	} else {
 		previewedWall = [{
+			width: 2,
 			corner1: Object.assign({}, nowCorner),
 			corner2: {
 				x: event.layerX,
@@ -166,7 +197,23 @@ function render(type) {
 			.attr("x2", (d) => { return d.corner2.x; })
 			.attr("y2", (d) => { return d.corner2.y; })
 			.attr("stroke", "blue")
-			.attr("stroke-width", 2);
+			.attr("stroke-width", 2)
+			.on('click', (d) => {
+				if (nowCorner.x == 0 && nowCorner.y == 0) {
+					selectWall(d);
+				} else {
+					drawline(d, false, true);
+				}
+			});
+		d3.select("#walls")
+			.selectAll("line")
+			.data(walls)
+			.attr("x1", (d) => { return d.corner1.x; })
+			.attr("y1", (d) => { return d.corner1.y; })
+			.attr("x2", (d) => { return d.corner2.x; })
+			.attr("y2", (d) => { return d.corner2.y; })
+			.attr("stroke-width", (d) => { return d.width; })
+			.exit().remove();
 	}
 	if (type === "previewedWall") {
 		d3.select("#previewWall")
@@ -204,6 +251,79 @@ function undo() {
 			room_counter-=1;
 		}
 	}
+}
+
+function deleteWall() {
+	if (nowCorner.x != 0 || nowCorner.y != 0) {	// is dot
+		let x = nowCorner.x;
+		let y = nowCorner.y;
+		nowCorner.id = "";
+		nowCorner.x = 0;
+		nowCorner.y = 0;
+		corners.pop();
+		let checkedCorners = [];
+		walls = walls.map(wall => {
+			if (wall.corner1.x == x && wall.corner1.y == y) {
+				checkedCorners.push(wall.corner2);
+				return false;
+			} else if (wall.corner2.x == x && wall.corner2.y == y) {
+				checkedCorners.push(wall.corner1);
+				return false;
+			} else {
+				return wall;
+			}
+		}).filter(ele => {
+			return ele;
+		});
+		checkedCorners.forEach(corner => {
+			checkCornerNotConnected(corner);
+		});
+		previewedWall = [];
+		render("line");
+		render("previewedWall");
+	} else {	// is line
+		let checkedCorners = [];
+		walls = walls.map(wall => {
+			if (wall.width == 4) {
+				checkedCorners.push(wall.corner1);
+				checkedCorners.push(wall.corner2);
+				return false;
+			} else {
+				return wall
+			}
+		}).filter(ele => {
+			return ele;
+		});
+		checkedCorners.forEach(corner => {
+			checkCornerNotConnected(corner);
+		});
+		render("line");
+	}
+}
+
+function checkCornerNotConnected(target) {
+	let result = true;
+	walls.forEach(wall => {
+		if ((wall.corner1.x == target.x && wall.corner1.y == target.y) ||
+			(wall.corner2.x == target.x && wall.corner2.y == target.y)) {
+			result = false;
+		}
+	});
+	if (result) {
+		corners = corners.map(corner => {
+			if (corner.x == target.x && corner.y == target.y) {
+				return false;
+			} else {
+				return corner;
+			}
+		}).filter(ele => {
+			return ele;
+		});
+	}
+}
+
+function deleteRoom() {
+
 }
 
 
