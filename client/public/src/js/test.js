@@ -48,8 +48,8 @@ function drawline(d, isDot, isLine) {
 		x = d.x;
 		y = d.y;
 	} else if (isLine) {
-		x = (Math.floor(d.corner2.x / gridSize) + ((d.corner2.x % gridSize) > (gridSize / 2))) * gridSize + 1;
-		y = (Math.floor(d.corner2.y / gridSize) + ((d.corner2.y % gridSize) > (gridSize / 2))) * gridSize + 1;
+		x = (Math.floor(event.layerX / gridSize) + ((event.layerX % gridSize) > (gridSize / 2))) * gridSize + 1;
+		y = (Math.floor(event.layerY / gridSize) + ((event.layerY % gridSize) > (gridSize / 2))) * gridSize + 1;
 	} else {
 		x = ((event.layerX % gridSize) > (gridSize / 2) || (event.layerX % gridSize) <= 0) * gridSize + d.x;
 		y = ((event.layerY % gridSize) > (gridSize / 2) || (event.layerY % gridSize) <= 0) * gridSize + d.y;
@@ -531,7 +531,6 @@ function deleteRoom() {
 	   	})
 		.on('mouseup',function(d){
 			if (mode === "rect"){
-				console.log("end")
 				room_counter+=1;
 				column.on('mousemove', null);
 				row.selectAll(".choosing")
