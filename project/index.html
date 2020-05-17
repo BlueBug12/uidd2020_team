@@ -8,8 +8,9 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" type="text/css" href="./font-awesome-4.7.0/css/font-awesome.css">
+    <link rel="stylesheet" href="./jquery-ui-themes-1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="./timepicker/jquery.timepicker.css">
     <link rel="stylesheet" href="./style.css">
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
@@ -81,32 +82,7 @@
                                 <label class="deadline-date-label space" for="datepicker">任務期限</label>
                                 <input type="text" id="datepicker" name="date">
                                 <label class="deadline-time-label" for="timepicker"></label>
-                                <select id="timepicker" name="time">
-                                    <option value="1:00 PM">1:00 PM</option>
-                                    <option value="2:00 PM">2:00 PM</option>
-                                    <option value="3:00 PM">3:00 PM</option>
-                                    <option value="4:00 PM">4:00 PM</option>
-                                    <option value="5:00 PM">5:00 PM</option>
-                                    <option value="6:00 PM">6:00 PM</option>
-                                    <option value="7:00 PM">7:00 PM</option>
-                                    <option value="8:00 PM">8:00 PM</option>
-                                    <option value="9:00 PM">9:00 PM</option>
-                                    <option value="10:00 PM">10:00 PM</option>
-                                    <option value="11:00 PM">11:00 PM</option>
-                                    <option value="12:00 PM">12:00 PM</option>
-                                    <option value="1:00 AM">1:00 AM</option>
-                                    <option value="2:00 AM">2:00 AM</option>
-                                    <option value="3:00 AM">3:00 AM</option>
-                                    <option value="4:00 AM">4:00 AM</option>
-                                    <option value="5:00 AM">5:00 AM</option>
-                                    <option value="6:00 AM">6:00 AM</option>
-                                    <option value="7:00 AM">7:00 AM</option>
-                                    <option value="8:00 AM">8:00 AM</option>
-                                    <option value="9:00 AM">9:00 AM</option>
-                                    <option value="10:00 AM">10:00 AM</option>
-                                    <option value="11:00 AM">11:00 AM</option>
-                                    <option value="12:00 AM">12:00 AM</option>
-                                </select>
+                                <input type="text" id="timepicker" name="time">
                             </div>
                             <div class="confirm-request">
                                 <button type="submit" class="btn getcase space" id="task_btn">確定</button>
@@ -184,74 +160,9 @@
     <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js " integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo " crossorigin="anonymous "></script> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js " integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut " crossorigin="anonymous "></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js " integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k " crossorigin="anonymous "></script>
+    <script src="./timepicker/jquery.timepicker.min.js"></script>
     <script src="index.js"></script>
     <script src="floorplan.js"></script>
-    <script>
-        $('.request-btn').css("opacity", "1");
-        $('.solve-btn').click(function() {
-            $(this).addClass('active');
-            $('.request-btn').removeClass('active');
-            $(this).css("opacity", "1");
-            $('.request-btn').css("opacity", "0.5");
-            $('.request-mission').css("display", "none");
-            $('.solve-mission').css("display", "block");
-        })
-
-        $('.request-btn').click(function() {
-            $(this).addClass('active');
-            $('.solve-btn').removeClass('active');
-            $(this).css("opacity", "1");
-            $('.solve-btn').css("opacity", "0.5");
-            $('.solve-mission').css("display", "none");
-            $('.request-mission').css("display", "block");
-        })
-
-        $('.accept').click(function() {
-            $(this).addClass('press');
-            $(this).css("opacity", "0.5");
-            $(this).siblings('.judge').removeClass('press');
-            $(this).siblings('.judge').css("opacity", "1");
-        })
-
-        $('.judge').click(function() {
-            $(this).addClass('press');
-            $(this).css("opacity", "0.5");
-            $(this).siblings('.accept').removeClass('press');
-            $(this).siblings('.accept').css("opacity", "1");
-        })
-
-        $('.member').click(function() {
-            $(this).toggleClass("on");
-        })
-
-
-
-        var count = $(".buttonContainer").children().length;
-        $('.solve-btn').attr('data-before', count);
-        var tabButtons = document.querySelectorAll(".tabContainer .buttonContainer button");
-        var tabPanels = document.querySelectorAll(".tabContainer  .tabPanel");
-
-        function showPanel(panelIndex) {
-            tabButtons.forEach(function(node) {
-                node.style.backgroundColor = "#F2D7AD";
-                node.style.color = "";
-            });
-            tabButtons[panelIndex].style.backgroundColor = "#F7F6E4";
-            tabButtons[panelIndex].style.color = "white";
-            tabPanels.forEach(function(node) {
-                node.style.display = "none";
-            });
-            tabPanels[panelIndex].style.display = "block";
-            tabPanels[panelIndex].style.backgroundColor = "#F7F6E4";
-        }
-        showPanel(0);
-        $("#datepicker").datepicker({
-            showOn: "both",
-            buttonText: '<i class="fa fa-calendar"></i>'
-        });
-
-        document.getElementById("timepicker").selectedIndex = -1;
-    </script>
 
 </body>
 

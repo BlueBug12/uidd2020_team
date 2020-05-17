@@ -370,8 +370,12 @@ li {
 }
 
 #timepicker {
-    width: 20%;
+    width: 23%;
     font-size: 60%;
+}
+
+.ui-menu-item .ui-corner-all {
+    font-size: 12px;
 }
 
 .confirm-request {
