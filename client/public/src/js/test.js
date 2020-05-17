@@ -194,7 +194,17 @@ function render(type) {
 			.attr("r", (d) => { return d.r; })
 			.attr("stroke-width", 0)
 			.attr("fill", "blue")
-			.on('click', (d) => { drawline(d, true, false); });
+			.on('click', (d) => { drawline(d, true, false); })
+			.on('mousedown', () => {
+				document.getElementsByTagName("svg")[0].addEventListener('mousemove', (d) => {
+					editWall(d, true, false);
+				});
+			})
+			.on('mousedown', () => {
+				document.getElementsByTagName("svg")[0].removeEventListener('mousemove', (d) => {
+					editWall(d, true, false);
+				});
+			});
 		d3.select("#corners")
 			.selectAll("circle")
 			.data(corners)
@@ -220,6 +230,16 @@ function render(type) {
 				} else {
 					drawline(d, false, true);
 				}
+			})
+			.on('mousedown', () => {
+				document.getElementsByTagName("svg")[0].addEventListener('mousemove', (d) => {
+					editWall(d, false, true);
+				});
+			})
+			.on('mousedown', () => {
+				document.getElementsByTagName("svg")[0].removeEventListener('mousemove', (d) => {
+					editWall(d, false, true);
+				});
 			});
 		d3.select("#walls")
 			.selectAll("line")
@@ -263,29 +283,10 @@ function undo() {
 		lastStep.forEach(step => {
 			if (step.operation === "new") {
 				if (step.object === "wall") {
-					walls = walls.map(wall => {
-						let target = step.target;
-						if (wall.corner1.x === target.corner1.x && wall.corner1.y == target.corner1.y &&
-							wall.corner2.x === target.corner2.x && wall.corner2.y == target.corner2.y) {
-							return false;
-						} else {
-							return wall;
-						}
-					}).filter(ele => {
-						return ele;
-					});
+					walls.pop();
 				}
 				if (step.object === "corner") {
-					corners = corners.map(corner => {
-						let target = step.target;
-						if (corner.x === target.x && corner.y == target.y) {
-							return false;
-						} else {
-							return corner;
-						}
-					}).filter(ele => {
-						return ele;
-					});
+					corners.pop();
 				}
 			}
 			if (step.operation === "delete") {
@@ -338,13 +339,10 @@ function deleteWall() {
 					target: corner,
 					index: key
 				});
-				updateDeleteStepKey(key, "corner");
 				return false;
 			} else {
 				return corner;
 			}
-		}).filter(ele => {
-			return ele;
 		});
 		let checkedCorners = [];
 		walls = walls.map((wall, key) => {
@@ -356,7 +354,6 @@ function deleteWall() {
 					target: wall,
 					index: key
 				});
-				updateDeleteStepKey(key, "wall");
 				return false;
 			} else if (wall.corner2.x == x && wall.corner2.y == y) {
 				checkedCorners.push(wall.corner1);
@@ -366,7 +363,6 @@ function deleteWall() {
 					target: wall,
 					index: key
 				});
-				updateDeleteStepKey(key, "wall");
 				return false;
 			} else {
 				return wall;
@@ -377,8 +373,11 @@ function deleteWall() {
 		checkedCorners.forEach(corner => {
 			checkCornerNotConnected(corner, newStep);
 		});
-		previewedWall = [];
+		corners = corners.filter(ele => {
+			return ele;
+		});
 		render("line");
+		previewedWall = [];
 		render("previewedWall");
 	} else {	// is line
 		let checkedCorners = [];
@@ -392,7 +391,6 @@ function deleteWall() {
 					target: wall,
 					index: key
 				});
-				updateDeleteStepKey(key, "wall");
 				return false;
 			} else {
 				return wall
@@ -402,6 +400,9 @@ function deleteWall() {
 		});
 		checkedCorners.forEach(corner => {
 			checkCornerNotConnected(corner, newStep);
+		});
+		corners = corners.filter(ele => {
+			return ele;
 		});
 		render("line");
 	}
@@ -425,34 +426,19 @@ function checkCornerNotConnected(target, stepRecorder) {
 					target: corner,
 					index: key
 				});
-				updateDeleteStepKey(key, "corner");
+				if (stepRecorder[0].object === "corner" && stepRecorder[0].index > key) {
+					stepRecorder[0].index--;
+				}
 				return false;
 			} else {
 				return corner;
 			}
-		}).filter(ele => {
-			return ele;
 		});
 	}
 }
 
-function updateDeleteStepKey(key, object, isDelete=true) {
-	lineChangeStep.forEach(steps => {
-		steps.forEach(step => {
-			if (step.operation === "delete" && step.object === object) {
-				if (isDelete) {
-					if (step.index > key) {
-						step.index--;
-					}
-				} else {
-					if (step.index <= key) {
-						step.index++;
-					}
-				}
-			}
-		});
-	});
-	console.log(lineChangeStep)
+function editWall(d, isDot, isLine) {
+
 }
 
 function deleteRoom() {
@@ -497,8 +483,8 @@ function deleteRoom() {
 
 	var grid = d3.select("#grid")
 		.append("svg")
-		.attr("width", panel.width+gridSize)
-		.attr("height", panel.height+gridSize);
+		.attr("width", panel.width+2)
+		.attr("height", panel.height+2);
 
 	var row = grid.selectAll(".row")
 		.data(gridData)
