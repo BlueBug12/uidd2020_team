@@ -27,11 +27,11 @@ let gridSize = 20;
 let pre_x=1;
 let pre_y=1;
 let room_counter=0;
+var room_stack = [];
 let corners = [];
 let walls = [];
 let previewedWall = [];
-let wall_stack = [];
-var room_stack = [];
+let lineChangeStep = [];
 let nowCorner = {
 	id: "",
 	x: 0,
@@ -63,58 +63,59 @@ function drawline(d, isDot, isLine) {
 		r: 6
 	};
 
-	// update dots
-	corners = corners.map(corner => {
-		if (corner.x == newCorner.x && corner.y == newCorner.y) {
-			newCorner.id = corner.id;
-			return false;
-		} else {
-			corner.r = 4;
-			return corner;
-		}
-	}).filter(ele => {
-		return ele;
-	});
-	if (nowCorner.x == newCorner.x && nowCorner.y == newCorner.y) {
-		newCorner.r = 4;
-		nowCorner.id = "";
-		nowCorner.x = 0;
-		nowCorner.y = 0;
-	} else {
-		document.getElementsByTagName("svg")[0].addEventListener('mousemove', previewWall);
-
-		// calculate line position
-		if (!(nowCorner.x == 0 && nowCorner.y == 0)) {
-			let newWall = {
-				width: 2,
-				corner1: previewedWall[0].corner1,
-				corner2: newCorner
-			};
-			walls = walls.map(wall => {
-				if ((wall.corner1.x == newWall.corner1.x && wall.corner1.y == newWall.corner1.y) &&
-					(wall.corner2.x == newWall.corner2.x && wall.corner2.y == newWall.corner2.y)) {
-					return false;
-				} else if ((wall.corner1.x == newWall.corner2.x && wall.corner1.y == newWall.corner2.y) &&
-						   (wall.corner2.x == newWall.corner1.x && wall.corner2.y == newWall.corner1.y)) {
-					return false;
-				} else {
-					return wall;
-				}
-			}).filter(ele => {
-				return ele;
-			});
-			walls.push(Object.assign({}, newWall));
-		}
-
-		nowCorner.id = newCorner.id;
-		nowCorner.x = newCorner.x;
-		nowCorner.y = newCorner.y;
+	// update lines
+	if (!(nowCorner.x == 0 && nowCorner.y == 0)) {
+		let newWall = {
+			width: 2,
+			corner1: previewedWall[0].corner1,
+			corner2: newCorner
+		};
+		let isNewWall = true;
+		walls.forEach(wall => {
+			if (((wall.corner1.x == newWall.corner1.x && wall.corner1.y == newWall.corner1.y) &&
+				(wall.corner2.x == newWall.corner2.x && wall.corner2.y == newWall.corner2.y)) || 
+				((wall.corner1.x == newWall.corner2.x && wall.corner1.y == newWall.corner2.y) &&
+				(wall.corner2.x == newWall.corner1.x && wall.corner2.y == newWall.corner1.y))) {
+				isNewWall = false;
+			}
+		});
+		if (newWall.corner1.x == newWall.corner2.x && newWall.corner1.y == newWall.corner2.y) isNewWall = false;
+		if (isNewWall) walls.push(Object.assign({}, newWall));
 	}
-	corners.push(newCorner);
 	walls = walls.map(wall => {
 		wall.width = 2;
 		return wall;
 	});
+
+	// update dots
+	let isNewCorner = true;
+	corners = corners.map(corner => {
+		if (corner.x == newCorner.x && corner.y == newCorner.y) {
+			if (corner.r == 4) {
+				corner.r = 6;
+				nowCorner.id = corner.id;
+				nowCorner.x = corner.x;
+				nowCorner.y = corner.y;
+				document.getElementsByTagName("svg")[0].addEventListener('mousemove', previewWall);
+			} else {
+				corner.r = 4;
+				nowCorner.id = "";
+				nowCorner.x = 0;
+				nowCorner.y = 0;
+			}
+			isNewCorner = false;
+		} else {
+			corner.r = 4;
+		}
+		return corner;
+	});
+	if (isNewCorner) {
+		document.getElementsByTagName("svg")[0].addEventListener('mousemove', previewWall);
+		nowCorner.id = newCorner.id;
+		nowCorner.x = newCorner.x;
+		nowCorner.y = newCorner.y;
+		corners.push(newCorner);
+	}
 
 	render("line");
 	previewWall(event);
@@ -260,7 +261,15 @@ function deleteWall() {
 		nowCorner.id = "";
 		nowCorner.x = 0;
 		nowCorner.y = 0;
-		corners.pop();
+		corners = corners.map(corner => {
+			if (corner.x == x && corner.y == y) {
+				return false;
+			} else {
+				return corner;
+			}
+		}).filter(ele => {
+			return ele;
+		});
 		let checkedCorners = [];
 		walls = walls.map(wall => {
 			if (wall.corner1.x == x && wall.corner1.y == y) {
