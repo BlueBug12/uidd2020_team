@@ -49,8 +49,11 @@ img {
 
 nav {
     position: absolute;
-    margin: 15px 50px 0px 50px;
+    margin-left: 4%;
+    margin-right: 4%;
+    bottom: 15%;
     z-index: 10;
+    margin-top: 20%;
 }
 
 nav a {
@@ -70,7 +73,7 @@ nav a {
     position: absolute;
     width: 92%;
     border-bottom: #799FB4 solid 3px;
-    margin: 15px 4% 0px 4%;
+    margin: 30px 4% 0px 4%;
 }
 
 nav>ul {
@@ -80,7 +83,7 @@ nav>ul {
     margin: 0;
     color: #799FB4;
     padding: 0;
-    bottom: 10px
+    bottom: 10px;
 }
 
 li {
@@ -88,11 +91,11 @@ li {
 }
 
 .nav-bg {
-    position: fixed;
-    height: 80px;
+    height: 13vh;
     width: 100%;
     background-color: #F7F6E4;
-    z-index: 10;
+    position: fixed;
+    z-index: 5;
 }
 
 #top-house {
