@@ -38,25 +38,7 @@ $(document).ready(function() {
 
 
 
-    var count = $(".buttonContainer").children().length;
-    $('.solve-btn').attr('data-before', count);
-    var tabButtons = document.querySelectorAll(".tabContainer .buttonContainer button");
-    var tabPanels = document.querySelectorAll(".tabContainer  .tabPanel");
 
-    function showPanel(panelIndex) {
-        tabButtons.forEach(function(node) {
-            node.style.backgroundColor = "#F2D7AD";
-            node.style.color = "";
-        });
-        tabButtons[panelIndex].style.backgroundColor = "#F7F6E4";
-        tabButtons[panelIndex].style.color = "white";
-        tabPanels.forEach(function(node) {
-            node.style.display = "none";
-        });
-        tabPanels[panelIndex].style.display = "block";
-        tabPanels[panelIndex].style.backgroundColor = "#F7F6E4";
-    }
-    showPanel(0);
     $("#datepicker").datepicker({
         showOn: "both",
         buttonText: '<i class="fa fa-calendar"></i>'

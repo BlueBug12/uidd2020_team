@@ -67,6 +67,7 @@ div#signin div#align div#container div#button {
     border-radius: 10px;
     position: inherit;
     margin-top: 3vh;
+    line-height: 3vh;
     padding-top: 1vh;
     font-family: GenJyuuGothic-Medium;
     font-size: 3vh;
