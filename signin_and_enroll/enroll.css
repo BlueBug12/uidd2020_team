@@ -26,9 +26,9 @@ div#signin div#align div#title {
 div#signin div#align div#container {
     background-color: #f7f6e4;
     width: inherit;
-    height: 64vh;
+    height: 68vh;
     position: absolute;
-    margin-top: 10vh;
+    margin-top: 5vh;
     border-radius: 28px;
     text-align: center;
 }
