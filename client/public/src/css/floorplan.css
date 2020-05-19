@@ -168,13 +168,13 @@ li {
   z-index: 12;
   top:10vh;
   left:16vw;
-  border-radius:30px
+  border-radius:30px;
   background-color: #ffffff;
 }
 #button {
-  position: absolute;
     height:5vh;
-
+    position: absolute;
+    top: 10vh;
     left: 1vw;
 }
 #color_picker{
