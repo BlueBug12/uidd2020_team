@@ -20,8 +20,8 @@ document.getElementById("delete").addEventListener('click', () => {
 });
 
 let panel = {
-    width: 1000,
-    height: 600
+    width: 800,
+    height: 500
 };
 let gridSize = 20;
 let pre_x=1;
@@ -34,6 +34,11 @@ let previewedWall = [];
 let lineChangeStep = [];
 let nowCorner = {
 	id: "",
+	x: 0,
+	y: 0
+};
+let isEditing = false;
+let editTarget = {
 	x: 0,
 	y: 0
 };
@@ -75,7 +80,7 @@ function drawline(d, isDot, isLine) {
 		let isNewWall = true;
 		walls.forEach(wall => {
 			if (((wall.corner1.x == newWall.corner1.x && wall.corner1.y == newWall.corner1.y) &&
-				(wall.corner2.x == newWall.corner2.x && wall.corner2.y == newWall.corner2.y)) || 
+				(wall.corner2.x == newWall.corner2.x && wall.corner2.y == newWall.corner2.y)) ||
 				((wall.corner1.x == newWall.corner2.x && wall.corner1.y == newWall.corner2.y) &&
 				(wall.corner2.x == newWall.corner1.x && wall.corner2.y == newWall.corner1.y))) {
 				isNewWall = false;
@@ -134,7 +139,7 @@ function drawline(d, isDot, isLine) {
 	if (newStep.length == 0) lineChangeStep.pop();
 	render("line");
 	previewWall(event);
-	
+
 }
 
 function selectWall(d) {
@@ -194,16 +199,18 @@ function render(type) {
 			.attr("r", (d) => { return d.r; })
 			.attr("stroke-width", 0)
 			.attr("fill", "blue")
-			.on('click', (d) => { drawline(d, true, false); })
-			.on('mousedown', () => {
-				document.getElementsByTagName("svg")[0].addEventListener('mousemove', (d) => {
-					editWall(d, true, false);
-				});
+			.on('click', (d) => {
+				if (isEditing) {
+					isEditing = false;
+					return;
+				}
+				drawline(d, true, false);
 			})
 			.on('mousedown', () => {
-				document.getElementsByTagName("svg")[0].removeEventListener('mousemove', (d) => {
-					editWall(d, true, false);
-				});
+				startEditWall();
+				let svg = document.getElementsByTagName("svg")[0];
+				svg.addEventListener('mousemove', editWall);
+				svg.addEventListener('mouseup', endEditWall);
 			});
 		d3.select("#corners")
 			.selectAll("circle")
@@ -225,6 +232,10 @@ function render(type) {
 			.attr("stroke", "blue")
 			.attr("stroke-width", 2)
 			.on('click', (d) => {
+				if (isEditing) {
+					isEditing = false;
+					return;
+				}
 				if (nowCorner.x == 0 && nowCorner.y == 0) {
 					selectWall(d);
 				} else {
@@ -232,14 +243,10 @@ function render(type) {
 				}
 			})
 			.on('mousedown', () => {
-				document.getElementsByTagName("svg")[0].addEventListener('mousemove', (d) => {
-					editWall(d, false, true);
-				});
-			})
-			.on('mousedown', () => {
-				document.getElementsByTagName("svg")[0].removeEventListener('mousemove', (d) => {
-					editWall(d, false, true);
-				});
+				startEditWall();
+				let svg = document.getElementsByTagName("svg")[0];
+				svg.addEventListener('mousemove', editWall);
+				svg.addEventListener('mouseup', endEditWall);
 			});
 		d3.select("#walls")
 			.selectAll("line")
@@ -298,20 +305,19 @@ function undo() {
 				}
 			}
 			if (step.operation === "edit") {
-				// TODO
+				if (step.object === "wall") {
+					walls[step.index].corner1.x = step.before.x1;
+					walls[step.index].corner1.y = step.before.y1;
+					walls[step.index].corner2.x = step.before.x2;
+					walls[step.index].corner2.y = step.before.y2;
+				}
+				if (step.object === "corner") {
+					corners[step.index].x = step.before.x;
+					corners[step.index].y = step.before.y;
+				}
 			}
 		});
-		corners = corners.map(corner => {
-			corner.r = 4;
-			return corner;
-		});
-		walls = walls.map(wall => {
-			wall.width = 2;
-			return wall;
-		});
-		previewedWall = [];
-		render("line");
-		render("previewedWall");
+		removeHighlight();
 	}
 	if (mode === "rect") {
 		let class_name=room_stack.pop()
@@ -437,14 +443,133 @@ function checkCornerNotConnected(target, stepRecorder) {
 	}
 }
 
-function editWall(d, isDot, isLine) {
+function startEditWall() {
+	let newStep = [];
+	lineChangeStep.push(newStep);
+	let x = (Math.floor(event.layerX / gridSize) + ((event.layerX % gridSize) > (gridSize / 2))) * gridSize + 1;
+	let y = (Math.floor(event.layerY / gridSize) + ((event.layerY % gridSize) > (gridSize / 2))) * gridSize + 1;
+	let index = -1;
+	corners.forEach((corner, key) => {
+		if (corner.x == x && corner.y == y && corner.r != 6) {
+			if (event.target.className.baseVal === "wall") {
+				if ((event.target.x1.baseVal.value == x && event.target.y1.baseVal.value == y) ||
+					(event.target.x2.baseVal.value == x && event.target.y2.baseVal.value == y)) {
+					index = key;
+				}
+			} else {
+				index = key;
+			}
+		}
+	});
+	if (index != -1) {
+		newStep.push({
+			operation: "edit",
+			object: "corner",
+			before: {
+				x: x,
+				y: y
+			},
+			after: {
+				x: x,
+				y: y
+			},
+			index: index
+		});
+		walls.forEach((wall, key) => {
+			if ((wall.corner1.x == x && wall.corner1.y == y) ||
+				(wall.corner2.x == x && wall.corner2.y == y)) {
+				newStep.push({
+					operation: "edit",
+					object: "wall",
+					before: {
+						x1: wall.corner1.x,
+						y1: wall.corner1.y,
+						x2: wall.corner2.x,
+						y2: wall.corner2.y
+					},
+					after: {
+						x1: wall.corner1.x,
+						y1: wall.corner1.y,
+						x2: wall.corner2.x,
+						y2: wall.corner2.y
+					},
+					index: key
+				});
+			}
+		});
+		editTarget = {
+			x: x,
+			y: y
+		};
+	}
+}
 
+function editWall() {
+	isEditing = true;
+	removeHighlight();
+	let stepRecorder = lineChangeStep[lineChangeStep.length-1];
+	let x = (Math.floor(event.layerX / gridSize) + ((event.layerX % gridSize) > (gridSize / 2))) * gridSize + 1;
+	let y = (Math.floor(event.layerY / gridSize) + ((event.layerY % gridSize) > (gridSize / 2))) * gridSize + 1;
+	stepRecorder.forEach(step => {
+		if (step.operation === "edit") {
+			if (step.object === "corner") {
+				step.after.x = x;
+				step.after.y = y;
+				corners[step.index].x = x;
+				corners[step.index].y = y;
+			}
+			if (step.object === "wall") {
+				if (step.after.x1 == editTarget.x && step.after.y1 == editTarget.y) {
+					step.after.x1 = x;
+					step.after.y1 = y;
+					walls[step.index].corner1.x = x;
+					walls[step.index].corner1.y = y;
+				} else {
+					step.after.x2 = x;
+					step.after.y2 = y;
+					walls[step.index].corner2.x = x;
+					walls[step.index].corner2.y = y;
+				}
+			}
+		}
+	});
+	editTarget.x = x;
+	editTarget.y = y;
+	render("line");
+}
+
+function endEditWall() {
+	let svg = document.getElementsByTagName("svg")[0];
+	svg.removeEventListener('mousemove', editWall);
+	svg.removeEventListener('mouseup', endEditWall);
+	let stepRecorder = lineChangeStep[lineChangeStep.length-1];
+	if (stepRecorder.length == 0 || JSON.stringify(stepRecorder[0].before) === JSON.stringify(stepRecorder[0].after)) {
+		lineChangeStep.pop();
+	} else {
+		removeHighlight();
+	}
 }
 
 function deleteRoom() {
 
 }
 
+function removeHighlight() {
+	corners = corners.map(corner => {
+		corner.r = 4;
+		return corner;
+	});
+	walls = walls.map(wall => {
+		wall.width = 2;
+		return wall;
+	});
+	nowCorner.id = "";
+	nowCorner.x = 0;
+	nowCorner.y = 0;
+	previewedWall = [];
+	render("line");
+	render("previewedWall");
+}
 
 
 // api, basically no need to modify
@@ -490,7 +615,7 @@ function deleteRoom() {
 		.data(gridData)
 		.enter().append("g")
 		.attr("class", "row");
-	
+
 	var column = row.selectAll(".square")
 		.data(function(d) { return d; })
 		.enter().append("rect")

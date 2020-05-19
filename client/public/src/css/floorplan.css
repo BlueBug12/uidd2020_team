@@ -1,0 +1,187 @@
+@media (max-width: 575px) {
+    .right-mission {
+        font-size: 0.5rem;
+    }
+    .btn {
+        font-size: 0.5rem;
+    }
+    .space {
+        letter-spacing: 1.8px;
+        text-indent: 0.9px;
+    }
+}
+
+@media (min-width: 576px) {
+    .right-mission {
+        font-size: 0.6rem;
+    }
+    .btn {
+        font-size: 0.6rem;
+    }
+    .space {
+        letter-spacing: 2.8px;
+        text-indent: 1.4px;
+    }
+}
+
+@media (min-width: 768px) {
+    .right-mission {
+        font-size: 0.8rem;
+    }
+    .btn {
+        font-size: 0.8rem;
+    }
+    .space {
+        letter-spacing: 3.8px;
+        text-indent: 1.9px;
+    }
+}
+
+@media (min-width: 992px) {
+    .right-mission {
+        font-size: 1.0rem;
+    }
+    .btn {
+        font-size: 0.8rem;
+    }
+    .space {
+        letter-spacing: 4.8px;
+        text-indent: 2.4px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .right-mission {
+        font-size: 1.3rem;
+    }
+    .btn {
+        font-size: 1.3rem;
+    }
+    .space {
+        letter-spacing: 5.8px;
+        text-indent: 2.9px;
+    }
+}
+
+@font-face {
+    font-family: GenJyuuGothic-Medium;
+    src: url("./font/GenJyuuGothic-Medium.ttf")
+}
+
+@font-face {
+    font-family: GenJyuuGothic-Light;
+    src: url("./font/GenJyuuGothic-Light.ttf")
+}
+
+.container-fluid {
+    padding: 0;
+}
+
+nav {
+    position: absolute;
+    margin-left: 4%;
+    margin-right: 4%;
+    bottom: 15%;
+    z-index: 10;
+    margin-top: 20%;
+}
+
+nav a {
+    color: inherit;
+    font-size: 19.5pt;
+    font-family: GenJyuuGothic-Medium;
+    bottom: 10px;
+    text-decoration: none;
+}
+
+#logo {
+    position: absolute;
+    bottom: 25%;
+}
+
+#navbar {
+    position: absolute;
+    width: 92%;
+    border-bottom: #799FB4 solid 3px;
+    margin: 30px 4% 0px 4%;
+}
+
+nav>ul {
+    position: absolute;
+    list-style: none;
+    right: 0;
+    margin: 0;
+    color: #799FB4;
+    padding: 0;
+    bottom: 10px;
+}
+
+li {
+    margin: 0 10px;
+}
+
+.nav-bg {
+    height: 13vh;
+    width: 100%;
+    background-color: #F7F6E4;
+    position: relative;
+}
+
+#background {
+    position: absolute;
+    background-color: #F4DF62;
+    height: 87vh;
+    width: 100%;
+    z-index: -1;
+    overflow: hidden;
+}
+
+#mode_bar{
+  position: absolute;
+  background-color: #F4DF62;
+  height: 10vh;
+  width: 100%;
+  top:3vh;
+  z-index: 1;
+}
+#draw_map{
+  position: absolute;
+  width: 10vw;
+  right: 55vw;
+}
+#place_furnish{
+  position: absolute;
+  width: 10vw;
+  left: 55vw;
+
+}
+.button_text{
+
+  font-size: 18.5pt;
+  font-family: GenJyuuGothic-Medium;
+  text-align: center;
+}
+#canvas{
+  position: absolute;
+  width:auto;
+  height: auto;
+  z-index: 12;
+  top:10vh;
+  left:25vw;
+  background-color: #ffffff;
+}
+#button {
+  height:3vh
+    position: absolute;
+    top: 10vh;
+    left: 1vw;
+}
+#color_picker{
+  position:absolute;
+  top:1vh;
+  right:5vw;
+  z-index: 10;
+}
+#color_canvas{
+  visibility: hidden;
+}
