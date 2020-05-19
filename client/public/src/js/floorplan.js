@@ -37,6 +37,7 @@ let nowCorner = {
 	x: 0,
 	y: 0
 };
+let isEditing = false;
 let editTarget = {
 	x: 0,
 	y: 0
@@ -198,7 +199,13 @@ function render(type) {
 			.attr("r", (d) => { return d.r; })
 			.attr("stroke-width", 0)
 			.attr("fill", "blue")
-			.on('click', (d) => { drawline(d, true, false); })
+			.on('click', (d) => {
+				if (isEditing) {
+					isEditing = false;
+					return;
+				}
+				drawline(d, true, false);
+			})
 			.on('mousedown', () => {
 				startEditWall();
 				let svg = document.getElementsByTagName("svg")[0];
@@ -225,6 +232,10 @@ function render(type) {
 			.attr("stroke", "blue")
 			.attr("stroke-width", 2)
 			.on('click', (d) => {
+				if (isEditing) {
+					isEditing = false;
+					return;
+				}
 				if (nowCorner.x == 0 && nowCorner.y == 0) {
 					selectWall(d);
 				} else {
@@ -306,17 +317,7 @@ function undo() {
 				}
 			}
 		});
-		corners = corners.map(corner => {
-			corner.r = 4;
-			return corner;
-		});
-		walls = walls.map(wall => {
-			wall.width = 2;
-			return wall;
-		});
-		previewedWall = [];
-		render("line");
-		render("previewedWall");
+		removeHighlight();
 	}
 	if (mode === "rect") {
 		let class_name=room_stack.pop()
@@ -495,7 +496,6 @@ function startEditWall() {
 					index: key
 				});
 			}
-			wall.width = 2;
 		});
 		editTarget = {
 			x: x,
@@ -505,6 +505,8 @@ function startEditWall() {
 }
 
 function editWall() {
+	isEditing = true;
+	removeHighlight();
 	let stepRecorder = lineChangeStep[lineChangeStep.length-1];
 	let x = (Math.floor(event.layerX / gridSize) + ((event.layerX % gridSize) > (gridSize / 2))) * gridSize + 1;
 	let y = (Math.floor(event.layerY / gridSize) + ((event.layerY % gridSize) > (gridSize / 2))) * gridSize + 1;
@@ -544,18 +546,7 @@ function endEditWall() {
 	if (stepRecorder.length == 0 || JSON.stringify(stepRecorder[0].before) === JSON.stringify(stepRecorder[0].after)) {
 		lineChangeStep.pop();
 	} else {
-		nowCorner.id = "";
-		nowCorner.x = 0;
-		nowCorner.y = 0;
-		corners.forEach(corner => {
-			corner.r = 4;
-		});
-		walls.forEach(wall => {
-			wall.width = 2;
-		});
-		previewedWall = [];
-		render("line");
-		render("previewedWall");
+		removeHighlight();
 	}
 }
 
@@ -563,6 +554,22 @@ function deleteRoom() {
 
 }
 
+function removeHighlight() {
+	corners = corners.map(corner => {
+		corner.r = 4;
+		return corner;
+	});
+	walls = walls.map(wall => {
+		wall.width = 2;
+		return wall;
+	});
+	nowCorner.id = "";
+	nowCorner.x = 0;
+	nowCorner.y = 0;
+	previewedWall = [];
+	render("line");
+	render("previewedWall");
+}
 
 
 // api, basically no need to modify
