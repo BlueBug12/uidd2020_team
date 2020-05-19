@@ -65,12 +65,12 @@
 
 @font-face {
     font-family: GenJyuuGothic-Medium;
-    src: url("./font/GenJyuuGothic-Medium.ttf")
+    src: url("../../font/GenJyuuGothic-Medium.ttf")
 }
 
 @font-face {
     font-family: GenJyuuGothic-Light;
-    src: url("./font/GenJyuuGothic-Light.ttf")
+    src: url("../../font/GenJyuuGothic-Light.ttf")
 }
 
 .container-fluid {
@@ -171,7 +171,7 @@ li {
   background-color: #ffffff;
 }
 #button {
-  height:3vh
+    height:3vh;
     position: absolute;
     top: 10vh;
     left: 1vw;
