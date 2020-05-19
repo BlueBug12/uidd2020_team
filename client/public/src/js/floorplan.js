@@ -30,11 +30,12 @@ let gridSize = 20;
 let pre_x=1;
 let pre_y=1;
 let room_counter=0;
-var room_stack = [];
+let isNewRoom = false;
+var rooms = [];
 let corners = [];
 let walls = [];
 let previewedWall = [];
-let lineChangeStep = [];
+let steps = [];
 let nowCorner = {
 	id: "",
 	x: 0,
@@ -71,7 +72,7 @@ function drawline(d, isDot, isLine) {
 		r: 6
 	};
 	let newStep = [];
-	lineChangeStep.push(newStep);
+	steps.push(newStep);
 
 	// update lines
 	if (!(nowCorner.x == 0 && nowCorner.y == 0)) {
@@ -139,7 +140,7 @@ function drawline(d, isDot, isLine) {
 		});
 	}
 
-	if (newStep.length == 0) lineChangeStep.pop();
+	if (newStep.length == 0) steps.pop();
 	render("line");
 	previewWall(event);
 
@@ -179,12 +180,13 @@ function previewWall(event) {
 }
 
 function drawrect(d) {
+	isNewRoom = true;
 	d3.selectAll(".square").style("fill", "#f0f0f0").attr("class","square")	// reset the class
-	let color = document.getElementById("color_canvas").value;
+	let color = document.getElementsByTagName("input")[0].value;
 	for (let i = Math.min(d.x, pre_x); i <= Math.max(d.x, pre_x) ; i+=gridSize) {
 		for (let j = Math.min(d.y, pre_y); j <= Math.max(d.y, pre_y); j+=gridSize) {
 			d3.select("#"+'_'+i.toString(10)+'_'+j.toString(10))
-				.style("fill", "#"+color)
+				.style("fill", color)
 				.classed('choosing', true)	// add class to recognize the chosen one
 		}
 	}
@@ -287,53 +289,57 @@ function render(type) {
 }
 
 function undo() {
-	if (mode === "line") {
-		let lastStep = lineChangeStep.pop();
-		if (!lastStep) return;
-		lastStep.forEach(step => {
-			if (step.operation === "new") {
-				if (step.object === "wall") {
-					walls.pop();
-				}
-				if (step.object === "corner") {
-					corners.pop();
+	let lastStep = steps.pop();
+	if (!lastStep) return;
+	lastStep.forEach(step => {
+		if (step.operation === "new") {
+			if (step.object === "wall") {
+				walls.pop();
+			}
+			if (step.object === "corner") {
+				corners.pop();
+			}
+			if (step.object === "room") {
+				let class_name=rooms.pop()
+				if(class_name) {
+					d3.selectAll("."+class_name).attr("class","square").style("fill", "#f0f0f0");
+					room_counter-=1;
 				}
 			}
-			if (step.operation === "delete") {
-				if (step.object === "wall") {
-					walls.splice(step.index, 0, step.target);
-				}
-				if (step.object === "corner") {
-					corners.splice(step.index, 0, step.target);
-				}
-			}
-			if (step.operation === "edit") {
-				if (step.object === "wall") {
-					walls[step.index].corner1.x = step.before.x1;
-					walls[step.index].corner1.y = step.before.y1;
-					walls[step.index].corner2.x = step.before.x2;
-					walls[step.index].corner2.y = step.before.y2;
-				}
-				if (step.object === "corner") {
-					corners[step.index].x = step.before.x;
-					corners[step.index].y = step.before.y;
-				}
-			}
-		});
-		removeHighlight();
-	}
-	if (mode === "rect") {
-		let class_name=room_stack.pop()
-		if(class_name) {
-			d3.selectAll("."+class_name).attr("class","square").style("fill", "#f0f0f0");
-			room_counter-=1;
 		}
-	}
+		if (step.operation === "delete") {
+			if (step.object === "wall") {
+				walls.splice(step.index, 0, step.target);
+			}
+			if (step.object === "corner") {
+				corners.splice(step.index, 0, step.target);
+			}
+			if (step.object === "room") {
+				// TODO
+			}
+		}
+		if (step.operation === "edit") {
+			if (step.object === "wall") {
+				walls[step.index].corner1.x = step.before.x1;
+				walls[step.index].corner1.y = step.before.y1;
+				walls[step.index].corner2.x = step.before.x2;
+				walls[step.index].corner2.y = step.before.y2;
+			}
+			if (step.object === "corner") {
+				corners[step.index].x = step.before.x;
+				corners[step.index].y = step.before.y;
+			}
+			if (step.object === "room") {
+				// TODO
+			}
+		}
+	});
+	removeHighlight();
 }
 
 function deleteWall() {
 	let newStep = [];
-	lineChangeStep.push(newStep);
+	steps.push(newStep);
 	if (nowCorner.x != 0 || nowCorner.y != 0) {	// is dot
 		let x = nowCorner.x;
 		let y = nowCorner.y;
@@ -415,7 +421,7 @@ function deleteWall() {
 		});
 		render("line");
 	}
-	if (newStep.length == 0) lineChangeStep.pop();
+	if (newStep.length == 0) steps.pop();
 }
 
 function checkCornerNotConnected(target, stepRecorder) {
@@ -448,7 +454,7 @@ function checkCornerNotConnected(target, stepRecorder) {
 
 function startEditWall() {
 	let newStep = [];
-	lineChangeStep.push(newStep);
+	steps.push(newStep);
 	let x = (Math.floor(event.layerX / gridSize) + ((event.layerX % gridSize) > (gridSize / 2))) * gridSize + 1;
 	let y = (Math.floor(event.layerY / gridSize) + ((event.layerY % gridSize) > (gridSize / 2))) * gridSize + 1;
 	let index = -1;
@@ -510,7 +516,7 @@ function startEditWall() {
 function editWall() {
 	isEditing = true;
 	removeHighlight();
-	let stepRecorder = lineChangeStep[lineChangeStep.length-1];
+	let stepRecorder = steps[steps.length-1];
 	let x = (Math.floor(event.layerX / gridSize) + ((event.layerX % gridSize) > (gridSize / 2))) * gridSize + 1;
 	let y = (Math.floor(event.layerY / gridSize) + ((event.layerY % gridSize) > (gridSize / 2))) * gridSize + 1;
 	stepRecorder.forEach(step => {
@@ -545,9 +551,9 @@ function endEditWall() {
 	let svg = document.getElementsByTagName("svg")[0];
 	svg.removeEventListener('mousemove', editWall);
 	svg.removeEventListener('mouseup', endEditWall);
-	let stepRecorder = lineChangeStep[lineChangeStep.length-1];
+	let stepRecorder = steps[steps.length-1];
 	if (stepRecorder.length == 0 || JSON.stringify(stepRecorder[0].before) === JSON.stringify(stepRecorder[0].after)) {
-		lineChangeStep.pop();
+		steps.pop();
 	} else {
 		removeHighlight();
 	}
@@ -638,20 +644,35 @@ function removeHighlight() {
 			}
 		}).on('mousedown', function(d) {
 			if (mode === "rect"){
-				var m = d3.mouse(this);
-				pre_x=Math.floor(m[0]/gridSize)*gridSize+1;
-				pre_y=Math.floor(m[1]/gridSize)*gridSize+1;
+				pre_x = (Math.floor(event.layerX / gridSize)) * gridSize + 1;
+				pre_y = (Math.floor(event.layerY / gridSize)) * gridSize + 1;
 				column.on('mousemove', drawrect);
 			}
 	   	})
 		.on('mouseup',function(d){
 			if (mode === "rect"){
-				room_counter+=1;
 				column.on('mousemove', null);
-				row.selectAll(".choosing")
-					.attr("class","room_"+room_counter.toString(10))
-					.classed('chosen',true)
-				room_stack.push("room_"+room_counter.toString(10));
+				if (isNewRoom) {
+					room_counter+=1;
+					row.selectAll(".choosing")
+						.attr("class","room_"+room_counter.toString(10))
+						.classed('chosen',true)
+					rooms.push("room_"+room_counter.toString(10));
+					steps.push([{
+						operation: "new",
+						object: "room",
+						color: document.getElementsByTagName("input")[0].value,
+						start: {
+							x: pre_x,
+							y: pre_y
+						},
+						end: {
+							x: d.x,
+							y: d.y
+						}
+					}]);
+					isNewRoom = false;
+				}
 			}
 		});
 
