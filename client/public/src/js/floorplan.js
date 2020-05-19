@@ -29,7 +29,6 @@ let panel = {
 let gridSize = 20;
 let pre_x=1;
 let pre_y=1;
-let room_counter=0;
 let isNewRoom = false;
 var rooms = [];
 let corners = [];
@@ -300,10 +299,13 @@ function undo() {
 				corners.pop();
 			}
 			if (step.object === "room") {
-				let class_name=rooms.pop()
-				if(class_name) {
-					d3.selectAll("."+class_name).attr("class","square").style("fill", "#f0f0f0");
-					room_counter-=1;
+				let room = rooms.pop();
+				if (room) {
+					room.color = "#f0f0f0";
+					setRoomColor(room);
+					rooms.forEach(room => {
+						setRoomColor(room);
+					});
 				}
 			}
 		}
@@ -335,6 +337,19 @@ function undo() {
 		}
 	});
 	removeHighlight();
+}
+
+function setRoomColor(room) {
+	let x1 = Math.min(room.start.x, room.end.x);
+	let x2 = Math.max(room.start.x, room.end.x);
+	let y1 = Math.min(room.start.y, room.end.y);
+	let y2 = Math.max(room.start.y, room.end.y);
+	for (let i = x1; i <= x2; i += gridSize) {
+		for (let j = y1; j <= y2; j += gridSize) {
+			d3.select("#"+'_'+i.toString(10)+'_'+j.toString(10))
+				.style("fill", room.color)
+		}
+	}
 }
 
 function deleteWall() {
@@ -653,14 +668,10 @@ function removeHighlight() {
 			if (mode === "rect"){
 				column.on('mousemove', null);
 				if (isNewRoom) {
-					room_counter+=1;
 					row.selectAll(".choosing")
-						.attr("class","room_"+room_counter.toString(10))
+						.attr("class", "room")
 						.classed('chosen',true)
-					rooms.push("room_"+room_counter.toString(10));
-					steps.push([{
-						operation: "new",
-						object: "room",
+					rooms.push({
 						color: document.getElementsByTagName("input")[0].value,
 						start: {
 							x: pre_x,
@@ -670,6 +681,11 @@ function removeHighlight() {
 							x: d.x,
 							y: d.y
 						}
+					});
+					steps.push([{
+						operation: "new",
+						object: "room",
+						value: Object.assign({}, rooms[rooms.length-1])
 					}]);
 					isNewRoom = false;
 				}
