@@ -2,11 +2,11 @@ let mode = "line";
 document.getElementById("add_button").addEventListener('click', () => {
 	if (mode === "line") {
 		mode = "rect";
-		document.getElementById("color_canvas").style.visibility = "visible";
+		//document.getElementById("color_canvas").style.visibility = "visible";
 	} else
 	if (mode === "rect") {
 		mode = "line";
-		document.getElementById("color_canvas").style.visibility = "hidden";
+		//document.getElementById("color_canvas").style.visibility = "hidden";
 	}
 });
 document.getElementById("undo_button").addEventListener('click', undo);
@@ -18,7 +18,10 @@ document.getElementById("delete").addEventListener('click', () => {
 		deleteRoom();
 	}
 });
-
+$('#add_button').click(function(event) {
+  let ccccc = document.getElementsByTagName("input")[0].value;
+	console.log(ccccc);
+});
 let panel = {
     width: 1000,
     height: 500
