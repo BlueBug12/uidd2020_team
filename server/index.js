@@ -12,12 +12,9 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static('../client/public'));
-require('./routes/authRoutes')(app);
 
 const taskRoute= require('./routes/Tasks');
 const userRoute = require('./routes/Users');
-app.use(express.static('../project'));
-app.use(express.static('../signin_and_enroll'));
 app.use('/tasks',taskRoute);
 app.use('/users',userRoute);
 

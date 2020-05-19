@@ -61,6 +61,7 @@ router.post('/createclass',async(req,res) => {
     }catch(err){
         res.json({message:err});
     }
+    res.status(200).send({ isSuccess: true });
 });
 
 module.exports = router;
