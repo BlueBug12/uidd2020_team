@@ -1,5 +1,5 @@
 let mode = "line";
-document.getElementById("switch").addEventListener('click', () => {
+document.getElementById("add_button").addEventListener('click', () => {
 	if (mode === "line") {
 		mode = "rect";
 		document.getElementById("color_canvas").style.visibility = "visible";
@@ -9,7 +9,7 @@ document.getElementById("switch").addEventListener('click', () => {
 		document.getElementById("color_canvas").style.visibility = "hidden";
 	}
 });
-document.getElementById("undo").addEventListener('click', undo);
+document.getElementById("undo_button").addEventListener('click', undo);
 document.getElementById("delete").addEventListener('click', () => {
 	if (mode === "line") {
 		deleteWall();
@@ -20,7 +20,7 @@ document.getElementById("delete").addEventListener('click', () => {
 });
 
 let panel = {
-    width: 800,
+    width: 1000,
     height: 500
 };
 let gridSize = 20;
@@ -197,7 +197,7 @@ function render(type) {
 			.attr("cy", (d) => { return d.y; })
 			.attr("r", (d) => { return d.r; })
 			.attr("stroke-width", 0)
-			.attr("fill", "blue")
+			.attr("fill", "black")
 			.on('click', (d) => { drawline(d, true, false); })
 			.on('mousedown', () => {
 				startEditWall();
@@ -222,7 +222,7 @@ function render(type) {
 			.attr("y1", (d) => { return d.corner1.y; })
 			.attr("x2", (d) => { return d.corner2.x; })
 			.attr("y2", (d) => { return d.corner2.y; })
-			.attr("stroke", "blue")
+			.attr("stroke", "black")
 			.attr("stroke-width", 2)
 			.on('click', (d) => {
 				if (nowCorner.x == 0 && nowCorner.y == 0) {
@@ -257,7 +257,7 @@ function render(type) {
 			.attr("y1", (d) => { return d.corner1.y; })
 			.attr("x2", (d) => { return d.corner2.x; })
 			.attr("y2", (d) => { return d.corner2.y; })
-			.attr("stroke", "blue")
+			.attr("stroke", "black")
 			.attr("stroke-width", 2)
 			.style("opacity", 0.5)
 			.on('click', (d) => { drawline(d, false, true); });
@@ -602,6 +602,7 @@ function deleteRoom() {
 	var grid = d3.select("#grid")
 		.append("svg")
 		.attr("width", panel.width+2)
+		.style("border-radius","30px")
 		.attr("height", panel.height+2);
 
 	var row = grid.selectAll(".row")
@@ -619,7 +620,7 @@ function deleteRoom() {
 		.attr("height", function(d) { return d.height; })
 		.attr("id", function(d) { return '_'+d.x.toString(10)+'_'+d.y.toString(10); })
 		.style("fill", "#f0f0f0")
-		.style("stroke", "#222")
+		.style("stroke", "#B3AFAF")
 		.style("stroke-width", 0.3)
 		.on('click', function(d) {
 			if (mode === "line") {
