@@ -20,8 +20,8 @@ document.getElementById("delete").addEventListener('click', () => {
 });
 
 let panel = {
-    width: 1000,
-    height: 600
+    width: 800,
+    height: 500
 };
 let gridSize = 20;
 let pre_x=1;
@@ -79,7 +79,7 @@ function drawline(d, isDot, isLine) {
 		let isNewWall = true;
 		walls.forEach(wall => {
 			if (((wall.corner1.x == newWall.corner1.x && wall.corner1.y == newWall.corner1.y) &&
-				(wall.corner2.x == newWall.corner2.x && wall.corner2.y == newWall.corner2.y)) || 
+				(wall.corner2.x == newWall.corner2.x && wall.corner2.y == newWall.corner2.y)) ||
 				((wall.corner1.x == newWall.corner2.x && wall.corner1.y == newWall.corner2.y) &&
 				(wall.corner2.x == newWall.corner1.x && wall.corner2.y == newWall.corner1.y))) {
 				isNewWall = false;
@@ -138,7 +138,7 @@ function drawline(d, isDot, isLine) {
 	if (newStep.length == 0) lineChangeStep.pop();
 	render("line");
 	previewWall(event);
-	
+
 }
 
 function selectWall(d) {
@@ -608,7 +608,7 @@ function deleteRoom() {
 		.data(gridData)
 		.enter().append("g")
 		.attr("class", "row");
-	
+
 	var column = row.selectAll(".square")
 		.data(function(d) { return d; })
 		.enter().append("rect")
