@@ -59,8 +59,51 @@ $(document).ready(function() {
     });
     $("#timepicker").attr("autocomplete", "off");
 
+    function buttonenable() {
+        let buttons = document.getElementsByTagName('button');
+        for (let i = 0; i < buttons.length; i++) {
+            buttons[i].disabled = false;
+            buttons[i].style.cursor = "pointer";
+        }
+    }
+
+    function hrefenable() {
+        let hrefs = document.getElementsByTagName('a');
+        for (let i = 0; i < hrefs.length; i++) {
+            hrefs[i].style.cursor = "pointer";
+            hrefs[i].style.pointerEvents = "auto";
+
+        }
+    }
+
+    function buttonunable() {
+        let buttons = document.getElementsByTagName('button');
+        for (let i = 0; i < buttons.length; i++) {
+            buttons[i].disabled = true;
+            buttons[i].style.cursor = "default";
+        }
+        $('.checkconfirm').css("cursor", "pointer");
+        $('.checkconfirm').prop("disabled", false);
+    }
+
+    function hrefunable() {
+        let hrefs = document.getElementsByTagName('a');
+        for (let i = 0; i < hrefs.length; i++) {
+            hrefs[i].style.cursor = "default";
+            hrefs[i].style.pointerEvents = "none";
+        }
+    }
+
+    $('.checkconfirm').click(function(e) {
+        buttonenable();
+        hrefenable();
+        $('.check').css("visibility", "hidden");
+        $('.mask').css("visibility", "hidden");
+    });
+
+
     $('#task_btn').click((event) => {
-        event.preventDefault()
+        event.preventDefault();
         $.post('./tasks', {
             content: $('#addTasks input[name=content]').val(),
             advise: $('#addTasks textarea[name=advise]').val(),
@@ -68,6 +111,14 @@ $(document).ready(function() {
             time: $('#addTasks input[name=time]').val()
         }, (res) => {
             console.log(res);
+            buttonunable();
+            hrefunable();
+            $('#addTasks input[name=content]').val("");
+            $('#addTasks textarea[name=advise]').val("");
+            $('#addTasks input[name=date]').val("");
+            $('#addTasks input[name=time]').val("");
+            $('.check').css("visibility", "visible");
+            $('.mask').css("visibility", "visible");
         });
     });
     $('#solve_btn').click((event) => {
@@ -79,5 +130,7 @@ $(document).ready(function() {
             console.log(res[0].content);
         });
     });
+
+
 
 });

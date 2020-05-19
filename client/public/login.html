@@ -36,11 +36,17 @@
         <div id="align">
             <div id="container">
                 <div id="title">Log in！</div>
-                <form name="signin" id="signin">
+                <form name="signin" class="needs-validation form">
                     <!-- <div class="text">帳號</div> -->
-                    <input type="text" placeholder="帳號" name="account" />
+                    <div class="formdiv">
+                        <input type="text" placeholder="帳號" name="account" autocomplete="off" class="form-control" required/>
+                        <div class="invalid-feedback">此為必填欄位</div>
+                    </div>
                     <!-- <div class="text">密碼</div> -->
-                    <input type="password" placeholder="密碼" name="password" />
+                    <div class="formdiv">
+                        <input type="password" placeholder="密碼" name="password" autocomplete="off" class="form-control" required/>
+                        <div class="invalid-feedback">此為必填欄位</div>
+                    </div>
                     <div class="button" id="login_btn">登入</div>
                 </form>
                 <div class="down">
@@ -58,21 +64,21 @@
         <!-- Modal -->
         <div id="myModal" class="modal fade" role="dialog">
             <div class="modal-dialog">
-        
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title"></h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title"></h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <p></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
                 </div>
-                <div class="modal-body">
-                    <p></p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        
+
             </div>
         </div>
         <div id="logo">

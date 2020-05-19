@@ -26,7 +26,8 @@
                             <a href=".#section_3">關於我們</a>
                         </li>
                         <li class="list-inline-item">
-                            <a href="login.html">登入</a>
+                            <!-- <a href="login.html">登入</a> -->
+                            <img src="./img/brother.png" alt="" srcset="">
                         </li>
                     </ul>
                 </nav>
@@ -35,14 +36,19 @@
         <div id="align">
             <div id="container">
                 <div id="title">創建班級</div>
-                <form name="signin" id="signin">
+                <form name="signin" class="needs-validation form">
                     <!-- <div class="text">帳號</div> -->
-                    <input type="text" placeholder="設定班級代碼" name="classcode" />
+                    <div class="formdiv">
+                        <input type="text" placeholder="設定班級代碼" class="form-control" autocomplete="off" name="classcode" required/>
+                        <div class="invalid-feedback">此為必填欄位</div>
+                    </div>
                     <!-- <div class="text">密碼</div> -->
-                    <input type="text" placeholder="你的暱稱" name="nickname" />
+                    <div class="formdiv">
+                        <input type="text" placeholder="你的暱稱" class="form-control" autocomplete="off" name="nickname" required/>
+                        <div class="invalid-feedback">此為必填欄位</div>
+                    </div>
                     <div class="button" id="group_btn2">加入</div>
                 </form>
-
                 <div class="add-text">
                     尚未創建班級?
                     <a href="createclass.html" class="enroll">馬上創建</a>

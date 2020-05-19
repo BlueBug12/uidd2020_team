@@ -61,6 +61,47 @@ div#signin div#align div#container {
     margin-top: 14vh;
     border-radius: 28px;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-control:focus {
+    color: #495057;
+    background-color: #fff;
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.0rem rgba(0, 123, 255, 0.25);
+}
+
+.was-validated .form-control:valid:focus,
+.form-control.is-valid:focus {
+    border-color: #28a745;
+    box-shadow: 0 0 0 0.0rem rgba(40, 167, 69, 0.25);
+}
+
+.was-validated .form-control:valid,
+.form-control.is-valid {
+    border-color: #28a745;
+    padding-right: calc(1.5em + 0.75rem);
+    background-image: none;
+}
+
+.was-validated .form-control:invalid:focus,
+.form-control.is-invalid:focus {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.0rem rgba(220, 53, 69, 0.25);
+}
+
+.invalid-feedback {
+    font-family: GenJyuuGothic-Medium;
+}
+
+.form {
+    margin: auto;
+}
+
+.formdiv {
+    height: 6vh;
 }
 
 form input::placeholder {
