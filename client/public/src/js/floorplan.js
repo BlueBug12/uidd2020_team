@@ -191,6 +191,10 @@ function drawrect(d) {
 	}
 }
 
+function selectRect() {
+	// TODO
+}
+
 function render(type) {
 	if (type === "line") {
 		d3.select("#corners")
@@ -299,14 +303,8 @@ function undo() {
 				corners.pop();
 			}
 			if (step.object === "room") {
-				let room = rooms.pop();
-				if (room) {
-					room.color = "#f0f0f0";
-					setRoomColor(room);
-					rooms.forEach(room => {
-						setRoomColor(room);
-					});
-				}
+				deleteRoom(rooms[rooms.length-1]);
+				resetRoomColor();
 			}
 		}
 		if (step.operation === "delete") {
@@ -339,17 +337,19 @@ function undo() {
 	removeHighlight();
 }
 
-function setRoomColor(room) {
-	let x1 = Math.min(room.start.x, room.end.x);
-	let x2 = Math.max(room.start.x, room.end.x);
-	let y1 = Math.min(room.start.y, room.end.y);
-	let y2 = Math.max(room.start.y, room.end.y);
-	for (let i = x1; i <= x2; i += gridSize) {
-		for (let j = y1; j <= y2; j += gridSize) {
-			d3.select("#"+'_'+i.toString(10)+'_'+j.toString(10))
-				.style("fill", room.color)
+function resetRoomColor() {
+	rooms.forEach(room => {
+		let x1 = Math.min(room.start.x, room.end.x);
+		let x2 = Math.max(room.start.x, room.end.x);
+		let y1 = Math.min(room.start.y, room.end.y);
+		let y2 = Math.max(room.start.y, room.end.y);
+		for (let i = x1; i <= x2; i += gridSize) {
+			for (let j = y1; j <= y2; j += gridSize) {
+				d3.select("#"+'_'+i.toString(10)+'_'+j.toString(10))
+					.style("fill", room.color)
+			}
 		}
-	}
+	});
 }
 
 function deleteWall() {
@@ -574,8 +574,20 @@ function endEditWall() {
 	}
 }
 
-function deleteRoom() {
-
+function deleteRoom(room) {
+	let x1 = Math.min(room.start.x, room.end.x);
+	let x2 = Math.max(room.start.x, room.end.x);
+	let y1 = Math.min(room.start.y, room.end.y);
+	let y2 = Math.max(room.start.y, room.end.y);
+	for (let i = x1; i <= x2; i += gridSize) {
+		for (let j = y1; j <= y2; j += gridSize) {
+			d3.select("#"+'_'+i.toString(10)+'_'+j.toString(10))
+				.attr("class", "square")
+				.style("fill", "#f0f0f0")
+		}
+	}
+	rooms.splice(rooms.indexOf(room), 1);
+	console.log(rooms)
 }
 
 function removeHighlight() {
