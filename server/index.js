@@ -1,6 +1,13 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-
+var https = require('https');
+var key = './ssl/private.key';
+var crt = './ssl/certificate.crt';
+const fs = require("fs");
+const SERVER_CONFIG = {
+  key:  fs.readFileSync(key),
+  cert: fs.readFileSync(crt)
+};
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -8,15 +15,16 @@ app.use(express.static('../client/public'));
 require('./routes/authRoutes')(app);
 
 const taskRoute= require('./routes/Tasks');
+const userRoute = require('./routes/Users');
 app.use(express.static('../project'));
+app.use(express.static('../signin_and_enroll'));
 app.use('/tasks',taskRoute);
+app.use('/users',userRoute);
 
-const port = 9898;
-app.listen(port, () => {
-    console.log("server listening on: " + port);
-});
-
-
+const port = 1112;
+https.createServer(SERVER_CONFIG, app)
+     .listen(port,function() { console.log("HTTPS sever started"); }
+);
 
 //Connect to Database
 const config = require('./config')

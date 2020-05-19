@@ -59,7 +59,7 @@ div#signin div#align div#container input:focus {
     outline: none;
 }
 
-div#signin div#align div#container div#button {
+div#signin div#align div#container div.button {
     display: inline-block;
     width: 26vw;
     height: 5vh;
@@ -73,7 +73,7 @@ div#signin div#align div#container div#button {
     color: #f7f6e4;
 }
 
-div#signin div#align div#container div#button:hover {
+div#signin div#align div#container div.button:hover {
     cursor: pointer;
 }
 
