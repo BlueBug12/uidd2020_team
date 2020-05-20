@@ -48,6 +48,7 @@ router.post('/enroll',async(req,res) => {
 //store fb login data
 router.post('/CheckData',async(req,res) => {
     try {
+        console.log(req.body.account);
         await Users.findOne({ "account":req.body.account}).exec(async (err, res2) => {
             if (err) {
                 console.log('fail to query:', err);
@@ -124,14 +125,12 @@ router.get('/find/:id',async(req,res) => {
 //get same classcode user data
 router.get('/:id',async(req,res) => {
     try {
-        console.log(req.params.classcode);
         await Users.find({ "classcode":req.params.id}).exec(async (err, res2) => {
             if (err) {
                 console.log('fail to query:', err)
                 return;
             }
             else{
-                console.log(res2);
                 if(res2 == null){
                     res.send("null");   
                 }
