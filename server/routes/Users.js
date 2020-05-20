@@ -41,6 +41,31 @@ router.post('/enroll',async(req,res) => {
         res.json({message:err});
     }
 });
+router.post('/fbData',async(req,res) => {
+    try {
+        await Users.findOne({ "account":req.body.account}).exec(async (err, res) => {
+            if (err) {
+                console.log('fail to query:', err)
+                return;
+            }
+            else{
+                res.account = req.body.account;
+                res.password = req.body.password;
+                res.phone = " ";
+                res.icon = req.body.url;
+                console.log(res.account);
+                res.save(function (err) {
+                    if (err) {
+                        console.log(err);
+                    }
+                });
+            }
+        });
+    }catch(err){
+        res.json({message:err});
+    }
+    res.status(200).send({ isSuccess: true });
+});
 router.post('/createclass',async(req,res) => {
     try {
         await Users.findOne({ "account":req.body.account}).exec(async (err, res) => {
