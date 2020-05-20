@@ -1,4 +1,14 @@
 let mode = "line";
+
+document.getElementById("draw_map").addEventListener('click', () => {
+	$("#place_furnish_mode").css({"visibility":"hidden", "height": 0});
+	$("#draw_map_mode").css({"visibility":"visible", "height": "100%"});
+});
+document.getElementById("place_furnish").addEventListener('click', () => {
+	$("#draw_map_mode").css({"visibility":"hidden", "height": 0});
+	$("#place_furnish_mode").css({"visibility":"visible", "height": "100%"});
+});
+
 document.getElementById("add_button").addEventListener('click', () => {
 	if(mode==='line'){
 		mode='rect';
@@ -26,7 +36,7 @@ document.getElementById("delete").addEventListener('click', () => {
 });
 
 let panel = {
-    width: 1140,
+    width: 1100,
     height: 520
 };
 let gridSize = 20;
@@ -200,7 +210,7 @@ function previewWall(event) {
 
 function drawrect(d) {
 	isNewRoom = true;
-	d3.selectAll(".square").style("fill", "#f0f0f0").attr("class","square")	// reset the class
+	d3.selectAll(".square").style("fill", "#f0f0f0").attr("class","square");	// reset the class
 	let color = current_color;
 	for (let i = Math.min(d.x, pre_x); i <= Math.max(d.x, pre_x) ; i+=gridSize) {
 		for (let j = Math.min(d.y, pre_y); j <= Math.max(d.y, pre_y); j+=gridSize) {

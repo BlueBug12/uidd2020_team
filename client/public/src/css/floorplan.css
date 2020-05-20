@@ -233,7 +233,28 @@ li {
   z-index:2;
   margin-bottom: 20px;
 }
+#furnish{
+  justify-content: center;
+  height:90%;
+  margin-top:10%;
+  margin-bottom:10%;
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+  overflow-x:hidden;
+  margin:auto 0;
+}
+.column_2{
+  list-style-type: none;
+  list-style: none;
+  margin-right:2vw;
+  columns: 2;
+  -webkit-columns: 2;
+  -moz-columns: 2;
+
+}
+#furnish::-webkit-scrollbar { width: 0 !important; }
 .item_margin{
+
   margin-bottom: 20px;
 }
 .c1{background-color:#E8C38F;}
@@ -244,11 +265,11 @@ li {
   padding: 0;
   margin: 0;
 }
-.draw_map_node{
+#draw_map_mode{
   visibility: visible;
 
 }
-.place_furnish_mode{
+#place_furnish_mode{
 
   visibility: hidden;
   height: 0;
@@ -349,4 +370,10 @@ input.call-picker {
 .awsome_input:focus+.awsome_input_border{
   width:100%;
 
+}
+
+#floor{
+  position: absolute;
+  left:2vw;
+  top:40vh;
 }
