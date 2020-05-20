@@ -6,8 +6,7 @@ $('#login_btn').click((event) => {
     } else {
         $.post('./users', {
             account: $('#signin input[name=account]').val(),
-            password: $('#signin input[name=password]').val(),
-            icon: "https://luffy.ee.ncku.edu.tw:1113/img/sister.png"
+            password: $('#signin input[name=password]').val()
         }, (res) => {
             localStorage.account = res.account;
             if (res.text === "登入失敗!") {

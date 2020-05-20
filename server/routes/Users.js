@@ -35,7 +35,8 @@ router.post('/enroll',async(req,res) => {
         account:req.body.account,
         password:req.body.password,
         name:req.body.name,
-        phone:req.body.phone
+        phone:req.body.phone,
+        icon:req.body.icon
     });
     try {
         const savePost = await users.save();
