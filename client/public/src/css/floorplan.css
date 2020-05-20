@@ -145,11 +145,15 @@ li {
   z-index: 1;
 }
 #draw_map{
+  color:#4b515f;
+  opacity: 1;
   position: absolute;
   width: 10vw;
   right: 64vw;
 }
 #place_furnish{
+  color:#4b515f;
+  opacity: 0.5;
   position: absolute;
   width: 10vw;
   left: 50vw;

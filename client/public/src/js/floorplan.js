@@ -3,10 +3,15 @@ let mode = "line";
 document.getElementById("draw_map").addEventListener('click', () => {
 	$("#place_furnish_mode").css({"visibility":"hidden", "height": 0});
 	$("#draw_map_mode").css({"visibility":"visible", "height": "100%"});
+	$('#place_furnish').css({"opacity": 0.5});
+	$('#draw_map').css({"opacity": 1});
+
 });
 document.getElementById("place_furnish").addEventListener('click', () => {
 	$("#draw_map_mode").css({"visibility":"hidden", "height": 0});
 	$("#place_furnish_mode").css({"visibility":"visible", "height": "100%"});
+	$('#place_furnish').css({"opacity": 1});
+	$('#draw_map').css({"opacity": 0.5});
 });
 
 document.getElementById("add_button").addEventListener('click', () => {
