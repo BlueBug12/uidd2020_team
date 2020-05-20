@@ -960,7 +960,6 @@ document.getElementById("submit").addEventListener('click', async () => {
 			items: items
 		}
 	};
-	console.log(result)
 	let response = await fetch('/saveFloorplan', {
 		body: JSON.stringify(result),
 		headers: {

@@ -7,13 +7,13 @@ module.exports = (app) => {
     app.post('/saveFloorplan', (req, res) => {
         let account = req.body.account;
         let floorplan = req.body.floorplan;
-        Users.find({ account: account }, (err, docs) => {
+        Users.find({ account: account }, (err, users) => {
             if (!err) {
-                Floorplan.find({ class: docs[0].classcode }, (err, docs) => {
+                Floorplan.find({ class: users[0].classcode }, (err, docs) => {
                     if (!err) {
                         if (docs.length == 0) {
                             Floorplan.insertMany([{
-                                class: docs[0].classcode,
+                                class: users[0].classcode,
                                 floorplan: floorplan
                             }], err => {
                                 if (!err) {
