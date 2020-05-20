@@ -11,11 +11,16 @@ document.getElementById("add_button").addEventListener('click', () => {
 });
 document.getElementById("undo_button").addEventListener('click', undo);
 document.getElementById("delete").addEventListener('click', () => {
-	if (mode === "line") {
+	if (!nowRoom) {
 		deleteWall();
-	}
-	if (mode === "rect") {
-		deleteRoom();
+	} else {
+		steps.push([{
+			operation: "delete",
+			object: "room",
+			index: rooms.indexOf(nowRoom),
+			value: Object.assign({}, nowRoom)
+		}]);
+		deleteRoom(nowRoom);
 	}
 });
 $('#add_button').click(function(event) {
@@ -31,6 +36,7 @@ let pre_x=1;
 let pre_y=1;
 let isNewRoom = false;
 var rooms = [];
+let previewedRoom = [];
 let corners = [];
 let walls = [];
 let previewedWall = [];
@@ -40,6 +46,7 @@ let nowCorner = {
 	x: 0,
 	y: 0
 };
+let nowRoom = null;
 let isEditing = false;
 let editTarget = {
 	x: 0,
@@ -191,6 +198,74 @@ function drawrect(d) {
 	}
 }
 
+function selectRect(d) {
+	rooms.forEach(room => {
+		if (((room.start.x <= d.x && room.end.x >= d.x) || (room.start.x >= d.x && room.end.x <= d.x)) && 
+			((room.start.y <= d.y && room.end.y >= d.y) || (room.start.y >= d.y && room.end.y <= d.y))) {
+			nowRoom = room;
+		}
+	});
+	let x1 = Math.min(nowRoom.start.x, nowRoom.end.x);
+	let x2 = Math.max(nowRoom.start.x, nowRoom.end.x) + gridSize;
+	let y1 = Math.min(nowRoom.start.y, nowRoom.end.y);
+	let y2 = Math.max(nowRoom.start.y, nowRoom.end.y) + gridSize;
+	if (previewedRoom.length == 0) {
+		previewRoom(x1, x2, y1, y2);
+	} else {
+		if (previewedRoom[0].corner1.x == x1 && previewedRoom[0].corner1.y == y1 &&
+			previewedRoom[0].corner2.x == x2 && previewedRoom[0].corner2.y == y2) {
+			previewedRoom = [];
+		} else {
+			previewedRoom = [];
+			previewRoom(x1, x2, y1, y2);
+		}
+	}
+	render("previewedRoom");
+}
+
+function previewRoom(x1, x2, y1, y2) {
+	previewedRoom.push({
+		corner1: {
+			x: x1,
+			y: y1
+		},
+		corner2: {
+			x: x1,
+			y: y2
+		}
+	});
+	previewedRoom.push({
+		corner1: {
+			x: x1,
+			y: y1
+		},
+		corner2: {
+			x: x2,
+			y: y1
+		}
+	});
+	previewedRoom.push({
+		corner1: {
+			x: x2,
+			y: y2
+		},
+		corner2: {
+			x: x1,
+			y: y2
+		}
+	});
+	previewedRoom.push({
+		corner1: {
+			x: x2,
+			y: y2
+		},
+		corner2: {
+			x: x2,
+			y: y1
+		}
+	});
+}
+
 function render(type) {
 	if (type === "line") {
 		d3.select("#corners")
@@ -285,6 +360,27 @@ function render(type) {
 			.attr("y2", (d) => { return d.corner2.y; })
 			.exit().remove();
 	}
+	if (type === "previewedRoom") {
+		d3.select("#previewRoom")
+			.selectAll(".border")
+			.data(previewedRoom)
+			.enter().append("line")
+			.attr("class", "border")
+			.attr("x1", (d) => { return d.corner1.x; })
+			.attr("y1", (d) => { return d.corner1.y; })
+			.attr("x2", (d) => { return d.corner2.x; })
+			.attr("y2", (d) => { return d.corner2.y; })
+			.attr("stroke", "blue")
+			.attr("stroke-width", 2);
+		d3.select("#previewRoom")
+			.selectAll(".border")
+			.data(previewedRoom)
+			.attr("x1", (d) => { return d.corner1.x; })
+			.attr("y1", (d) => { return d.corner1.y; })
+			.attr("x2", (d) => { return d.corner2.x; })
+			.attr("y2", (d) => { return d.corner2.y; })
+			.exit().remove();
+	}
 }
 
 function undo() {
@@ -299,14 +395,7 @@ function undo() {
 				corners.pop();
 			}
 			if (step.object === "room") {
-				let room = rooms.pop();
-				if (room) {
-					room.color = "#f0f0f0";
-					setRoomColor(room);
-					rooms.forEach(room => {
-						setRoomColor(room);
-					});
-				}
+				deleteRoom(rooms[rooms.length-1]);
 			}
 		}
 		if (step.operation === "delete") {
@@ -317,7 +406,8 @@ function undo() {
 				corners.splice(step.index, 0, step.target);
 			}
 			if (step.object === "room") {
-				// TODO
+				rooms.splice(step.index, 0, step.value);
+				resetRoomColor();
 			}
 		}
 		if (step.operation === "edit") {
@@ -339,17 +429,20 @@ function undo() {
 	removeHighlight();
 }
 
-function setRoomColor(room) {
-	let x1 = Math.min(room.start.x, room.end.x);
-	let x2 = Math.max(room.start.x, room.end.x);
-	let y1 = Math.min(room.start.y, room.end.y);
-	let y2 = Math.max(room.start.y, room.end.y);
-	for (let i = x1; i <= x2; i += gridSize) {
-		for (let j = y1; j <= y2; j += gridSize) {
-			d3.select("#"+'_'+i.toString(10)+'_'+j.toString(10))
-				.style("fill", room.color)
+function resetRoomColor() {
+	rooms.forEach(room => {
+		let x1 = Math.min(room.start.x, room.end.x);
+		let x2 = Math.max(room.start.x, room.end.x);
+		let y1 = Math.min(room.start.y, room.end.y);
+		let y2 = Math.max(room.start.y, room.end.y);
+		for (let i = x1; i <= x2; i += gridSize) {
+			for (let j = y1; j <= y2; j += gridSize) {
+				d3.select("#"+'_'+i.toString(10)+'_'+j.toString(10))
+					.attr("class", "room")
+					.style("fill", room.color);
+			}
 		}
-	}
+	});
 }
 
 function deleteWall() {
@@ -574,8 +667,22 @@ function endEditWall() {
 	}
 }
 
-function deleteRoom() {
-
+function deleteRoom(room) {
+	let x1 = Math.min(room.start.x, room.end.x);
+	let x2 = Math.max(room.start.x, room.end.x);
+	let y1 = Math.min(room.start.y, room.end.y);
+	let y2 = Math.max(room.start.y, room.end.y);
+	for (let i = x1; i <= x2; i += gridSize) {
+		for (let j = y1; j <= y2; j += gridSize) {
+			d3.select("#"+'_'+i.toString(10)+'_'+j.toString(10))
+				.attr("class", "square")
+				.style("fill", "#f0f0f0")
+		}
+	}
+	rooms.splice(rooms.indexOf(room), 1);
+	resetRoomColor();
+	previewedRoom = [];
+	render("previewedRoom");
 }
 
 function removeHighlight() {
@@ -591,8 +698,10 @@ function removeHighlight() {
 	nowCorner.x = 0;
 	nowCorner.y = 0;
 	previewedWall = [];
+	previewedRoom = []
 	render("line");
 	render("previewedWall");
+	render("previewedRoom");
 }
 
 
@@ -655,7 +764,11 @@ function removeHighlight() {
 		.style("stroke-width", 0.3)
 		.on('click', function(d) {
 			if (mode === "line") {
-				drawline(d, false, false);
+				if (document.getElementById(`_${d.x}_${d.y}`).classList.contains("room")) {
+					selectRect(d);
+				} else {
+					drawline(d, false, false);
+				}
 			}
 		}).on('mousedown', function(d) {
 			if (mode === "rect"){
@@ -695,5 +808,6 @@ function removeHighlight() {
 	grid.append("g").attr("id", "corners");
 	grid.append("g").attr("id", "walls");
 	grid.append("g").attr("id", "previewWall");
+	grid.append("g").attr("id", "previewRoom");
 
 })();
