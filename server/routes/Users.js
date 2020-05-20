@@ -104,9 +104,9 @@ router.post('/createclass',async(req,res) => {
     res.status(200).send({ isSuccess: true });
 });
 
+//get specific user info
 router.get('/:id',async(req,res) => {
     try {
-        console.log(req.params.id);
         await Users.findOne({ "account":req.params.id}).exec(async (err, res2) => {
             if (err) {
                 console.log('fail to query:', err)

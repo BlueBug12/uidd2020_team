@@ -811,3 +811,9 @@ function removeHighlight() {
 	grid.append("g").attr("id", "previewRoom");
 
 })();
+async function getUser() {
+    var account = localStorage.getItem("account");
+    await $.get('./users/'+account, {}, (res) => {
+        document.getElementById("UserImg").src = res.icon;
+    }); 
+}

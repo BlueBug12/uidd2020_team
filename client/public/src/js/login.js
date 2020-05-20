@@ -48,7 +48,6 @@ $(function() {
         if (response.authResponse) {
           await new Promise(resolve => {
             FB.api('/me',{fields: 'id,name,email'}, function (response) {
-              console.log(`Successful login for: ${response.name}`)
               localStorage.setItem("account", response.id);
               account=response.id;
               name = response.name
@@ -70,10 +69,29 @@ $(function() {
             );
           });
         } else {
-          FB.login(function (response) {
+          FB.login(async function(response) {
             if (response.authResponse) {
-              FB.api('/me',{fields: 'id,name'}, function (response) {
-              
+              await new Promise(resolve => {
+                FB.api('/me',{fields: 'id,name,email'}, function (response) {
+                  localStorage.setItem("account", response.id);
+                  account=response.id;
+                  name = response.name
+                });
+                FB.api(
+                  "/me/picture",
+                  {
+                  "redirect": false,
+                  "height": 50,
+                  "width": 50,
+                  "type": "normal"
+                  },
+                  function (response) {
+                  if (response && !response.error) {
+                      url = response.data.url;
+                      resolve();
+                  }
+                  }
+                );
               });
             }       
           }, { scope: 'email,user_likes' });
@@ -81,7 +99,6 @@ $(function() {
         resolve();
       });
     });
-    console.log(url);
     await $.post('./users/CheckData', {
       account: account,
       password: " ",
@@ -93,12 +110,7 @@ $(function() {
         location.href = './join.html';
       else
         location.href = './game.html';
-      console.log(res);
     });
     
   });
 });
-
-async function GetData(){
-
-}

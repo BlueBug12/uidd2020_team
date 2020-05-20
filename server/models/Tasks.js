@@ -21,6 +21,10 @@ const TaskSchema = mongoose.Schema({
         type:String,
         require:true
     },
+    classcode:{
+        type:String,
+        require:true
+    }
 
 },{collection: 'Tasks'});
 
