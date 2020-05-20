@@ -15,7 +15,7 @@ router.get('/', async (req,res) => {
 //get specific classcode data
 router.get('/:classcode',async(req,res) => {
     try {
-        await Tasks.findOne({ "classcode":req.params.classcode}).exec(async (err, res2) => {
+        await Tasks.find({ "classcode":req.params.classcode}).exec(async (err, res2) => {
             if (err) {
                 console.log('fail to query:', err)
                 return;
@@ -33,6 +33,8 @@ router.get('/:classcode',async(req,res) => {
         res.json({message:err});
     }
 });
+
+//save task data
 router.post('/',async(req,res) => {
     const tasks = new Tasks({
         content:req.body.content,

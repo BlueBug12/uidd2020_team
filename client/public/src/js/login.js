@@ -9,7 +9,7 @@ $('#login_btn').click((event) => {
             password: $('#signin input[name=password]').val()
         }, (res) => {
             localStorage.account = res.account;
-            if (res.text === "登入失敗") {
+            if (res.text === "登入失敗!") {
                 var modal = $('#myModal');
                 modal.find('.modal-body p').text(res.text);
                 $('#myModal').modal('show');
@@ -38,15 +38,14 @@ window.fbAsyncInit = function() {
      fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));
 
-$(function() {
-  $("#fb_btn").click(async function() {
+$("#fb_btn").click(async function() {
     var account = "";
     var url = " ";
     var name=" ";
     await new Promise((resolve, reject) => {
       FB.getLoginStatus(async function(response) {
         if (response.authResponse) {
-          await new Promise(resolve => {
+          await new Promise(resolve1 => {
             FB.api('/me',{fields: 'id,name,email'}, function (response) {
               localStorage.setItem("account", response.id);
               account=response.id;
@@ -63,13 +62,15 @@ $(function() {
               function (response) {
               if (response && !response.error) {
                   url = response.data.url;
-                  resolve();
+                  resolve1();
               }
               }
             );
           });
-        } else {
-          FB.login(async function(response) {
+        } 
+        else {
+          FB.login(async function (response) {
+            console.log(response);
             if (response.authResponse) {
               await new Promise(resolve => {
                 FB.api('/me',{fields: 'id,name,email'}, function (response) {
@@ -86,17 +87,17 @@ $(function() {
                   "type": "normal"
                   },
                   function (response) {
-                  if (response && !response.error) {
-                      url = response.data.url;
-                      resolve();
-                  }
+                    if (response && !response.error) {
+                        url = response.data.url;
+                        resolve();
+                    }
                   }
                 );
               });
             }       
-          }, { scope: 'email,user_likes' });
-        }
-        resolve();
+          }, { scope: 'email'});
+        }  
+      resolve();
       });
     });
     await $.post('./users/CheckData', {
@@ -111,6 +112,5 @@ $(function() {
       else
         location.href = './game.html';
     });
-    
-  });
 });
+
