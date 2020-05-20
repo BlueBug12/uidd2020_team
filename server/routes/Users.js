@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Users = require('../models/Users');
 
+//Check login
 router.post('/',async(req,res) => {
     try {
         await Users.findOne({'account':req.body.account,'password': req.body.password }).exec(async (err, res2) => {
@@ -27,6 +28,8 @@ router.post('/',async(req,res) => {
         res.json({message:err});
     }
 });
+
+//store enroll data
 router.post('/enroll',async(req,res) => {
     const users = new Users({
         account:req.body.account,
@@ -41,6 +44,43 @@ router.post('/enroll',async(req,res) => {
         res.json({message:err});
     }
 });
+
+//store fb login data
+router.post('/CheckData',async(req,res) => {
+    try {
+        await Users.findOne({ "account":req.body.account}).exec(async (err, res2) => {
+            if (err) {
+                console.log('fail to query:', err);
+                return;
+            }
+            else{
+                if(res2 == null){
+                    const users = new Users({
+                        account:req.body.account,
+                        password:req.body.password,
+                        name:req.body.name,
+                        phone:req.body.phone,
+                        icon:req.body.url
+                    });
+                    await users.save();
+                    res.send(JSON.parse(`{
+                        "first": "true"
+                    }`));
+                }
+                else{
+                    res.send(JSON.parse(`{
+                        "first": "false"
+                    }`));
+                }
+            }
+        });
+    }catch(err){
+        res.json({message:err});
+    }
+    //res.status(200).send({ isSuccess: true });
+});
+
+//store class info
 router.post('/createclass',async(req,res) => {
     try {
         await Users.findOne({ "account":req.body.account}).exec(async (err, res) => {
@@ -64,4 +104,20 @@ router.post('/createclass',async(req,res) => {
     res.status(200).send({ isSuccess: true });
 });
 
+//get specific user info
+router.get('/:id',async(req,res) => {
+    try {
+        await Users.findOne({ "account":req.params.id}).exec(async (err, res2) => {
+            if (err) {
+                console.log('fail to query:', err)
+                return;
+            }
+            else{
+                res.send(res2);
+            }
+        });
+    }catch(err){
+        res.json({message:err});
+    }
+});
 module.exports = router;

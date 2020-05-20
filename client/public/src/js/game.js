@@ -1,4 +1,19 @@
 $(document).ready(function() {
+	let bannerbuttons = document.getElementsByClassName('bannerbutton');
+    bannerbuttons[0].classList.add('active');
+
+
+    for (let i = 0; i < bannerbuttons.length; i++) {
+        bannerbuttons[i].addEventListener('click', function(e) {
+            for (let i = 0; i < bannerbuttons.length; i++) {
+                bannerbuttons[i].classList.remove('active');
+            }
+            e.target.classList.add('active');
+        });
+    }
+
+	
+	
     $('.request-btn').css("opacity", "1");
     $('.solve-btn').click(function() {
         $(this).addClass('active');
@@ -58,7 +73,6 @@ $(document).ready(function() {
 
     });
     $("#timepicker").attr("autocomplete", "off");
-
     function buttonenable() {
         let buttons = document.getElementsByTagName('button');
         for (let i = 0; i < buttons.length; i++) {
@@ -108,7 +122,9 @@ $(document).ready(function() {
             content: $('#addTasks input[name=content]').val(),
             advise: $('#addTasks textarea[name=advise]').val(),
             date: $('#addTasks input[name=date]').val(),
-            time: $('#addTasks input[name=time]').val()
+            time: $('#addTasks input[name=time]').val(),
+            author:localStorage.getItem("account"),
+            classcode:localStorage.getItem("classcode")
         }, (res) => {
             console.log(res);
             buttonunable();
@@ -123,14 +139,28 @@ $(document).ready(function() {
     });
     $('#solve_btn').click((event) => {
         event.preventDefault()
+        //var classcode = localStorage.getItem("classcode");
         $.get('./tasks', {}, (res) => {
             console.log(res);
+            if(res === "null"){
+                console.log("123");
+            }
+            else{
             var num = res.length;
             console.log(num);
             console.log(res[0].content);
+            }
         });
     });
 
 
 
 });
+
+async function getUser() {
+    var account = localStorage.getItem("account");
+    await $.get('./users/'+account, {}, (res) => {
+        document.getElementById("UserImg").src = res.icon;
+        localStorage.setItem("classcode", res.classcode);
+    }); 
+}
