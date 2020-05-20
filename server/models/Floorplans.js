@@ -10,8 +10,8 @@ const FloorplanSchema = new Schema({
             y: Number
         }],
         walls: [{
-            corner1: String,
-            corner2: String
+            corner1: { id: String },
+            corner2: { id: String }
         }],
         rooms: [{
             text: String,

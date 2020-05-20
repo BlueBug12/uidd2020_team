@@ -16,6 +16,7 @@ module.exports = (app) => {
                         if (!err) {
                             res.status(200).send({ isSuccess: true });
                         } else {
+                            console.log(err)
                             res.status(503).send({ isSuccess: false });
                         }
                     });
@@ -35,7 +36,14 @@ module.exports = (app) => {
     });
 
     app.post('/readFloorplan', (req, res) => {
-        
+        let account = req.body.account;
+        Floorplan.find({ account: account }, (err, docs) => {
+            if (!err) {
+                res.status(200).send({ floorplan: docs[0].floorplan });
+            } else {
+                res.status(503).send({ isSuccess: false });
+            }
+        });
     });
 
 };
