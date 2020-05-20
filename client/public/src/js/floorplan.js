@@ -86,7 +86,6 @@ var circles=document.getElementsByClassName("round");
 for(let i=0;i<circles.length;++i){
 	circles[i].addEventListener('click', () => {
 		let color=window.getComputedStyle(circles[i], null).getPropertyValue("background-color");
-		console.log(color);
 		$('#pen').css('background-color', color);
 		mode="rect";
 		current_color=color;
@@ -907,7 +906,6 @@ $('#add_button').click(function(event) {
 		for(let i=0;i<circles.length;++i){
 			circles[i].addEventListener('click', () => {
 				let color=window.getComputedStyle(circles[i], null).getPropertyValue("background-color");
-				console.log(color);
 				$('#pen').css('background-color', color);
 				mode="rect";
 				current_color=color;
@@ -916,17 +914,11 @@ $('#add_button').click(function(event) {
 
 	});
 });
-//
+
 function updateScroll(){
     var element = document.getElementById("color");
     element.scrollTop = element.scrollHeight;
 }
-
-/*
-$('#add_button').click(function(event) {
-let ccccc = document.getElementsByTagName("input")[0].value;
-});
-*/
 
 document.getElementById("submit").addEventListener('click', async () => {
 	corners.forEach(corner => {
@@ -936,9 +928,31 @@ document.getElementById("submit").addEventListener('click', async () => {
 		delete wall.width;
 		delete wall.corner2.r;
 	});
+	let colors = document.getElementsByClassName("awsome_input_border");
+	rooms.forEach(room => {
+		for (let iter = 0; iter < colors.length; ++iter) {
+			function componentToHex(c) {
+				let hex = c.toString(16);
+				return hex.length == 1 ? "0" + hex : hex;
+			}
+			function rgbToHex(r, g, b) {
+				return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+			}
+			let color = room.color;
+			if (color.startsWith("rgb")) {
+				if (colors[iter].style["background-color"] === color) {
+					room.text = document.getElementsByClassName("awsome_input")[iter].value;
+				}
+			} else {
+				let rgb = colors[iter].style["background-color"].match(/rgba?\((\d{1,3}), ?(\d{1,3}), ?(\d{1,3})\)?(?:, ?(\d(?:\.\d?))\))?/);
+				if (rgbToHex(parseInt(rgb[1]), parseInt(rgb[2]), parseInt(rgb[3])) === color) {
+					room.text = document.getElementsByClassName("awsome_input")[iter].value;
+				}
+			}
+		};
+	});
 	let result = {
-		account: "test",
-		// account: localStorage.getItem("account"),
+		account: localStorage.getItem("account"),
 		floorplan: {
 			corners: corners,
 			walls: walls,

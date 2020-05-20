@@ -1,34 +1,40 @@
 const mongoose = require('mongoose');
 const Floorplan = mongoose.model("Floorplan");
+const Users = require('../models/Users');
 
 module.exports = (app) => {
 
     app.post('/saveFloorplan', (req, res) => {
         let account = req.body.account;
         let floorplan = req.body.floorplan;
-        Floorplan.find({ account: account }, (err, docs) => {
+        Users.find({ account: account }, (err, docs) => {
             if (!err) {
-                if (docs.length == 0) {
-                    Floorplan.insertMany([{
-                        account: account,
-                        floorplan: floorplan
-                    }], err => {
-                        if (!err) {
-                            res.status(200).send({ isSuccess: true });
+                Floorplan.find({ class: docs[0].classcode }, (err, docs) => {
+                    if (!err) {
+                        if (docs.length == 0) {
+                            Floorplan.insertMany([{
+                                class: docs[0].classcode,
+                                floorplan: floorplan
+                            }], err => {
+                                if (!err) {
+                                    res.status(200).send({ isSuccess: true });
+                                } else {
+                                    res.status(503).send({ isSuccess: false });
+                                }
+                            });
                         } else {
-                            console.log(err)
-                            res.status(503).send({ isSuccess: false });
+                            Floorplan.findOneAndUpdate({ class: docs[0].classcode }, { floorplan: floorplan }, err => {
+                                if (!err) {
+                                    res.status(200).send({ isSuccess: true });
+                                } else {
+                                    res.status(503).send({ isSuccess: false });
+                                }
+                            });
                         }
-                    });
-                } else {
-                    Floorplan.findOneAndUpdate({ account: account }, { floorplan: floorplan }, err => {
-                        if (!err) {
-                            res.status(200).send({ isSuccess: true });
-                        } else {
-                            res.status(503).send({ isSuccess: false });
-                        }
-                    });
-                }
+                    } else {
+                        res.status(503).send({ isSuccess: false });
+                    }
+                });
             } else {
                 res.status(503).send({ isSuccess: false });
             }
@@ -37,9 +43,15 @@ module.exports = (app) => {
 
     app.post('/readFloorplan', (req, res) => {
         let account = req.body.account;
-        Floorplan.find({ account: account }, (err, docs) => {
+        Users.find({ account: account }, (err, docs) => {
             if (!err) {
-                res.status(200).send({ floorplan: docs[0].floorplan });
+                Floorplan.find({ class: docs[0].classcode }, (err, docs) => {
+                    if (!err) {
+                        res.status(200).send({ floorplan: docs[0].floorplan });
+                    } else {
+                        res.status(503).send({ isSuccess: false });
+                    }
+                });
             } else {
                 res.status(503).send({ isSuccess: false });
             }

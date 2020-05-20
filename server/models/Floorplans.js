@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const FloorplanSchema = new Schema({
-    account: String,
+    class: String,
     floorplan: {
         corners: [{
             id: String,

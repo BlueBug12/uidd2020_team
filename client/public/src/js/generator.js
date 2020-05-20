@@ -3,8 +3,7 @@
     var choose_region;
     var prevDiv = null;
     let data = await fetch('/readFloorplan', {
-        body: JSON.stringify({ account: "test" }),
-        // body: JSON.stringify({ account: localStorage.getItem("account") }),
+        body: JSON.stringify({ account: localStorage.getItem("account") }),
         headers: {
             "Content-Type": "application/json"
         },
@@ -32,7 +31,6 @@
             'position': 'absolute',
             'width': "100%",
             'height': "100%"
-                //'background-color':'blue'
         });
     data_point = []
     for (let i = 0; i < walls.length; ++i) {
