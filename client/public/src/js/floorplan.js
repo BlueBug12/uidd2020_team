@@ -1,12 +1,28 @@
 let mode = "line";
+
+document.getElementById("draw_map").addEventListener('click', () => {
+	$("#place_furnish_mode").css({"visibility":"hidden", "height": 0});
+	$("#draw_map_mode").css({"visibility":"visible", "height": "100%"});
+	$('#place_furnish').css({"opacity": 0.5});
+	$('#draw_map').css({"opacity": 1});
+
+});
+document.getElementById("place_furnish").addEventListener('click', () => {
+	$("#draw_map_mode").css({"visibility":"hidden", "height": 0});
+	$("#place_furnish_mode").css({"visibility":"visible", "height": "100%"});
+	$('#place_furnish').css({"opacity": 1});
+	$('#draw_map').css({"opacity": 0.5});
+});
+
 document.getElementById("add_button").addEventListener('click', () => {
-	if (mode === "line") {
-		mode = "rect";
-		//document.getElementById("color_canvas").style.visibility = "visible";
-	} else
-	if (mode === "rect") {
-		mode = "line";
-		//document.getElementById("color_canvas").style.visibility = "hidden";
+	if(mode==='line'){
+		mode='rect';
+	}
+});
+document.getElementById("pen_button").addEventListener('click', () => {
+	if(mode==='rect'){
+		mode='line';
+		$('#pen').css('background-color', "transparent");
 	}
 });
 document.getElementById("undo_button").addEventListener('click', undo);
@@ -23,13 +39,23 @@ document.getElementById("delete").addEventListener('click', () => {
 		deleteRoom(nowRoom);
 	}
 });
-$('#add_button').click(function(event) {
-  let ccccc = document.getElementsByTagName("input")[0].value;
-	console.log(ccccc);
-});
+
+// let furnishIcons = document.getElementsByClassName("item_margin");
+// for (let iter = 0; iter < furnishIcons.length; ++iter) {
+// 	furnishIcons[iter].addEventListener('mousedown', () => {
+// 		isAddingFurnish = true;
+// 		document.addEventListener('mouseup', endMoveFurnish);
+// 	});
+// };
+// document.addEventListener('mousemove', () => {
+// 	if (isAddingFurnish) {
+// 		moveFurnish();
+// 	}
+// });
+
 let panel = {
-    width: 1000,
-    height: 500
+    width: 1100,
+    height: 520
 };
 let gridSize = 20;
 let pre_x=1;
@@ -41,6 +67,8 @@ let corners = [];
 let walls = [];
 let previewedWall = [];
 let steps = [];
+let current_color;
+let room_counter=2;
 let nowCorner = {
 	id: "",
 	x: 0,
@@ -52,6 +80,18 @@ let editTarget = {
 	x: 0,
 	y: 0
 };
+let items = [];
+
+var circles=document.getElementsByClassName("round");
+for(let i=0;i<circles.length;++i){
+	circles[i].addEventListener('click', () => {
+		let color=window.getComputedStyle(circles[i], null).getPropertyValue("background-color");
+		console.log(color);
+		$('#pen').css('background-color', color);
+		mode="rect";
+		current_color=color;
+	});
+}
 
 function drawline(d, isDot, isLine) {
 
@@ -168,7 +208,7 @@ function selectWall(d) {
 		return wall;
 	});
 	removeRoomHighlight();
-	render("line");	
+	render("line");
 }
 
 function previewWall(event) {
@@ -189,8 +229,8 @@ function previewWall(event) {
 
 function drawrect(d) {
 	isNewRoom = true;
-	d3.selectAll(".square").style("fill", "#f0f0f0").attr("class","square")	// reset the class
-	let color = document.getElementsByTagName("input")[0].value;
+	d3.selectAll(".square").style("fill", "#f0f0f0").attr("class","square");	// reset the class
+	let color = current_color;
 	for (let i = Math.min(d.x, pre_x); i <= Math.max(d.x, pre_x) ; i+=gridSize) {
 		for (let j = Math.min(d.y, pre_y); j <= Math.max(d.y, pre_y); j+=gridSize) {
 			d3.select("#"+'_'+i.toString(10)+'_'+j.toString(10))
@@ -203,7 +243,7 @@ function drawrect(d) {
 function selectRoom(d) {
 	removeHighlight();
 	rooms.forEach(room => {
-		if (((room.start.x <= d.x && room.end.x >= d.x) || (room.start.x >= d.x && room.end.x <= d.x)) && 
+		if (((room.start.x <= d.x && room.end.x >= d.x) || (room.start.x >= d.x && room.end.x <= d.x)) &&
 			((room.start.y <= d.y && room.end.y >= d.y) || (room.start.y >= d.y && room.end.y <= d.y))) {
 			nowRoom = room;
 		}
@@ -713,6 +753,16 @@ function removeRoomHighlight() {
 	render("previewedRoom");
 }
 
+function moveFurnish() {
+
+}
+
+function endMoveFurnish() {
+	isAddingFurnish = false;
+	document.removeEventListener('mouseup', endMoveFurnish);
+}
+
+
 // api, basically no need to modify
 (function genPanel() {
 	function gridData() {
@@ -793,7 +843,7 @@ function removeRoomHighlight() {
 						.attr("class", "room")
 						.classed('chosen',true)
 					rooms.push({
-						color: document.getElementsByTagName("input")[0].value,
+						color: current_color,
 						start: {
 							x: pre_x,
 							y: pre_y
@@ -819,9 +869,84 @@ function removeRoomHighlight() {
 	grid.append("g").attr("id", "previewRoom");
 
 })();
+
+
+
+var colorList = [ '000000', '993300', '333300', '003300', '003366', '000066', '333399', '333333',
+'660000', 'FF6633', '666633', '336633', '336666', '0066FF', '666699', '666666', 'CC3333', 'FF9933', '99CC33', '669966', '66CCCC', '3366FF', '663366', '999999', 'CC66FF', 'FFCC33', 'FFFF66', '99FF66', '99CCCC', '66CCFF', '993366', 'CCCCCC', 'FF99CC', 'FFCC99', 'FFFF99', 'CCffCC', 'CCFFff', '99CCFF', 'CC99FF', 'FFFFFF' ];
+var picker = $('#color-picker');
+
+for (var i = 0; i < colorList.length; i++ ) {
+	picker.append('<li class="color-item" data-hex="' + '#' + colorList[i] + '" style="background-color:' + '#' + colorList[i] + ';"></li>');
+}
+/*
+$('body').click(function () {
+	picker.fadeOut();
+});*/
+
+$('#add_button').click(function(event) {
+
+	event.stopPropagation();
+	picker.fadeIn();
+
+	picker.children('li').click(function(e) {
+		var codeHex = $(this).data('hex');
+
+		//$('.color-holder').css('background-color', codeHex);
+		$('#pickcolor').val(codeHex);
+		$('#pen').css('background-color', codeHex);
+		current_color=codeHex;
+		picker.fadeOut();
+		e.stopImmediatePropagation();
+		e.preventDefault();
+		$('#color_list').append(`<li class=\"round \" style=\" background-color:${codeHex}\"><div class=\"input_container\"><input type=\"text\" id=\"text_in1\"class=\"awsome_input\" placeholder=\"room_${room_counter}\"/><span class=\"awsome_input_border\"/></div></li>`);
+		updateScroll();
+		room_counter+=1;
+		var circles=document.getElementsByClassName("round");
+		for(let i=0;i<circles.length;++i){
+			circles[i].addEventListener('click', () => {
+				let color=window.getComputedStyle(circles[i], null).getPropertyValue("background-color");
+				console.log(color);
+				$('#pen').css('background-color', color);
+				mode="rect";
+				current_color=color;
+			});
+		}
+
+	});
+});
+//
+function updateScroll(){
+    var element = document.getElementById("color");
+    element.scrollTop = element.scrollHeight;
+}
+
+/*
+$('#add_button').click(function(event) {
+let ccccc = document.getElementsByTagName("input")[0].value;
+});
+*/
+
+document.getElementById("submit").addEventListener('click', async () => {
+	let result = {
+		corners: corners,
+		walls: walls,
+		rooms: rooms,
+		items: items
+	};
+	let response = await fetch('/saveFloorplan', {
+		body: JSON.stringify(result),
+		headers: {
+			'content-type': 'application/json'
+		},
+		method: 'POST'
+	});
+	console.log(response);
+})
+
 async function getUser() {
     var account = localStorage.getItem("account");
     await $.get('./users/'+account, {}, (res) => {
         document.getElementById("UserImg").src = res.icon;
-    }); 
+    });
 }

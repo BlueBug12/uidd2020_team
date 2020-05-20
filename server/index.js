@@ -34,3 +34,6 @@ const conn = mongoose.connect(url,{ useNewUrlParser: true ,useUnifiedTopology: t
   if (err) console.log('fail to connect:', err)
 });
 mongoose.Promise = global.Promise
+require('./models/Floorplans');
+require('./routes/Floorplan')(app);
+

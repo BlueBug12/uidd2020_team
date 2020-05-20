@@ -128,7 +128,7 @@ li {
 }
 
 
-/* 
+/*
 .banner {
     background-color: #F7F6E4;
     height: 13vh;
@@ -149,7 +149,7 @@ li {
     max-width: 100%;
 }
 
-.banner-list { 
+.banner-list {
     list-style-type: none;
     margin: 0;
     padding: 0;
@@ -532,7 +532,6 @@ li {
     opacity: 0.5;
 }
 
-#floorplan {}
 
 .floor-item:hover {
     cursor: pointer;
