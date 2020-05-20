@@ -33,7 +33,7 @@ function postData(event) {
 }
 async function getUser() {
     var account = localStorage.getItem("account");
-    await $.get('./users/'+account, {}, (res) => {
+    await $.get('./users/find/'+account, {}, (res) => {
         document.getElementById("UserImg").src = res.icon;
     }); 
 }

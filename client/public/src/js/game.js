@@ -136,6 +136,16 @@ $(document).ready(function() {
             $('.check').css("visibility", "visible");
             $('.mask').css("visibility", "visible");
         });
+        var newbtn = document.createElement("button");
+        newbtn.onclick = function(){
+            showPanel(2);
+        };
+        newbtn.onclick = "showPanel(2)";
+        newbtn.style["background-color"] =  "rgb(242, 215, 173)"; 
+        document.getElementById("Panelbtns").appendChild(newbtn);
+        var count = $(".buttonContainer").children().length;
+        $('.solve-btn').attr('data-before', count);
+        
     });
     $('#solve_btn').click((event) => {
         event.preventDefault()
@@ -161,6 +171,20 @@ $(document).ready(function() {
         });
     });
 });
+function restTime () {
+    var setTime = new Date("2020/5/21 18:00:00");
+    var nowTime = new Date ();
+    var restSec = setTime.getTime() - nowTime.getTime ();
+    var day = parseInt(restSec/ (60*60*24*1000));
+    var hour= parseInt(restSec/(60*60*1000)%24);
+    var minu = parseInt(restSec/(60*1000)% 60);
+    var sec = parseInt(restSec / 1000 % 60);
+    var str =day+"天"+hour+"時"+minu+"分"+sec+"秒";
+    document.getElementsByClassName("DeadlineTime")[0].innerText=str;
+    document.getElementsByClassName("DeadlineTime")[1].innerText=str;
+    document.getElementsByClassName("DeadlineTime")[2].innerText=str;
+    setTimeout (restTime, 1000);
+}
 
 function addTask(num){
     var newbtn = document.createElement('button');
@@ -199,4 +223,6 @@ async function getUser() {
         document.getElementById("UserImg").src = res.icon;
         localStorage.setItem("classcode", res.classcode);
     }); 
+    restTime();
+    
 }

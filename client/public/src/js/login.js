@@ -6,7 +6,8 @@ $('#login_btn').click((event) => {
     } else {
         $.post('./users', {
             account: $('#signin input[name=account]').val(),
-            password: $('#signin input[name=password]').val()
+            password: $('#signin input[name=password]').val(),
+            icon: "https://luffy.ee.ncku.edu.tw:1113/img/sister.png"
         }, (res) => {
             localStorage.account = res.account;
             if (res.text === "登入失敗!") {
@@ -45,9 +46,10 @@ $("#fb_btn").click(async function() {
     await new Promise((resolve, reject) => {
       FB.getLoginStatus(async function(response) {
         if (response.authResponse) {
-          await new Promise(resolve1 => {
+          await new Promise(resolve => {
             FB.api('/me',{fields: 'id,name,email'}, function (response) {
               localStorage.setItem("account", response.id);
+
               account=response.id;
               name = response.name
             });
@@ -62,7 +64,7 @@ $("#fb_btn").click(async function() {
               function (response) {
               if (response && !response.error) {
                   url = response.data.url;
-                  resolve1();
+                  resolve();
               }
               }
             );
@@ -100,6 +102,7 @@ $("#fb_btn").click(async function() {
       resolve();
       });
     });
+    console.log(account);
     await $.post('./users/CheckData', {
       account: account,
       password: " ",

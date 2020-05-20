@@ -8,7 +8,8 @@ $('#enroll_btn').click((event) => {
             account: $('#signin input[name=account]').val(),
             password: $('#signin input[name=password]').val(),
             name: $('#signin input[name=name]').val(),
-            phone: $('#signin input[name=phone]').val()
+            phone: $('#signin input[name=phone]').val(),
+            icon: "https://luffy.ee.ncku.edu.tw:1113/img/sister.png"
         }, (res) => {
             localStorage.account = res.account;
         });
@@ -74,16 +75,7 @@ $(function() {
         }
         resolve();
       });
-    });
-    await $.post('./users/FbEnroll', {
-      account: account,
-      password: " ",
-      name: name,
-      phone: 0000000000,
-      url:url
-    }, (res) => {
-      console.log(res);
-    });
+    })
     //location.href = './join.html';
   });
 });
