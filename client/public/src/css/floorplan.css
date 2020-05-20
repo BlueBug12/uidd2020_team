@@ -167,21 +167,139 @@ li {
   height: auto;
   z-index: 12;
   top:10vh;
-  left:25vw;
+  left:16vw;
+  border-radius:30px;
   background-color: #ffffff;
 }
 #button {
-    height:3vh;
-    position: absolute;
-    top: 10vh;
-    left: 1vw;
+  position: absolute;
+  height:5vh;
+
+  left: 1vw;
 }
 #color_picker{
   position:absolute;
   top:1vh;
   right:5vw;
-  z-index: 10;
+  z-index: 5;
 }
 #color_canvas{
   visibility: hidden;
+}
+#grid{
+  border-radius:10px;
+}
+#editor{
+  position:absolute;
+  width:10.5vw;
+  height:55vh;
+  top:20vh;
+  right:5vw;
+  display:inline;
+  border-radius:30px;
+  background-color: #FCFFE3 ;
+  padding-top: 10px;
+  z-index: 100;
+}
+#color{
+  position:absolute;
+  width:100%;
+  height:80%;
+  display:inline;
+}
+.circle{
+  width:30px;
+  height:30px;
+  border-radius: 50%;
+  border:1px solid black;
+}
+.round{
+  width:40px;
+  height:40px;
+  border-width: 1px;
+  border-radius: 50%;
+  border-color: red;
+  z-index:2;
+  margin-bottom: 20px;
+}
+.item_margin{
+  margin-bottom: 20px;
+}
+.c1{background-color:#E8C38F;}
+.c2{background-color:#E7A9E8;}
+.c3{background-color:#99B9E8;}
+.c4{background-color:#92E88B;}
+.c5{background-color:#6C93E8;}
+.color_list{
+  list-style-type: none;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.draw_map_node{
+  visibility: visible;
+
+}
+.place_furnish_mode{
+
+  visibility: hidden;
+  height: 0;
+}
+.color-wrapper {
+  position: relative;
+  width: 250px;
+  margin: 20px auto;
+  z-index:10;
+}
+input.call-picker {
+  border: 1px solid #AAA;
+  color: #666;
+  text-transform: uppercase;
+  float: left;
+  outline: none;
+  padding: 10px;
+  text-transform: uppercase;
+  width: 85px;
+  visibility: hidden;
+}
+
+.color-picker {
+  width:10.5vw;
+  background: #F3F3F3;
+  height: 20vh;
+  padding: 5px;
+  border: 5px solid #fff;
+  box-shadow: 0px 0px 3px 1px #DDD;
+  position: absolute;
+  border-radius: 30px;
+  top: 10vh;
+  right:5vw;
+  z-index:10;
+}
+
+.color-holder {
+  background: #fff;
+  cursor: pointer;
+  border: 1px solid #AAA;
+  width: 40px;
+  height: 36px;
+  float: left;
+  margin-left: 5px;
+}
+
+.color-picker .color-item {
+  width: 10px;
+  cursor: pointer;
+  height: 10px;
+  list-style-type: none;
+  float: left;
+  margin: 2px;
+  border: 1px solid #DDD;
+}
+
+.color-picker .color-item:hover {
+  border: 1px solid #666;
+  opacity: 0.8;
+  -moz-opacity: 0.8;
+  filter:alpha(opacity=8);
 }

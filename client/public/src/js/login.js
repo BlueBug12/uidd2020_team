@@ -1,25 +1,30 @@
 $('#login_btn').click((event) => {
     event.preventDefault()
-    $.post('./users', {
-        account: $('#signin input[name=account]').val(),
-        password: $('#signin input[name=password]').val()
-    }, (res) => {
-        localStorage.account = res.account;
-        if (res.text === "登入失敗！") {
-          var modal = $('#myModal');
-          modal.find('.modal-body p').text(res.text); 
-          $('#myModal').modal('show'); 
-        } else {
-          
-        }
-    });
+    let form = document.getElementsByTagName('form');
+    if (form[0].checkValidity() === false) {
+        form[0].classList.add('was-validated');
+    } else {
+        $.post('./users', {
+            account: $('#signin input[name=account]').val(),
+            password: $('#signin input[name=password]').val()
+        }, (res) => {
+            localStorage.account = res.account;
+            if (res.text === "登入失敗") {
+                var modal = $('#myModal');
+                modal.find('.modal-body p').text(res.text);
+                $('#myModal').modal('show');
+            } else {
+                location.href = './game.html';
+            }
+        });
+    }
 });
 
 window.fbAsyncInit = function() {
     FB.init({
-      appId      : myAppId,
-      xfbml      : true,
-      version    : 'v7.0'
+        appId: myAppId,
+        xfbml: true,
+        version: 'v7.0'
     });
     FB.AppEvents.logPageView();
 };
@@ -44,32 +49,31 @@ $(function() {
           await new Promise(resolve => {
             FB.api('/me',{fields: 'id,name,email'}, function (response) {
               console.log(`Successful login for: ${response.name}`)
-              console.log(response);
-              localStorage.setItem("account", response.name);
+              localStorage.setItem("account", response.id);
               account=response.id;
-              name = response.name;
-              resolve();
+              name = response.name
             });
-          });
-          FB.api(
-            "/me/picture",
-            {
+            FB.api(
+              "/me/picture",
+              {
               "redirect": false,
-              "height": 200,
-              "width": 200,
+              "height": 50,
+              "width": 50,
               "type": "normal"
-            },
-            function (response) {
+              },
+              function (response) {
               if (response && !response.error) {
-                url = response.data.url;
-                console.log(response.data.url);
+                  url = response.data.url;
+                  resolve();
               }
-            }
-          );
+              }
+            );
+          });
         } else {
           FB.login(function (response) {
             if (response.authResponse) {
               FB.api('/me',{fields: 'id,name'}, function (response) {
+              
               });
             }       
           }, { scope: 'email,user_likes' });
@@ -77,13 +81,24 @@ $(function() {
         resolve();
       });
     });
-    await $.post('./users/fbData', {
+    console.log(url);
+    await $.post('./users/CheckData', {
       account: account,
+      password: " ",
       name: name,
+      phone: 0000000000,
       url:url
     }, (res) => {
+      if(res.first==="true")
+        location.href = './join.html';
+      else
+        location.href = './game.html';
       console.log(res);
     });
-    //location.href = './game.html';
+    
   });
 });
+
+async function GetData(){
+
+}

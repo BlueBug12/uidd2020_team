@@ -16,7 +16,8 @@ router.post('/',async(req,res) => {
         content:req.body.content,
         advise:req.body.advise,
         date:req.body.date,
-        time:req.body.time
+        time:req.body.time,
+        author:req.body.author
     });
     try {
         const savePost = await tasks.save();

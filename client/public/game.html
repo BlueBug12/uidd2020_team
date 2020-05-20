@@ -20,7 +20,12 @@
 
 <body>
     <div class="container-fluid">
-
+        <div class="mask"></div>
+        <div class="check">
+            <p class="notify">通知</p>
+            <p class="alert-mess">任務已發佈</p>
+            <button class="checkconfirm ">確定</button>
+        </div>
         <div class="banner">
             <div class="nav-bg">
                 <nav class="navbar " id="navbar">
@@ -34,7 +39,8 @@
                             <a href=".#section_3">關於我們</a>
                         </li>
                         <li class="list-inline-item">
-                            <a href="login.html">登入</a>
+                            <!-- <a href="login.html">登入</a> -->
+                            <img src="./img/brother.png" alt="" srcset="">
                         </li>
                     </ul>
                 </nav>
@@ -66,20 +72,20 @@
                     <div class="reqPanel">
                         <div class="head space">我要發任務</div>
 
-                        <form class="formset" id="addTasks">
+                        <form class="formset " id="addTasks" novalidate="">
                             <div class="content">
                                 <label class="content-label space" for="inputcontent">任務內容</label>
-                                <input type="text" id="inputcontent" name="content">
+                                <input type="text" id="inputcontent" name="content" required>
                             </div>
                             <div class="suggest">
                                 <label class="suggest-label space" for="inputsuggest">任務建議</label>
-                                <textarea id="inputsuggest" rows="3" cols="20" name="advise"></textarea>
+                                <textarea id="inputsuggest" rows="3" cols="20" name="advise" required></textarea>
                             </div>
                             <div class="deadline">
                                 <label class="deadline-date-label space" for="datepicker">任務期限</label>
-                                <input type="text" id="datepicker" name="date">
+                                <input type="text" id="datepicker" name="date" required>
                                 <label class="deadline-time-label" for="timepicker"></label>
-                                <input type="text" id="timepicker" name="time">
+                                <input type="text" id="timepicker" name="time" required>
                             </div>
                             <div class="confirm-request">
                                 <button type="submit" class="btn getcase space" id="task_btn">確定</button>

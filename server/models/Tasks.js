@@ -16,7 +16,12 @@ const TaskSchema = mongoose.Schema({
     time:{
         type:String,
         require:true
-    }
+    },
+    author:{
+        type:String,
+        require:true
+    },
+
 },{collection: 'Tasks'});
 
 module.exports = mongoose.model('Tasks',TaskSchema);

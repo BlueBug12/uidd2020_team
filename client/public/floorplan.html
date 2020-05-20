@@ -9,10 +9,11 @@
       <!-- Bootstrap CSS -->
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
       <link href="./src/css/floorplan.css" rel="stylesheet" >
+      <linl href="./src/css/style.css" rel="stylesheet">
       <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
       <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
       <script src="https://d3js.org/d3.v4.min.js"></script>
-      <title>floorplan</title>
+      <title>floorplan test</title>
   </head>
 
   <body>
@@ -21,17 +22,18 @@
           <div class="banner">
               <div class="nav-bg">
                   <nav class="navbar " id="navbar">
-                      <a href="index.html" class="navbar-brand">
+                      <a href="About_Us.html" class="navbar-brand">
                           <span id="logo">
                               <img src="./img/s_topic.png" class="d-inline-block align-top">
                           </span>
                       </a>
                       <ul class="list-inline">
                           <li class="list-inline-item">
-                              <a href=".#section_3">關於我們</a>
+                              <a href="#">關於我們</a>
                           </li>
                           <li class="list-inline-item">
-                              <a href="login.html">登入</a>
+                              <!--<a href="#">登入</a>-->
+							  <img src="./img/brother.png" alt="" srcset="">
                           </li>
                       </ul>
                   </nav>
@@ -52,15 +54,68 @@
             <div id="grid"></div>
         </div>
         <div id="button">
-            <button id="switch">switch mode</button>
-            <button id="undo">undo</button>
             <button id="delete">delete</button>
         </div>
-        <div id="color_picker">
-          <input id = "color_canvas" class="jscolor {closable:true,closeText:'Close me!'}" value="2C93E8">
+        <div id="color-wrapper">
+          <input type="text" name="custom_color" placeholder="#FFFFFF" id="pickcolor" class="call-picker">
+          <div class="color-picker" id="color-picker" style="display: none"></div>
         </div>
+        <div id="editor">
+          <div class="draw_map_node">
+            <ul class="list-inline ">
+              <li class="list-inline-item">
+                  <div class="circle">
+                    <img src="./img/add.png" id="add_button" >
+                  </div>
+              </li>
+                <li class="list-inline-item">
+                  <div class="circle">
+                    <img src="./img/undo.png" id="undo_button">
+                  </div>
+                </li>
+                <li class="list-inline-item">
+                  <div class="circle">
+                    <img src="./img/pen.png" id="pen_button">
+                  </div>
+                </li>
+            </ul>
+            <div id="color" >
+              <ul class="color_list">
+                <li class="round c1 jscolor">
+                </li>
+                <li class="round c2">
+                </li>
+                <li class="round c3">
+                </li>
+                <li class="round c4">
+                </li>
+                <li class="round c5">
+                </li>
+              </ul>
+          </div>
+        </div>
+        <div class="place_furnish_mode">
+          <div id="color" >
+            <ul class="color_list">
+              <li class="item_margin">
+                <img src="./img/furnish/bathtub.png" id="bathtub_img">
+              </li>
+              <li class="item_margin">
+                <img src="./img/furnish/chair.png" id="chair_img">
+              </li>
+              <li class="item_margin">
+                <img src="./img/furnish/door.png" id="door_img">
+              </li>
+              <li class="item_margin">
+                <img src="./img/furnish/sink.png" id="sink_img">
+              </li>
+              <li class="item_margin">
+                <img src="./img/furnish/sofa.png" id="toilet.img">
+              </li>
+            </ul>
+          </div>
       </div>
-
+      <script src="./src/js/color.js" type="text/javascript"></script>
       <script src="./src/js/floorplan.js" type="text/javascript"></script>
       <script src="./src/js/lib/jscolor.js" type="text/javascript"></script>
 
