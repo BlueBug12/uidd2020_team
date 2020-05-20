@@ -1,4 +1,19 @@
 $(document).ready(function() {
+	let bannerbuttons = document.getElementsByClassName('bannerbutton');
+    bannerbuttons[0].classList.add('active');
+
+
+    for (let i = 0; i < bannerbuttons.length; i++) {
+        bannerbuttons[i].addEventListener('click', function(e) {
+            for (let i = 0; i < bannerbuttons.length; i++) {
+                bannerbuttons[i].classList.remove('active');
+            }
+            e.target.classList.add('active');
+        });
+    }
+
+	
+	
     $('.request-btn').css("opacity", "1");
     $('.solve-btn').click(function() {
         $(this).addClass('active');
