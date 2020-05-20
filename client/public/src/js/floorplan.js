@@ -167,6 +167,7 @@ function drawline(d, isDot, isLine) {
 				nowCorner.x = 0;
 				nowCorner.y = 0;
 			}
+			walls[walls.length-1].corner2.id = corner.id;
 			isNewCorner = false;
 		} else {
 			corner.r = 4;
@@ -928,20 +929,36 @@ let ccccc = document.getElementsByTagName("input")[0].value;
 */
 
 document.getElementById("submit").addEventListener('click', async () => {
+	corners.forEach(corner => {
+		delete corner.r;
+	});
+	walls.forEach(wall => {
+		delete wall.width;
+		delete wall.corner2.r;
+	});
 	let result = {
-		corners: corners,
-		walls: walls,
-		rooms: rooms,
-		items: items
+		account: "test",
+		// account: localStorage.getItem("account"),
+		floorplan: {
+			corners: corners,
+			walls: walls,
+			rooms: rooms,
+			items: items
+		}
 	};
+	console.log(result)
 	let response = await fetch('/saveFloorplan', {
 		body: JSON.stringify(result),
 		headers: {
-			'content-type': 'application/json'
+			"Content-Type": "application/json"
 		},
 		method: 'POST'
+	}).then(res => {
+		return res.json();
 	});
-	console.log(response);
+	if (response.isSuccess) {
+		location.href = './game.html';
+	}
 })
 
 async function getUser() {

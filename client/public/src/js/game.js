@@ -139,27 +139,63 @@ $(document).ready(function() {
     });
     $('#solve_btn').click((event) => {
         event.preventDefault()
-        //var classcode = localStorage.getItem("classcode");
-        $.get('./tasks', {}, (res) => {
-            console.log(res);
+        var classcode = localStorage.getItem("classcode");
+        //get group tasks
+        $.get('./tasks/'+classcode, {}, (res) => {
             if(res === "null"){
-                console.log("123");
+                $('#solve_btn').data('0');
             }
-            else{
-            var num = res.length;
-            console.log(num);
-            console.log(res[0].content);
+            else{  
+                //get group member
+                $.get('./users/'+classcode, {}, (res) => {
+                    if(res === "null"){
+                        console.log("123");
+                    }
+                    else{
+                        res.forEach(item =>console.log(item));
+                    }
+                }); 
+                res.forEach(item =>console.log(item));
+                
             }
         });
     });
-
-
-
 });
 
+function addTask(num){
+    var newbtn = document.createElement('button');
+    btn.onclick = "showPanel(${num})";
+    var newdiv = document.createElement('div');
+    newdiv.className = "tabPanel";
+    newdiv.innerHTML = `<img src="./img" alt="" class="exhibit">
+    <div class="dialogue">
+        <img src="./img/dialogue.png" alt="" class="dialogue-img">
+        <p class="dialogue-text">廁所有蜘蛛</p>
+    </div>
+
+    <div class="mission-div">
+        <span class="mission-text space">任務建議</span>
+        <span class="white-block"></span>
+    </div>
+    <div class="mission-div">
+        <span class="mission-text space">成員邀請</span>
+        <img class="member" src="./img/brother.png" alt="">
+        <img class="member" src="./img/father.png" alt="">
+        <img class="member" src="./img/grandfather.png" alt="">
+        <img class="member" src="./img/mother.png" alt="">
+    </div>
+    <div class="mission-div">
+        <span class="mission-text space">剩餘時間</span>
+        <span class="white-block"> </span>
+    </div>
+    <div class="confirm-solve">
+        <button type="button" class="btn accept space">接案</button>
+        <button type="button" class="btn judge space"> 送出審核</button>
+    </div>`;
+}
 async function getUser() {
     var account = localStorage.getItem("account");
-    await $.get('./users/'+account, {}, (res) => {
+    await $.get('./users/find/'+account, {}, (res) => {
         document.getElementById("UserImg").src = res.icon;
         localStorage.setItem("classcode", res.classcode);
     }); 
