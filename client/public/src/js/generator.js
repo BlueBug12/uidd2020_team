@@ -11,7 +11,6 @@
     }).then(res => {
         return res.json();
     });
-    console.log(data)
     var data_point = [];
     var walls = data.floorplan.walls;
     var corners = data.floorplan.corners;
@@ -52,7 +51,6 @@
             y: corner2.y
         });
     }
-    console.log(data_point)
     svg.append('path')
         .attr({
             'position': 'absolute',
@@ -77,12 +75,12 @@
             });
         svg.append('text')
             .attr({
-                'x': Math.min(rooms[i].start.x, rooms[i].end.x) + 100 + 5,
-                'y': Math.min(rooms[i].start.y, rooms[i].end.y),
+                'x': Math.min(rooms[i].start.x, rooms[i].end.x) - 100 + 5,
+                'y': Math.min(rooms[i].start.y, rooms[i].end.y) + 25,
                 'fill': 'white'
             }).style({
-                'font-size': '20px'
-
+                'font-size': '25px',
+                'font-family': "GenJyuuGothic-Medium"
             }).text(rooms[i].text);
     }
     // var furnish = data.items;
