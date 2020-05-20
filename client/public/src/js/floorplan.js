@@ -149,6 +149,7 @@ function drawline(d, isDot, isLine) {
 	if (newStep.length == 0) steps.pop();
 	render("line");
 	previewWall(event);
+	removeRoomHighlight();
 
 }
 
@@ -166,7 +167,8 @@ function selectWall(d) {
 		}
 		return wall;
 	});
-	render("line");
+	removeRoomHighlight();
+	render("line");	
 }
 
 function previewWall(event) {
@@ -198,7 +200,8 @@ function drawrect(d) {
 	}
 }
 
-function selectRect(d) {
+function selectRoom(d) {
+	removeHighlight();
 	rooms.forEach(room => {
 		if (((room.start.x <= d.x && room.end.x >= d.x) || (room.start.x >= d.x && room.end.x <= d.x)) && 
 			((room.start.y <= d.y && room.end.y >= d.y) || (room.start.y >= d.y && room.end.y <= d.y))) {
@@ -213,8 +216,8 @@ function selectRect(d) {
 		previewRoom(x1, x2, y1, y2);
 	} else {
 		if (previewedRoom[0].corner1.x == x1 && previewedRoom[0].corner1.y == y1 &&
-			previewedRoom[0].corner2.x == x2 && previewedRoom[0].corner2.y == y2) {
-			previewedRoom = [];
+			previewedRoom[2].corner1.x == x2 && previewedRoom[2].corner1.y == y2) {
+			removeRoomHighlight();
 		} else {
 			previewedRoom = [];
 			previewRoom(x1, x2, y1, y2);
@@ -427,6 +430,7 @@ function undo() {
 		}
 	});
 	removeHighlight();
+	removeRoomHighlight();
 }
 
 function resetRoomColor() {
@@ -624,6 +628,7 @@ function startEditWall() {
 function editWall() {
 	isEditing = true;
 	removeHighlight();
+	removeRoomHighlight();
 	let stepRecorder = steps[steps.length-1];
 	let x = (Math.floor(event.layerX / gridSize) + ((event.layerX % gridSize) > (gridSize / 2))) * gridSize + 1;
 	let y = (Math.floor(event.layerY / gridSize) + ((event.layerY % gridSize) > (gridSize / 2))) * gridSize + 1;
@@ -664,6 +669,7 @@ function endEditWall() {
 		steps.pop();
 	} else {
 		removeHighlight();
+		removeRoomHighlight();
 	}
 }
 
@@ -681,8 +687,7 @@ function deleteRoom(room) {
 	}
 	rooms.splice(rooms.indexOf(room), 1);
 	resetRoomColor();
-	previewedRoom = [];
-	render("previewedRoom");
+	removeRoomHighlight();
 }
 
 function removeHighlight() {
@@ -698,12 +703,15 @@ function removeHighlight() {
 	nowCorner.x = 0;
 	nowCorner.y = 0;
 	previewedWall = [];
-	previewedRoom = []
 	render("line");
 	render("previewedWall");
-	render("previewedRoom");
 }
 
+function removeRoomHighlight() {
+	nowRoom = null;
+	previewedRoom = [];
+	render("previewedRoom");
+}
 
 // api, basically no need to modify
 (function genPanel() {
@@ -765,7 +773,7 @@ function removeHighlight() {
 		.on('click', function(d) {
 			if (mode === "line") {
 				if (document.getElementById(`_${d.x}_${d.y}`).classList.contains("room")) {
-					selectRect(d);
+					selectRoom(d);
 				} else {
 					drawline(d, false, false);
 				}
