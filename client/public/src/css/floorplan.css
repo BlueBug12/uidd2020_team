@@ -192,8 +192,8 @@ li {
 #editor{
   position:absolute;
   width:14vw;
-  height:64vh;
-  bottom:4vh;
+  height:60vh;
+  bottom:12vh;
   right:3vw;
   display:inline;
   border-radius:30px;
@@ -349,4 +349,16 @@ input.call-picker {
 .awsome_input:focus+.awsome_input_border{
   width:100%;
 
+}
+
+#submit {
+  position: absolute;
+  width: 14vw;
+  height: 4vh;
+  bottom: -8vh;
+  background-color: #FCFFE3;
+  border-radius: 30px;
+  text-align: center;
+  font-family: GenJyuuGothic-Medium;
+  font-size: 2.5vh;
 }

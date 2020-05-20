@@ -25,6 +25,19 @@ document.getElementById("delete").addEventListener('click', () => {
 	}
 });
 
+// let furnishIcons = document.getElementsByClassName("item_margin");
+// for (let iter = 0; iter < furnishIcons.length; ++iter) {
+// 	furnishIcons[iter].addEventListener('mousedown', () => {
+// 		isAddingFurnish = true;
+// 		document.addEventListener('mouseup', endMoveFurnish);
+// 	});
+// };
+// document.addEventListener('mousemove', () => {
+// 	if (isAddingFurnish) {
+// 		moveFurnish();
+// 	}
+// });
+
 let panel = {
     width: 1140,
     height: 520
@@ -52,6 +65,7 @@ let editTarget = {
 	x: 0,
 	y: 0
 };
+let items = [];
 
 var circles=document.getElementsByClassName("round");
 for(let i=0;i<circles.length;++i){
@@ -724,6 +738,16 @@ function removeRoomHighlight() {
 	render("previewedRoom");
 }
 
+function moveFurnish() {
+
+}
+
+function endMoveFurnish() {
+	isAddingFurnish = false;
+	document.removeEventListener('mouseup', endMoveFurnish);
+}
+
+
 // api, basically no need to modify
 (function genPanel() {
 	function gridData() {
@@ -881,6 +905,30 @@ function updateScroll(){
     var element = document.getElementById("color");
     element.scrollTop = element.scrollHeight;
 }
+
+/*
+$('#add_button').click(function(event) {
+let ccccc = document.getElementsByTagName("input")[0].value;
+});
+*/
+
+document.getElementById("submit").addEventListener('click', async () => {
+	let result = {
+		corners: corners,
+		walls: walls,
+		rooms: rooms,
+		items: items
+	};
+	let response = await fetch('/saveFloorplan', {
+		body: JSON.stringify(result),
+		headers: {
+			'content-type': 'application/json'
+		},
+		method: 'POST'
+	});
+	console.log(response);
+})
+
 async function getUser() {
     var account = localStorage.getItem("account");
     await $.get('./users/'+account, {}, (res) => {
