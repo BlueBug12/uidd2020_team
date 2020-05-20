@@ -900,7 +900,7 @@ $('#add_button').click(function(event) {
 		picker.fadeOut();
 		e.stopImmediatePropagation();
 		e.preventDefault();
-		$('#color_list').append(`<li class=\"round \" style=\" background-color:${codeHex}\"><div class=\"input_container\"><input type=\"text\" id=\"text_in1\"class=\"awsome_input\" placeholder=\"room_${room_counter}\"/><span class=\"awsome_input_border\"/></div></li>`);
+		$('#color_list').append(`<li class=\"round \" style=\" background-color:${codeHex}\"><div class=\"input_container\"><input type=\"text\" id=\"text_in1\"class=\"awsome_input\" placeholder=\"room_${room_counter}\"/><span class=\"awsome_input_border\" style=\"background:${codeHex}\"/></div></li>`);
 		updateScroll();
 		room_counter+=1;
 		var circles=document.getElementsByClassName("round");
