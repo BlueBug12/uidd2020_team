@@ -179,7 +179,7 @@ function selectWall(d) {
 		return wall;
 	});
 	removeRoomHighlight();
-	render("line");	
+	render("line");
 }
 
 function previewWall(event) {
@@ -214,7 +214,7 @@ function drawrect(d) {
 function selectRoom(d) {
 	removeHighlight();
 	rooms.forEach(room => {
-		if (((room.start.x <= d.x && room.end.x >= d.x) || (room.start.x >= d.x && room.end.x <= d.x)) && 
+		if (((room.start.x <= d.x && room.end.x >= d.x) || (room.start.x >= d.x && room.end.x <= d.x)) &&
 			((room.start.y <= d.y && room.end.y >= d.y) || (room.start.y >= d.y && room.end.y <= d.y))) {
 			nowRoom = room;
 		}
@@ -861,6 +861,7 @@ $('#add_button').click(function(event) {
 		e.stopImmediatePropagation();
 		e.preventDefault();
 		$('#color_list').append(`<li class=\"round \" style=\" background-color:${codeHex}\"><div class=\"input_container\"><input type=\"text\" id=\"text_in1\"class=\"awsome_input\" placeholder=\"room_${room_counter}\"/><span class=\"awsome_input_border\"/></div></li>`);
+		updateScroll();
 		room_counter+=1;
 		var circles=document.getElementsByClassName("round");
 		for(let i=0;i<circles.length;++i){
@@ -876,17 +877,13 @@ $('#add_button').click(function(event) {
 	});
 });
 //
-
-/*
-$('#add_button').click(function(event) {
-let ccccc = document.getElementsByTagName("input")[0].value;
-});
-*/
-
+function updateScroll(){
+    var element = document.getElementById("color");
+    element.scrollTop = element.scrollHeight;
+}
 async function getUser() {
     var account = localStorage.getItem("account");
     await $.get('./users/'+account, {}, (res) => {
         document.getElementById("UserImg").src = res.icon;
-    }); 
+    });
 }
-
