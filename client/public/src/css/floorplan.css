@@ -147,12 +147,12 @@ li {
 #draw_map{
   position: absolute;
   width: 10vw;
-  right: 55vw;
+  right: 64vw;
 }
 #place_furnish{
   position: absolute;
   width: 10vw;
-  left: 55vw;
+  left: 50vw;
 
 }
 .button_text{
@@ -166,8 +166,8 @@ li {
   width:auto;
   height: auto;
   z-index: 12;
-  top:10vh;
-  left:16vw;
+  bottom:4vh;
+  right:20vw;
   border-radius:30px;
   background-color: #ffffff;
 }
@@ -191,10 +191,10 @@ li {
 }
 #editor{
   position:absolute;
-  width:10.5vw;
-  height:55vh;
-  top:20vh;
-  right:5vw;
+  width:14vw;
+  height:64vh;
+  bottom:4vh;
+  right:3vw;
   display:inline;
   border-radius:30px;
   background-color: #FCFFE3 ;
@@ -210,8 +210,13 @@ li {
 .circle{
   width:30px;
   height:30px;
+  display:flex;
+  justify-content: center;
   border-radius: 50%;
   border:1px solid black;
+}
+#eraser_button{
+  align-self: center;
 }
 .round{
   width:40px;
@@ -264,7 +269,7 @@ input.call-picker {
 }
 
 .color-picker {
-  width:10.5vw;
+  width:14vw;
   background: #F3F3F3;
   height: 20vh;
   padding: 5px;
@@ -273,7 +278,7 @@ input.call-picker {
   position: absolute;
   border-radius: 30px;
   top: 10vh;
-  right:5vw;
+  right:3vw;
   z-index:10;
 }
 
@@ -302,4 +307,43 @@ input.call-picker {
   opacity: 0.8;
   -moz-opacity: 0.8;
   filter:alpha(opacity=8);
+}
+
+
+.input_container{
+  display: inline-block;
+  text-align: center;
+  z-index: 100;
+  overflow:hidden;
+}
+.awsome_input{
+  position:relative;
+  padding: 5px 10px;
+  left:50px;
+  border: none;
+  background: transparent;
+  display: block;
+}
+.awsome_input_border{
+  display:inline-block;
+  width:0px;
+  height: 2px;
+  background: #FEC938;
+  position: relative;
+  left:50px;
+  top:-5px;
+  -webkit-transition: all ease-in-out .15s;
+  -o-transition: all ease-in-out .15s;
+  transition: all ease-in-out .15s;
+}
+.awsome_input:hover,
+.awsome_input:active,
+.awsome_input:focus{
+  outline: none;
+}
+.awsome_input:hover+.awsome_input_border,
+.awsome_input:active+.awsome_input_border,
+.awsome_input:focus+.awsome_input_border{
+  width:100%;
+
 }
