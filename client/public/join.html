@@ -27,7 +27,7 @@
                         </li>
                         <li class="list-inline-item">
                             <!-- <a href="login.html">登入</a> -->
-                            <img id = "UserImg"  alt="" srcset="" style=" border-radius: 50%;">
+                            <img id="UserImg" alt="" srcset="" style=" border-radius: 50%;">
                         </li>
                     </ul>
                 </nav>
@@ -36,16 +36,16 @@
         <div id="align">
             <div id="container">
                 <div id="title">加入班級</div>
-                <form name="signin" class="needs-validation form">
+                <form name="signin" class="form">
                     <!-- <div class="text">帳號</div> -->
                     <div class="formdiv">
-                        <input type="text" placeholder="輸入班級代碼" class="form-control" autocomplete="off" name="classcode" required/>
-                        <div class="invalid-feedback">此為必填欄位</div>
+                        <input type="text" placeholder="輸入班級代碼" class="form-control" autocomplete="off" id="classcode" name="classcode" required/>
+                        <div id="classcode-error" class="error"></div>
                     </div>
                     <!-- <div class="text">密碼</div> -->
                     <div class="formdiv">
-                        <input type="text" placeholder="你的暱稱" class="form-control" autocomplete="off" name="nickname" required/>
-                        <div class="invalid-feedback">此為必填欄位</div>
+                        <input type="text" placeholder="你的暱稱" class="form-control" autocomplete="off" id="nickname" name="nickname" required/>
+                        <div id="nickname-error" class="error"></div>
                     </div>
                     <div class="button" id="group_btn">加入</div>
                 </form>

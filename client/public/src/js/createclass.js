@@ -1,19 +1,47 @@
+function error(type, str) {
+    $(type + '-error').text(str);
+    $(type).addClass('err');
+}
+
+function clear() {
+    $('#classcode-error').text("");
+    $('#nickname-error').text("");
+    $('#classcode').removeClass('err');
+    $('#nickname').removeClass('err');
+
+}
+
+function check() {
+    clear();
+    const classcode = $('#classcode').val().trim();
+    const nickname = $('#nickname').val().trim();
+    let ans = true;
+
+    if (classcode == "") {
+        error("#classcode", '此為必填欄位');
+        ans = false;
+    }
+
+    if (nickname == "") {
+        error("#nickname", '此為必填欄位');
+        ans = false;
+    }
+
+    return ans;
+
+}
+
+
 $('#group_btn').click((event) => {
     event.preventDefault();
-    let form = document.getElementsByTagName('form');
-    if (form[0].checkValidity() === false) {
-        form[0].classList.add('was-validated');
-    } else {
+    if (check() == true) {
         postData(event);
     }
 });
 
 $('#group_btn2').click((event) => {
     event.preventDefault();
-    let form = document.getElementsByTagName('form');
-    if (form[0].checkValidity() === false) {
-        form[0].classList.add('was-validated');
-    } else {
+    if (check() == true) {
         postData(event);
     }
 });
@@ -21,8 +49,8 @@ $('#group_btn2').click((event) => {
 function postData(event) {
     $.post('./users/createclass', {
         account: localStorage.getItem("account"),
-        classcode: $('#signin input[name=classcode]').val(),
-        nickname: $('#signin input[name=nickname]').val()
+        classcode: $('#signin input[name=classcode]').val().trim(),
+        nickname: $('#signin input[name=nickname]').val().trim()
     }, (res) => {
         if (event.target.id.endsWith('2')) {
             location.href = './floorplan.html';
@@ -33,7 +61,7 @@ function postData(event) {
 }
 async function getUser() {
     var account = localStorage.getItem("account");
-    await $.get('./users/find/'+account, {}, (res) => {
+    await $.get('./users/' + account, {}, (res) => {
         document.getElementById("UserImg").src = res.icon;
-    }); 
+    });
 }

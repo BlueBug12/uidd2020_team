@@ -36,16 +36,16 @@
         <div id="align">
             <div id="container">
                 <div id="title">Log in！</div>
-                <form name="signin" class="needs-validation form">
+                <form name="signin" class="form">
                     <!-- <div class="text">帳號</div> -->
                     <div class="formdiv">
-                        <input type="text" placeholder="帳號" name="account" autocomplete="off" class="form-control" required/>
-                        <div class="invalid-feedback">此為必填欄位</div>
+                        <input type="text" placeholder="帳號" name="account" id="account" autocomplete="off" class="form-control" required/>
+                        <div id="account-error" class="error"></div>
                     </div>
                     <!-- <div class="text">密碼</div> -->
                     <div class="formdiv">
-                        <input type="password" placeholder="密碼" name="password" autocomplete="off" class="form-control" required/>
-                        <div class="invalid-feedback">此為必填欄位</div>
+                        <input type="password" placeholder="密碼" name="password" id="password" autocomplete="off" class="form-control" required/>
+                        <div id="password-error" class="error"></div>
                     </div>
                     <div class="button" id="login_btn">登入</div>
                 </form>
