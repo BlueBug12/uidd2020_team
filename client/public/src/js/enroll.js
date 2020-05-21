@@ -89,7 +89,7 @@ $('#enroll_btn').click((event) => {
             phone: $('#signin input[name=phone]').val().trim()
         }, (res) => {
             console.log(res);
-            localStorage.setItem("account", res.account);
+            localStorage.setItem("account", res);
         });
         location.href = './join.html';
     }
