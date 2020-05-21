@@ -41,7 +41,7 @@ $('#login_btn').click((event) => {
             account: $('#signin input[name=account]').val().trim(),
             password: $('#signin input[name=password]').val().trim()
         }, (res) => {
-            localStorage.account = res.account;
+          localStorage.setItem("account", res.account);
             if (res.text === "登入失敗！") {
                 var modal = $('#myModal');
                 modal.find('.modal-body p').text(res.text);
