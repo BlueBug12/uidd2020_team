@@ -89,8 +89,9 @@ $('#enroll_btn').click((event) => {
         }, (res) => {
             console.log(res);
             localStorage.setItem("account", res.account);
+            location.href = './join.html';
         });
-        location.href = './join.html';
+        
     }
 
 });
