@@ -41,6 +41,7 @@ router.post('/enroll',async(req,res) => {
     try {
         const savePost = await users.save();
         res.json(savePost);
+        res.send(savePost);
     }catch(err){
         res.json({message:err});
     }
