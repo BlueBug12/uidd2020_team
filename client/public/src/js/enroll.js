@@ -88,6 +88,7 @@ $('#enroll_btn').click((event) => {
             name: $('#signin input[name=name]').val().trim(),
             phone: $('#signin input[name=phone]').val().trim()
         }, (res) => {
+            console.log(res);
             localStorage.setItem("account", res.account);
         });
         location.href = './join.html';
