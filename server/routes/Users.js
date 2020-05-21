@@ -44,7 +44,7 @@ router.post('/enroll',async(req,res) => {
     }catch(err){
         res.json({message:err});
     }
-    res.send(JSON.parse(`{account:${req.body.account}}`));
+    res.send({ account: req.body.account });
 });
 
 //store fb login data

@@ -23,7 +23,8 @@ module.exports = (app) => {
                                 }
                             });
                         } else {
-                            Floorplan.findOneAndUpdate({ class: docs[0].classcode }, { floorplan: floorplan }, err => {
+                            Floorplan.findOneAndUpdate({ class: users[0].classcode }, { floorplan: floorplan }, err => {
+                                console.log(err)
                                 if (!err) {
                                     res.status(200).send({ isSuccess: true });
                                 } else {

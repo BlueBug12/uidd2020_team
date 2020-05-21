@@ -85,9 +85,9 @@ $('#enroll_btn').click((event) => {
             account: $('#signin input[name=account]').val().trim(),
             password: $('#signin input[name=password]').val().trim(),
             name: $('#signin input[name=name]').val().trim(),
-            phone: $('#signin input[name=phone]').val().trim()
+            phone: $('#signin input[name=phone]').val().trim(),
+            icon: "https://luffy.ee.ncku.edu.tw:1113/img/sister.png"
         }, (res) => {
-            console.log(res);
             localStorage.setItem("account", res.account);
             location.href = './join.html';
         });

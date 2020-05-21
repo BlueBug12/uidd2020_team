@@ -940,12 +940,13 @@ document.getElementById("submit").addEventListener('click', async () => {
 			}
 			let color = room.color;
 			if (color.startsWith("rgb")) {
+				console.log(colors[iter].style["background-color"], color)
 				if (colors[iter].style["background-color"] === color) {
 					room.text = document.getElementsByClassName("awsome_input")[iter].value;
 				}
 			} else {
 				let rgb = colors[iter].style["background-color"].match(/rgba?\((\d{1,3}), ?(\d{1,3}), ?(\d{1,3})\)?(?:, ?(\d(?:\.\d?))\))?/);
-				if (rgbToHex(parseInt(rgb[1]), parseInt(rgb[2]), parseInt(rgb[3])) === color) {
+				if ((rgbToHex(parseInt(rgb[1]), parseInt(rgb[2]), parseInt(rgb[3]))).toUpperCase() === color) {
 					room.text = document.getElementsByClassName("awsome_input")[iter].value;
 				}
 			}
@@ -976,7 +977,7 @@ document.getElementById("submit").addEventListener('click', async () => {
 
 async function getUser() {
     var account = localStorage.getItem("account");
-    await $.get('./users/'+account, {}, (res) => {
+    await $.get('./users/find/'+account, {}, (res) => {
         document.getElementById("UserImg").src = res.icon;
     });
 }
