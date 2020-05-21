@@ -43,9 +43,9 @@ module.exports = (app) => {
 
     app.post('/readFloorplan', (req, res) => {
         let account = req.body.account;
-        Users.find({ account: account }, (err, docs) => {
+        Users.find({ account: account }, (err, users) => {
             if (!err) {
-                Floorplan.find({ class: docs[0].classcode }, (err, docs) => {
+                Floorplan.find({ class: users[0].classcode }, (err, docs) => {
                     if (!err) {
                         res.status(200).send({ floorplan: docs[0].floorplan });
                     } else {
