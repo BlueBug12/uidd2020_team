@@ -26,7 +26,6 @@ function check() {
     const password = $('#password').val().trim();
     const password2 = $('#password2').val().trim();
     const phone = $('#phone').val().trim();
-    console.log(account);
     let ans = true;
 
     if (name == "") {
@@ -89,7 +88,7 @@ $('#enroll_btn').click((event) => {
             phone: $('#signin input[name=phone]').val().trim()
         }, (res) => {
             console.log(res);
-            localStorage.setItem("account", res);
+            localStorage.setItem("account", res.account);
         });
         location.href = './join.html';
     }

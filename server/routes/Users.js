@@ -41,7 +41,7 @@ router.post('/enroll',async(req,res) => {
     try {
         const savePost = await users.save();
         res.json(savePost);
-        res.send({account:req.body.account});
+        res.send(JSON.parse(`{account:${req.body.account}}`));
     }catch(err){
         res.json({message:err});
     }
