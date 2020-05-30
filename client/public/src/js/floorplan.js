@@ -97,7 +97,7 @@ $(document).on('click','.round',function(){
 	mode="rect";
 
 	circle_id=$(this).attr('id');
-	room_id=circle_id.slice(2,circle_id.length);
+	room_id=parseInt(circle_id.slice(2,circle_id.length),10);
 	event.stopPropagation();
 	picker.fadeIn();
 });
@@ -120,14 +120,14 @@ $(document).on('click','.color-item',function(e){
 	else{//change existed room color
 		$('#'+circle_id).css('background-color', codeHex);
 		$('#b_'+room_id).css('background',codeHex);
-		room_id=circle_id.slice(2,circle_id.length);
-		console.log('#room_'+room_id);
+		room_id=parseInt(circle_id.slice(2,circle_id.length),10);
+		//console.log('#room_'+room_id);
 		d3.selectAll('.room_'+room_id)
 			.style("fill", codeHex)
 
-		//change record color
 		rooms.forEach(room => {
-			if(room.room_id===room_id){
+			if(room.id==room_id){
+				console.log("found: "+room_id);
 				room.color=codeHex;
 			}
 		});
@@ -268,19 +268,21 @@ function previewWall(event) {
 	}
 	render("previewedWall");
 }
-
+//let area=0;
 function drawrect(d) {
 	isNewRoom = true;
 	d3.selectAll(".square").style("fill", "#f0f0f0").attr("class","square");	// reset the class
 	let color = current_color;
 	for (let i = Math.min(d.x, pre_x); i <= Math.max(d.x, pre_x) ; i+=gridSize) {
 		for (let j = Math.min(d.y, pre_y); j <= Math.max(d.y, pre_y); j+=gridSize) {
-			//if($("#"+'_'+i.toString(10)+'_'+j.toString(10)).)
 			d3.selectAll("#"+'_'+i.toString(10)+'_'+j.toString(10)+':not(.chosen)')
 				.style("fill", color)
 				.classed('choosing', true)	// add class to recognize the chosen one
+
 		}
 	}
+	//area=(Math.max(d.x, pre_x)-Math.min(d.x, pre_x))*(Math.max(d.x, pre_x)-Math.min(d.y, pre_y))
+	//console.log(area);
 }
 
 function selectRoom(d) {
@@ -880,6 +882,12 @@ function endMoveFurnish() {
 			}
 	   	})
 		.on('mouseup',function(d){
+			if($("#"+'_'+pre_x.toString(10)+'_'+pre_y.toString(10)+".choosing")[0]===undefined||
+				 $("#"+'_'+d.x.toString(10)+'_'+pre_y.toString(10)+".choosing")[0]===undefined||
+			 	 $("#"+'_'+d.x.toString(10)+'_'+d.y.toString(10)+".choosing")[0]===undefined||
+			 	 $("#"+'_'+pre_x.toString(10)+'_'+d.y.toString(10)+".choosing")[0]===undefined){
+					 console.log("overlapping!");
+				}
 			if (mode === "rect"){
 				column.on('mousemove', null);
 				if (isNewRoom) {
