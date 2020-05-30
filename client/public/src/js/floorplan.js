@@ -13,18 +13,20 @@ document.getElementById("place_furnish").addEventListener('click', () => {
 	$('#place_furnish').css({"opacity": 1});
 	$('#draw_map').css({"opacity": 0.5});
 });
-
+/*
 document.getElementById("add_button").addEventListener('click', () => {
 	if(mode==='line'){
 		mode='rect';
 	}
-});
+});*/
 document.getElementById("pen_button").addEventListener('click', () => {
-	if(mode==='rect'){
+	if(mode==='rect'&& new_room!=1){
 		mode='line';
 		$('#pen').css('background-color', "transparent");
 	}
 });
+
+
 document.getElementById("undo_button").addEventListener('click', undo);
 document.getElementById("delete").addEventListener('click', () => {
 	if (!nowRoom) {
@@ -68,6 +70,7 @@ let walls = [];
 let previewedWall = [];
 let steps = [];
 let current_color;
+let room_id=1;
 let room_counter=2;
 let nowCorner = {
 	id: "",
@@ -85,8 +88,8 @@ let items = [];
 let new_room=1;
 let circle_id;
 
-
 $(document).on('click','.round',function(){
+	mode='rect';
 	new_room=0;
 	picker.fadeOut();
 	current_color = $(this).css("backgroundColor");
@@ -94,24 +97,40 @@ $(document).on('click','.round',function(){
 	mode="rect";
 
 	circle_id=$(this).attr('id');
+	room_id=circle_id.slice(2,circle_id.length);
 	event.stopPropagation();
 	picker.fadeIn();
 });
-
+$(document).on('mousedown','#svg_canvas',function(){
+	picker.fadeOut();
+});
 $(document).on('click','.color-item',function(e){
-
+	mode='rect';
 	var codeHex = $(this).css("backgroundColor");//.data('hex');
 	current_color=codeHex;
 	$('#pickcolor').val(codeHex);
 	$('#pen').css('background-color', codeHex);
 	picker.fadeOut();
 	if(new_room===1){
-		$('#color_list').append(`<li class=\"round \" id = \"c_${room_counter}\"style=\" background-color:${codeHex}\"><div class=\"input_container\"><input type=\"text\" id=\"text_in1\"class=\"awsome_input\" placeholder=\"room_${room_counter}\"/><span class=\"awsome_input_border\" style=\"background:${codeHex}\"/></div></li>`);
+		room_id=room_counter;
+		$('#color_list').append(`<li class=\"round \" id = \"c_${room_counter}\"style=\" background-color:${codeHex}\"><div class=\"input_container\"><input type=\"text\" id=\"text_in1\"class=\"awsome_input\" placeholder=\"room_${room_counter}\"/><span class=\"awsome_input_border\" id=\"b_${room_counter}\" style=\"background:${codeHex}\"/></div></li>`);
 		updateScroll();
 		room_counter+=1;
 	}
-	else{
+	else{//change existed room color
 		$('#'+circle_id).css('background-color', codeHex);
+		$('#b_'+room_id).css('background',codeHex);
+		room_id=circle_id.slice(2,circle_id.length);
+		console.log('#room_'+room_id);
+		d3.selectAll('.room_'+room_id)
+			.style("fill", codeHex)
+
+		//change record color
+		rooms.forEach(room => {
+			if(room.room_id===room_id){
+				room.color=codeHex;
+			}
+		});
 	}
 });
 
@@ -256,7 +275,8 @@ function drawrect(d) {
 	let color = current_color;
 	for (let i = Math.min(d.x, pre_x); i <= Math.max(d.x, pre_x) ; i+=gridSize) {
 		for (let j = Math.min(d.y, pre_y); j <= Math.max(d.y, pre_y); j+=gridSize) {
-			d3.select("#"+'_'+i.toString(10)+'_'+j.toString(10))
+			//if($("#"+'_'+i.toString(10)+'_'+j.toString(10)).)
+			d3.selectAll("#"+'_'+i.toString(10)+'_'+j.toString(10)+':not(.chosen)')
 				.style("fill", color)
 				.classed('choosing', true)	// add class to recognize the chosen one
 		}
@@ -505,7 +525,7 @@ function resetRoomColor() {
 		for (let i = x1; i <= x2; i += gridSize) {
 			for (let j = y1; j <= y2; j += gridSize) {
 				d3.select("#"+'_'+i.toString(10)+'_'+j.toString(10))
-					.attr("class", "room")
+					.attr("class", "chosen room_"+room.id)
 					.style("fill", room.color);
 			}
 		}
@@ -822,6 +842,7 @@ function endMoveFurnish() {
 
 	var grid = d3.select("#grid")
 		.append("svg")
+		.attr('id',"svg_canvas")
 		.attr("width", panel.width+2)
 		.style("border-radius","30px")
 		.attr("height", panel.height+2);
@@ -863,7 +884,7 @@ function endMoveFurnish() {
 				column.on('mousemove', null);
 				if (isNewRoom) {
 					row.selectAll(".choosing")
-						.attr("class", "room")
+						.attr("class", "room_"+room_id)
 						.classed('chosen',true)
 					rooms.push({
 						color: current_color,
@@ -874,7 +895,8 @@ function endMoveFurnish() {
 						end: {
 							x: d.x,
 							y: d.y
-						}
+						},
+						id:room_id
 					});
 					steps.push([{
 						operation: "new",
