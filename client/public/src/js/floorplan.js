@@ -82,15 +82,38 @@ let editTarget = {
 };
 let items = [];
 
-var circles=document.getElementsByClassName("round");
-for(let i=0;i<circles.length;++i){
-	circles[i].addEventListener('click', () => {
-		let color=window.getComputedStyle(circles[i], null).getPropertyValue("background-color");
-		$('#pen').css('background-color', color);
-		mode="rect";
-		current_color=color;
-	});
-}
+let new_room=1;
+let circle_id;
+
+
+$(document).on('click','.round',function(){
+	new_room=0;
+	picker.fadeOut();
+	current_color = $(this).css("backgroundColor");
+	$('#pen').css('background-color', current_color);
+	mode="rect";
+
+	circle_id=$(this).attr('id');
+	event.stopPropagation();
+	picker.fadeIn();
+});
+
+$(document).on('click','.color-item',function(e){
+
+	var codeHex = $(this).css("backgroundColor");//.data('hex');
+	current_color=codeHex;
+	$('#pickcolor').val(codeHex);
+	$('#pen').css('background-color', codeHex);
+	picker.fadeOut();
+	if(new_room===1){
+		$('#color_list').append(`<li class=\"round \" id = \"c_${room_counter}\"style=\" background-color:${codeHex}\"><div class=\"input_container\"><input type=\"text\" id=\"text_in1\"class=\"awsome_input\" placeholder=\"room_${room_counter}\"/><span class=\"awsome_input_border\" style=\"background:${codeHex}\"/></div></li>`);
+		updateScroll();
+		room_counter+=1;
+	}
+	else{
+		$('#'+circle_id).css('background-color', codeHex);
+	}
+});
 
 function drawline(d, isDot, isLine) {
 
@@ -884,35 +907,11 @@ $('body').click(function () {
 	picker.fadeOut();
 });*/
 
-$('#add_button').click(function(event) {
 
+$('#add_button').click(function(event) {
+	new_room=1;
 	event.stopPropagation();
 	picker.fadeIn();
-
-	picker.children('li').click(function(e) {
-		var codeHex = $(this).data('hex');
-
-		//$('.color-holder').css('background-color', codeHex);
-		$('#pickcolor').val(codeHex);
-		$('#pen').css('background-color', codeHex);
-		current_color=codeHex;
-		picker.fadeOut();
-		e.stopImmediatePropagation();
-		e.preventDefault();
-		$('#color_list').append(`<li class=\"round \" style=\" background-color:${codeHex}\"><div class=\"input_container\"><input type=\"text\" id=\"text_in1\"class=\"awsome_input\" placeholder=\"room_${room_counter}\"/><span class=\"awsome_input_border\" style=\"background:${codeHex}\"/></div></li>`);
-		updateScroll();
-		room_counter+=1;
-		var circles=document.getElementsByClassName("round");
-		for(let i=0;i<circles.length;++i){
-			circles[i].addEventListener('click', () => {
-				let color=window.getComputedStyle(circles[i], null).getPropertyValue("background-color");
-				$('#pen').css('background-color', color);
-				mode="rect";
-				current_color=color;
-			});
-		}
-
-	});
 });
 
 function updateScroll(){
