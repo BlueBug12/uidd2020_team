@@ -224,6 +224,7 @@ li {
   justify-content: center;
   border-radius: 50%;
   border:1px solid #4b515f;
+  user-select: none;
 }
 .center{
   align-self: center;
@@ -271,7 +272,7 @@ li {
 }
 #draw_map_mode{
   visibility: visible;
-
+  user-select: none;
 }
 #place_furnish_mode{
 
@@ -356,7 +357,7 @@ input.call-picker {
   display:inline-block;
   width:0px;
   height: 2px;
-  
+
   position: relative;
   left:50px;
   top:-5px;
