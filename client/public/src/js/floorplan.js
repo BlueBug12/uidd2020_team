@@ -23,6 +23,7 @@ document.getElementById("pen_button").addEventListener('click', () => {
 	if(mode==='rect'&& new_room!=1){
 		mode='line';
 		$('#pen').css('background-color', "transparent");
+		picker.fadeOut();
 	}
 });
 
@@ -127,7 +128,6 @@ $(document).on('click','.color-item',function(e){
 
 		rooms.forEach(room => {
 			if(room.id==room_id){
-				console.log("found: "+room_id);
 				room.color=codeHex;
 			}
 		});
@@ -868,7 +868,7 @@ function endMoveFurnish() {
 		.style("stroke-width", 0.3)
 		.on('click', function(d) {
 			if (mode === "line") {
-				if (document.getElementById(`_${d.x}_${d.y}`).classList.contains("room")) {
+				if (document.getElementById(`_${d.x}_${d.y}`).classList.contains("chosen")) {//room_*
 					selectRoom(d);
 				} else {
 					drawline(d, false, false);
@@ -882,38 +882,45 @@ function endMoveFurnish() {
 			}
 	   	})
 		.on('mouseup',function(d){
-			if($("#"+'_'+pre_x.toString(10)+'_'+pre_y.toString(10)+".choosing")[0]===undefined||
-				 $("#"+'_'+d.x.toString(10)+'_'+pre_y.toString(10)+".choosing")[0]===undefined||
-			 	 $("#"+'_'+d.x.toString(10)+'_'+d.y.toString(10)+".choosing")[0]===undefined||
-			 	 $("#"+'_'+pre_x.toString(10)+'_'+d.y.toString(10)+".choosing")[0]===undefined){
-					 console.log("overlapping!");
-				}
-			if (mode === "rect"){
+			let grid_number=((Math.max(d.x, pre_x)-Math.min(d.x, pre_x))/20+1)*((Math.max(d.y, pre_y)-Math.min(d.y, pre_y))/20+1);
+			let temp_chosen=d3.selectAll(".choosing");
+			//console.log(temp_chosen._groups[0].length);
+			if(temp_chosen._groups[0].length!=grid_number){
+				console.log("overlapping!");
+				temp_chosen.attr("class","square").style("fill", "#f0f0f0");
 				column.on('mousemove', null);
-				if (isNewRoom) {
-					row.selectAll(".choosing")
-						.attr("class", "room_"+room_id)
-						.classed('chosen',true)
-					rooms.push({
-						color: current_color,
-						start: {
-							x: pre_x,
-							y: pre_y
-						},
-						end: {
-							x: d.x,
-							y: d.y
-						},
-						id:room_id
-					});
-					steps.push([{
-						operation: "new",
-						object: "room",
-						value: Object.assign({}, rooms[rooms.length-1])
-					}]);
-					isNewRoom = false;
+				new_room=0;
+				isNewRoom = false;
+				//if(mode==='rect'&& new_room!=1){
+			}else{
+				if (mode === "rect"){
+					column.on('mousemove', null);
+					if (isNewRoom) {
+						row.selectAll(".choosing")
+							.attr("class", "room_"+room_id)
+							.classed('chosen',true)
+						rooms.push({
+							color: current_color,
+							start: {
+								x: pre_x,
+								y: pre_y
+							},
+							end: {
+								x: d.x,
+								y: d.y
+							},
+							id:room_id
+						});
+						steps.push([{
+							operation: "new",
+							object: "room",
+							value: Object.assign({}, rooms[rooms.length-1])
+						}]);
+						isNewRoom = false;
+					}
 				}
 			}
+
 		});
 
 	grid.append("g").attr("id", "corners");
