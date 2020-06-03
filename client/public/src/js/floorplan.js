@@ -8,6 +8,7 @@ document.getElementById("draw_map").addEventListener('click', () => {
 
 });
 document.getElementById("place_furnish").addEventListener('click', () => {
+	picker.fadeOut();
 	$("#draw_map_mode").css({"visibility":"hidden", "height": 0});
 	$("#place_furnish_mode").css({"visibility":"visible", "height": "100%"});
 	$('#place_furnish').css({"opacity": 1});
@@ -932,8 +933,8 @@ function endMoveFurnish() {
 
 
 
-var colorList = [ '000000', '993300', '333300', '003300', '003366', '000066', '333399', '333333',
-'660000', 'FF6633', '666633', '336633', '336666', '0066FF', '666699', '666666', 'CC3333', 'FF9933', '99CC33', '669966', '66CCCC', '3366FF', '663366', '999999', 'CC66FF', 'FFCC33', 'FFFF66', '99FF66', '99CCCC', '66CCFF', '993366', 'CCCCCC', 'FF99CC', 'FFCC99', 'FFFF99', 'CCffCC', 'CCFFff', '99CCFF', 'CC99FF', 'FFFFFF' ];
+var colorList = ['F1BA9C','F5A96B','F8C780','D4C793','C7DF93','669A7D','9ED5D2','7DBEDF','C4D5D9','A889AD','D788AD','A9A696',
+								 'D57456','E0742D','EBAB4B','A1986E','81863A','365545','388185','0F4867','384851','715D75','4F3239','696758']
 var picker = $('#color-picker');
 
 for (var i = 0; i < colorList.length; i++ ) {

@@ -262,7 +262,7 @@ li {
 
   margin-bottom: 20px;
 }
-.c1{background-color:#E8C38F;}
+.c1{background-color:#F1BA9C;}
 
 .color_list{
   list-style-type: none;
@@ -299,11 +299,11 @@ input.call-picker {
 
 .color-picker {
   width:14vw;
-  background: #F3F3F3;
+  background: #FCFFE3;
   height: 20vh;
   padding: 5px;
-  border: 5px solid #fff;
-  box-shadow: 0px 0px 3px 1px #DDD;
+  border: 5px solid #FCFFE3;
+  box-shadow: 0px 0px 3px 1px #FCFFE3;
   position: absolute;
   border-radius: 30px;
   top: 10vh;
