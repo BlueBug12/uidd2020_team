@@ -21,7 +21,7 @@ document.getElementById("add_button").addEventListener('click', () => {
 	}
 });*/
 document.getElementById("pen_button").addEventListener('click', () => {
-	if(mode==='rect'&& new_room!=1){
+	if(mode==='rect'&& new_room[current_floor]!=1){
 		mode='line';
 		$('#pen').css('background-color', "transparent");
 		picker.fadeOut();
@@ -34,10 +34,10 @@ document.getElementById("delete").addEventListener('click', () => {
 	if (!nowRoom) {
 		deleteWall();
 	} else {
-		steps.push([{
+		steps[current_floor].push([{
 			operation: "delete",
 			object: "room",
-			index: rooms.indexOf(nowRoom),
+			index: rooms[current_floor].indexOf(nowRoom),
 			value: Object.assign({}, nowRoom)
 		}]);
 		deleteRoom(nowRoom);
@@ -64,42 +64,49 @@ let panel = {
 let gridSize = 20;
 let pre_x=1;
 let pre_y=1;
-let isNewRoom = false;
-var rooms = [];
-let previewedRoom = [];
-let corners = [];
-let walls = [];
-let previewedWall = [];
-let steps = [];
-let current_color;
-let room_id=1;
-let room_counter=2;
-let nowCorner = {
+
+let current_floor=0;
+
+let foo =[];
+
+let isNewRoom = [false];
+var rooms = [[]];
+let previewedRoom = [[]];
+let corners = [[]];
+let walls = [[]];console.log(walls);
+let previewedWall = [[]];
+let steps = [[]];
+let current_color = ["#fff"];
+let room_id=[1];
+let room_counter=[2];
+let tempCorner = {
 	id: "",
 	x: 0,
 	y: 0
 };
+let nowCorner=[tempCorner];
 let nowRoom = null;
-let isEditing = false;
-let editTarget = {
+let isEditing = [false];
+let tempTarget = {
 	x: 0,
 	y: 0
 };
-let items = [];
+let editTarget=[tempTarget];
+let items = [[]];
 
-let new_room=1;
+let new_room=[1];
 let circle_id;
 
 $(document).on('click','.round',function(){
 	mode='rect';
-	new_room=0;
+	new_room[current_floor]=0;
 	picker.fadeOut();
-	current_color = $(this).css("backgroundColor");
-	$('#pen').css('background-color', current_color);
+	current_color[current_floor] = $(this).css("backgroundColor");
+	$('#pen').css('background-color', current_color[current_floor]);
 	mode="rect";
 
 	circle_id=$(this).attr('id');
-	room_id=parseInt(circle_id.slice(2,circle_id.length),10);
+	room_id[current_floor]=parseInt(circle_id.slice(2,circle_id.length),10);
 	event.stopPropagation();
 	picker.fadeIn();
 });
@@ -109,26 +116,26 @@ $(document).on('mousedown','#svg_canvas',function(){
 $(document).on('click','.color-item',function(e){
 	mode='rect';
 	var codeHex = $(this).css("backgroundColor");//.data('hex');
-	current_color=codeHex;
+	current_color[current_floor]=codeHex;
 	$('#pickcolor').val(codeHex);
 	$('#pen').css('background-color', codeHex);
 	picker.fadeOut();
-	if(new_room===1){
-		room_id=room_counter;
-		$('#color_list').append(`<li class=\"round \" id = \"c_${room_counter}\"style=\" background-color:${codeHex}\"><div class=\"input_container\"><input type=\"text\" id=\"text_in1\"class=\"awsome_input\" placeholder=\"room_${room_counter}\"/><span class=\"awsome_input_border\" id=\"b_${room_counter}\" style=\"background:${codeHex}\"/></div></li>`);
+	if(new_room[current_floor]===1){
+		room_id[current_floor]=room_counter[current_floor];
+		$('#color_list').append(`<li class=\"round \" id = \"c_${room_counter[current_floor]}\"style=\" background-color:${codeHex}\"><div class=\"input_container\"><input type=\"text\" id=\"text_in1\"class=\"awsome_input\" placeholder=\"room_${room_counter[current_floor]}\"/><span class=\"awsome_input_border\" id=\"b_${room_counter[current_floor]}\" style=\"background:${codeHex}\"/></div></li>`);
 		updateScroll();
-		room_counter+=1;
+		room_counter[current_floor]+=1;
 	}
 	else{//change existed room color
 		$('#'+circle_id).css('background-color', codeHex);
-		$('#b_'+room_id).css('background',codeHex);
-		room_id=parseInt(circle_id.slice(2,circle_id.length),10);
+		$('#b_'+room_id[current_floor]).css('background',codeHex);
+		room_id[current_floor]=parseInt(circle_id.slice(2,circle_id.length),10);
 		//console.log('#room_'+room_id);
-		d3.selectAll('.room_'+room_id)
+		d3.selectAll('.room_'+room_id[current_floor])
 			.style("fill", codeHex)
 
-		rooms.forEach(room => {
-			if(room.id==room_id){
+		rooms[current_floor].forEach(room => {
+			if(room.id==room_id[current_floor]){
 				room.color=codeHex;
 			}
 		});
@@ -138,7 +145,7 @@ $(document).on('click','.color-item',function(e){
 function drawline(d, isDot, isLine) {
 
 	document.getElementsByTagName("svg")[0].removeEventListener('mousemove', previewWall);
-
+	//console.log(d);
 	// calculate dot position
 	let x, y;
 	if (isDot) {
@@ -160,17 +167,18 @@ function drawline(d, isDot, isLine) {
 		r: 6
 	};
 	let newStep = [];
-	steps.push(newStep);
+	steps[current_floor].push(newStep);
 
 	// update lines
-	if (!(nowCorner.x == 0 && nowCorner.y == 0)) {
+	if (!(nowCorner[current_floor].x == 0 && nowCorner[current_floor].y == 0)) {
 		let newWall = {
 			width: 2,
-			corner1: previewedWall[0].corner1,
+			corner1: previewedWall[current_floor][0].corner1,
 			corner2: newCorner
 		};
 		let isNewWall = true;
-		walls.forEach(wall => {
+
+		walls[current_floor].forEach(wall => {
 			if (((wall.corner1.x == newWall.corner1.x && wall.corner1.y == newWall.corner1.y) &&
 				(wall.corner2.x == newWall.corner2.x && wall.corner2.y == newWall.corner2.y)) ||
 				((wall.corner1.x == newWall.corner2.x && wall.corner1.y == newWall.corner2.y) &&
@@ -178,9 +186,11 @@ function drawline(d, isDot, isLine) {
 				isNewWall = false;
 			}
 		});
+		//console.log("add wall");
 		if (newWall.corner1.x == newWall.corner2.x && newWall.corner1.y == newWall.corner2.y) isNewWall = false;
 		if (isNewWall) {
-			walls.push(Object.assign({}, newWall));
+			//console.log("add wall");
+			walls[current_floor].push(Object.assign({}, newWall));
 			newStep.push({
 				operation: "new",
 				object: "wall",
@@ -188,28 +198,29 @@ function drawline(d, isDot, isLine) {
 			});
 		}
 	}
-	walls = walls.map(wall => {
+
+	walls[current_floor] = walls[current_floor].map(wall => {
 		wall.width = 2;
 		return wall;
 	});
 
 	// update dots
 	let isNewCorner = true;
-	corners = corners.map(corner => {
+	corners[current_floor] = corners[current_floor].map(corner => {
 		if (corner.x == newCorner.x && corner.y == newCorner.y) {
 			if (corner.r == 4) {
 				corner.r = 6;
-				nowCorner.id = corner.id;
-				nowCorner.x = corner.x;
-				nowCorner.y = corner.y;
+				nowCorner[current_floor].id = corner.id;
+				nowCorner[current_floor].x = corner.x;
+				nowCorner[current_floor].y = corner.y;
 				document.getElementsByTagName("svg")[0].addEventListener('mousemove', previewWall);
 			} else {
 				corner.r = 4;
-				nowCorner.id = "";
-				nowCorner.x = 0;
-				nowCorner.y = 0;
+				nowCorner[current_floor].id = "";
+				nowCorner[current_floor].x = 0;
+				nowCorner[current_floor].y = 0;
 			}
-			walls[walls.length-1].corner2.id = corner.id;
+			walls[current_floor][walls[current_floor].length-1].corner2.id = corner.id;
 			isNewCorner = false;
 		} else {
 			corner.r = 4;
@@ -218,10 +229,10 @@ function drawline(d, isDot, isLine) {
 	});
 	if (isNewCorner) {
 		document.getElementsByTagName("svg")[0].addEventListener('mousemove', previewWall);
-		nowCorner.id = newCorner.id;
-		nowCorner.x = newCorner.x;
-		nowCorner.y = newCorner.y;
-		corners.push(newCorner);
+		nowCorner[current_floor].id = newCorner.id;
+		nowCorner[current_floor].x = newCorner.x;
+		nowCorner[current_floor].y = newCorner.y;
+		corners[current_floor].push(newCorner);
 		newStep.push({
 			operation: "new",
 			object: "corner",
@@ -229,7 +240,7 @@ function drawline(d, isDot, isLine) {
 		});
 	}
 
-	if (newStep.length == 0) steps.pop();
+	if (newStep.length == 0) steps[current_floor].pop();
 	render("line");
 	previewWall(event);
 	removeRoomHighlight();
@@ -237,8 +248,8 @@ function drawline(d, isDot, isLine) {
 }
 
 function selectWall(d) {
-	let index = walls.indexOf(d);
-	walls = walls.map((wall, key) => {
+	let index = walls[current_floor].indexOf(d);
+	walls[current_floor] = walls[current_floor].map((wall, key) => {
 		if (key == index) {
 			if (wall.width == 4) {
 				wall.width = 2;
@@ -255,12 +266,12 @@ function selectWall(d) {
 }
 
 function previewWall(event) {
-	if (nowCorner.x == 0 && nowCorner.y == 0) {
-		previewedWall = [];
+	if (nowCorner[current_floor].x == 0 && nowCorner[current_floor].y == 0) {
+		previewedWall[current_floor] = [];
 	} else {
-		previewedWall = [{
+		previewedWall[current_floor] = [{
 			width: 2,
-			corner1: Object.assign({}, nowCorner),
+			corner1: Object.assign({}, nowCorner[current_floor]),
 			corner2: {
 				x: event.layerX,
 				y: event.layerY
@@ -271,9 +282,9 @@ function previewWall(event) {
 }
 //let area=0;
 function drawrect(d) {
-	isNewRoom = true;
+	isNewRoom[current_floor] = true;
 	d3.selectAll(".square").style("fill", "#f0f0f0").attr("class","square");	// reset the class
-	let color = current_color;
+	let color = current_color[current_floor];
 	for (let i = Math.min(d.x, pre_x); i <= Math.max(d.x, pre_x) ; i+=gridSize) {
 		for (let j = Math.min(d.y, pre_y); j <= Math.max(d.y, pre_y); j+=gridSize) {
 			d3.selectAll("#"+'_'+i.toString(10)+'_'+j.toString(10)+':not(.chosen)')
@@ -288,7 +299,7 @@ function drawrect(d) {
 
 function selectRoom(d) {
 	removeHighlight();
-	rooms.forEach(room => {
+	rooms[current_floor].forEach(room => {
 		if (((room.start.x <= d.x && room.end.x >= d.x) || (room.start.x >= d.x && room.end.x <= d.x)) &&
 			((room.start.y <= d.y && room.end.y >= d.y) || (room.start.y >= d.y && room.end.y <= d.y))) {
 			nowRoom = room;
@@ -298,14 +309,14 @@ function selectRoom(d) {
 	let x2 = Math.max(nowRoom.start.x, nowRoom.end.x) + gridSize;
 	let y1 = Math.min(nowRoom.start.y, nowRoom.end.y);
 	let y2 = Math.max(nowRoom.start.y, nowRoom.end.y) + gridSize;
-	if (previewedRoom.length == 0) {
+	if (previewedRoom[current_floor].length == 0) {
 		previewRoom(x1, x2, y1, y2);
 	} else {
-		if (previewedRoom[0].corner1.x == x1 && previewedRoom[0].corner1.y == y1 &&
-			previewedRoom[2].corner1.x == x2 && previewedRoom[2].corner1.y == y2) {
+		if (previewedRoom[current_floor][0].corner1.x == x1 && previewedRoom[current_floor][0].corner1.y == y1 &&
+			previewedRoom[current_floor][2].corner1.x == x2 && previewedRoom[current_floor][2].corner1.y == y2) {
 			removeRoomHighlight();
 		} else {
-			previewedRoom = [];
+			previewedRoom[current_floor] = [];
 			previewRoom(x1, x2, y1, y2);
 		}
 	}
@@ -313,7 +324,7 @@ function selectRoom(d) {
 }
 
 function previewRoom(x1, x2, y1, y2) {
-	previewedRoom.push({
+	previewedRoom[current_floor].push({
 		corner1: {
 			x: x1,
 			y: y1
@@ -323,7 +334,7 @@ function previewRoom(x1, x2, y1, y2) {
 			y: y2
 		}
 	});
-	previewedRoom.push({
+	previewedRoom[current_floor].push({
 		corner1: {
 			x: x1,
 			y: y1
@@ -333,7 +344,7 @@ function previewRoom(x1, x2, y1, y2) {
 			y: y1
 		}
 	});
-	previewedRoom.push({
+	previewedRoom[current_floor].push({
 		corner1: {
 			x: x2,
 			y: y2
@@ -343,7 +354,7 @@ function previewRoom(x1, x2, y1, y2) {
 			y: y2
 		}
 	});
-	previewedRoom.push({
+	previewedRoom[current_floor].push({
 		corner1: {
 			x: x2,
 			y: y2
@@ -359,7 +370,7 @@ function render(type) {
 	if (type === "line") {
 		d3.select("#corners")
 			.selectAll(".corner")
-			.data(corners)
+			.data(corners[current_floor])
 			.enter().append("circle")
 			.attr("class", "corner")
 			.attr("cx", (d) => { return d.x; })
@@ -368,8 +379,8 @@ function render(type) {
 			.attr("stroke-width", 0)
 			.attr("fill", "black")
 			.on('click', (d) => {
-				if (isEditing) {
-					isEditing = false;
+				if (isEditing[current_floor]) {
+					isEditing[current_floor] = false;
 					return;
 				}
 				drawline(d, true, false);
@@ -382,7 +393,7 @@ function render(type) {
 			});
 		d3.select("#corners")
 			.selectAll("circle")
-			.data(corners)
+			.data(corners[current_floor])
 			.attr("cx", (d) => { return d.x; })
 			.attr("cy", (d) => { return d.y; })
 			.attr("r", (d) => { return d.r; })
@@ -390,7 +401,7 @@ function render(type) {
 
 		d3.select("#walls")
 			.selectAll(".wall")
-			.data(walls)
+			.data(walls[current_floor])
 			.enter().append("line")
 			.attr("class", "wall")
 			.attr("x1", (d) => { return d.corner1.x; })
@@ -400,11 +411,11 @@ function render(type) {
 			.attr("stroke", "black")
 			.attr("stroke-width", 2)
 			.on('click', (d) => {
-				if (isEditing) {
-					isEditing = false;
+				if (isEditing[current_floor]) {
+					isEditing[current_floor] = false;
 					return;
 				}
-				if (nowCorner.x == 0 && nowCorner.y == 0) {
+				if (nowCorner[current_floor].x == 0 && nowCorner[current_floor].y == 0) {
 					selectWall(d);
 				} else {
 					drawline(d, false, true);
@@ -418,7 +429,7 @@ function render(type) {
 			});
 		d3.select("#walls")
 			.selectAll("line")
-			.data(walls)
+			.data(walls[current_floor])
 			.attr("x1", (d) => { return d.corner1.x; })
 			.attr("y1", (d) => { return d.corner1.y; })
 			.attr("x2", (d) => { return d.corner2.x; })
@@ -429,7 +440,7 @@ function render(type) {
 	if (type === "previewedWall") {
 		d3.select("#previewWall")
 			.selectAll(".wall")
-			.data(previewedWall)
+			.data(previewedWall[current_floor])
 			.enter().append("line")
 			.attr("class", "wall")
 			.attr("x1", (d) => { return d.corner1.x; })
@@ -442,7 +453,7 @@ function render(type) {
 			.on('click', (d) => { drawline(d, false, true); });
 		d3.select("#previewWall")
 			.selectAll(".wall")
-			.data(previewedWall)
+			.data(previewedWall[current_floor])
 			.attr("x1", (d) => { return d.corner1.x; })
 			.attr("y1", (d) => { return d.corner1.y; })
 			.attr("x2", (d) => { return d.corner2.x; })
@@ -452,7 +463,7 @@ function render(type) {
 	if (type === "previewedRoom") {
 		d3.select("#previewRoom")
 			.selectAll(".border")
-			.data(previewedRoom)
+			.data(previewedRoom[current_floor])
 			.enter().append("line")
 			.attr("class", "border")
 			.attr("x1", (d) => { return d.corner1.x; })
@@ -463,7 +474,7 @@ function render(type) {
 			.attr("stroke-width", 2);
 		d3.select("#previewRoom")
 			.selectAll(".border")
-			.data(previewedRoom)
+			.data(previewedRoom[current_floor])
 			.attr("x1", (d) => { return d.corner1.x; })
 			.attr("y1", (d) => { return d.corner1.y; })
 			.attr("x2", (d) => { return d.corner2.x; })
@@ -473,42 +484,42 @@ function render(type) {
 }
 
 function undo() {
-	let lastStep = steps.pop();
+	let lastStep = steps[current_floor].pop();
 	if (!lastStep) return;
 	lastStep.forEach(step => {
 		if (step.operation === "new") {
 			if (step.object === "wall") {
-				walls.pop();
+				walls[current_floor].pop();
 			}
 			if (step.object === "corner") {
-				corners.pop();
+				corners[current_floor].pop();
 			}
 			if (step.object === "room") {
-				deleteRoom(rooms[rooms.length-1]);
+				deleteRoom(rooms[current_floor][rooms.length-1]);
 			}
 		}
 		if (step.operation === "delete") {
 			if (step.object === "wall") {
-				walls.splice(step.index, 0, step.target);
+				walls[current_floor].splice(step.index, 0, step.target);
 			}
 			if (step.object === "corner") {
-				corners.splice(step.index, 0, step.target);
+				corners[current_floor].splice(step.index, 0, step.target);
 			}
 			if (step.object === "room") {
-				rooms.splice(step.index, 0, step.value);
+				rooms[current_floor].splice(step.index, 0, step.value);
 				resetRoomColor();
 			}
 		}
 		if (step.operation === "edit") {
 			if (step.object === "wall") {
-				walls[step.index].corner1.x = step.before.x1;
-				walls[step.index].corner1.y = step.before.y1;
-				walls[step.index].corner2.x = step.before.x2;
-				walls[step.index].corner2.y = step.before.y2;
+				walls[current_floor][step.index].corner1.x = step.before.x1;
+				walls[current_floor][step.index].corner1.y = step.before.y1;
+				walls[current_floor][step.index].corner2.x = step.before.x2;
+				walls[current_floor][step.index].corner2.y = step.before.y2;
 			}
 			if (step.object === "corner") {
-				corners[step.index].x = step.before.x;
-				corners[step.index].y = step.before.y;
+				corners[current_floor][step.index].x = step.before.x;
+				corners[current_floor][step.index].y = step.before.y;
 			}
 			if (step.object === "room") {
 				// TODO
@@ -520,7 +531,7 @@ function undo() {
 }
 
 function resetRoomColor() {
-	rooms.forEach(room => {
+	rooms[current_floor].forEach(room => {
 		let x1 = Math.min(room.start.x, room.end.x);
 		let x2 = Math.max(room.start.x, room.end.x);
 		let y1 = Math.min(room.start.y, room.end.y);
@@ -537,14 +548,14 @@ function resetRoomColor() {
 
 function deleteWall() {
 	let newStep = [];
-	steps.push(newStep);
-	if (nowCorner.x != 0 || nowCorner.y != 0) {	// is dot
-		let x = nowCorner.x;
-		let y = nowCorner.y;
-		nowCorner.id = "";
-		nowCorner.x = 0;
-		nowCorner.y = 0;
-		corners = corners.map((corner, key) => {
+	steps[current_floor].push(newStep);
+	if (nowCorner[current_floor].x != 0 || nowCorner[current_floor].y != 0) {	// is dot
+		let x = nowCorner[current_floor].x;
+		let y = nowCorner[current_floor].y;
+		nowCorner[current_floor].id = "";
+		nowCorner[current_floor].x = 0;
+		nowCorner[current_floor].y = 0;
+		corners[current_floor] = corners[current_floor].map((corner, key) => {
 			if (corner.x == x && corner.y == y) {
 				newStep.push({
 					operation: "delete",
@@ -558,7 +569,7 @@ function deleteWall() {
 			}
 		});
 		let checkedCorners = [];
-		walls = walls.map((wall, key) => {
+		walls[current_floor] = walls[current_floor].map((wall, key) => {
 			if (wall.corner1.x == x && wall.corner1.y == y) {
 				checkedCorners.push(wall.corner2);
 				newStep.push({
@@ -586,15 +597,15 @@ function deleteWall() {
 		checkedCorners.forEach(corner => {
 			checkCornerNotConnected(corner, newStep);
 		});
-		corners = corners.filter(ele => {
+		corners[current_floor] = corners[current_floor].filter(ele => {
 			return ele;
 		});
 		render("line");
-		previewedWall = [];
+		previewedWall[current_floor] = [];
 		render("previewedWall");
 	} else {	// is line
 		let checkedCorners = [];
-		walls = walls.map((wall, key) => {
+		walls[current_floor] = walls[current_floor].map((wall, key) => {
 			if (wall.width == 4) {
 				checkedCorners.push(wall.corner1);
 				checkedCorners.push(wall.corner2);
@@ -614,24 +625,24 @@ function deleteWall() {
 		checkedCorners.forEach(corner => {
 			checkCornerNotConnected(corner, newStep);
 		});
-		corners = corners.filter(ele => {
+		corners[current_floor] = corners[current_floor].filter(ele => {
 			return ele;
 		});
 		render("line");
 	}
-	if (newStep.length == 0) steps.pop();
+	if (newStep.length == 0) steps[current_floor].pop();
 }
 
 function checkCornerNotConnected(target, stepRecorder) {
 	let result = true;
-	walls.forEach(wall => {
+	walls[current_floor].forEach(wall => {
 		if ((wall.corner1.x == target.x && wall.corner1.y == target.y) ||
 			(wall.corner2.x == target.x && wall.corner2.y == target.y)) {
 			result = false;
 		}
 	});
 	if (result) {
-		corners = corners.map((corner, key) => {
+		corners[current_floor] = corners[current_floor].map((corner, key) => {
 			if (corner.x == target.x && corner.y == target.y) {
 				stepRecorder.push({
 					operation: "delete",
@@ -652,11 +663,11 @@ function checkCornerNotConnected(target, stepRecorder) {
 
 function startEditWall() {
 	let newStep = [];
-	steps.push(newStep);
+	steps[current_floor].push(newStep);
 	let x = (Math.floor(event.layerX / gridSize) + ((event.layerX % gridSize) > (gridSize / 2))) * gridSize + 1;
 	let y = (Math.floor(event.layerY / gridSize) + ((event.layerY % gridSize) > (gridSize / 2))) * gridSize + 1;
 	let index = -1;
-	corners.forEach((corner, key) => {
+	corners[current_floor].forEach((corner, key) => {
 		if (corner.x == x && corner.y == y && corner.r != 6) {
 			if (event.target.className.baseVal === "wall") {
 				if ((event.target.x1.baseVal.value == x && event.target.y1.baseVal.value == y) ||
@@ -682,7 +693,7 @@ function startEditWall() {
 			},
 			index: index
 		});
-		walls.forEach((wall, key) => {
+		walls[current_floor].forEach((wall, key) => {
 			if ((wall.corner1.x == x && wall.corner1.y == y) ||
 				(wall.corner2.x == x && wall.corner2.y == y)) {
 				newStep.push({
@@ -704,7 +715,7 @@ function startEditWall() {
 				});
 			}
 		});
-		editTarget = {
+		editTarget[current_floor] = {
 			x: x,
 			y: y
 		};
@@ -712,10 +723,10 @@ function startEditWall() {
 }
 
 function editWall() {
-	isEditing = true;
+	isEditing[current_floor] = true;
 	removeHighlight();
 	removeRoomHighlight();
-	let stepRecorder = steps[steps.length-1];
+	let stepRecorder = steps[current_floor][steps[current_floor].length-1];
 	let x = (Math.floor(event.layerX / gridSize) + ((event.layerX % gridSize) > (gridSize / 2))) * gridSize + 1;
 	let y = (Math.floor(event.layerY / gridSize) + ((event.layerY % gridSize) > (gridSize / 2))) * gridSize + 1;
 	stepRecorder.forEach(step => {
@@ -723,26 +734,26 @@ function editWall() {
 			if (step.object === "corner") {
 				step.after.x = x;
 				step.after.y = y;
-				corners[step.index].x = x;
-				corners[step.index].y = y;
+				corners[current_floor][step.index].x = x;
+				corners[current_floor][step.index].y = y;
 			}
 			if (step.object === "wall") {
-				if (step.after.x1 == editTarget.x && step.after.y1 == editTarget.y) {
+				if (step.after.x1 == editTarget[current_floor].x && step.after.y1 == editTarget[current_floor].y) {
 					step.after.x1 = x;
 					step.after.y1 = y;
-					walls[step.index].corner1.x = x;
-					walls[step.index].corner1.y = y;
+					walls[current_floor][step.index].corner1.x = x;
+					walls[current_floor][step.index].corner1.y = y;
 				} else {
 					step.after.x2 = x;
 					step.after.y2 = y;
-					walls[step.index].corner2.x = x;
-					walls[step.index].corner2.y = y;
+					walls[current_floor][step.index].corner2.x = x;
+					walls[current_floor][step.index].corner2.y = y;
 				}
 			}
 		}
 	});
-	editTarget.x = x;
-	editTarget.y = y;
+	editTarget[current_floor].x = x;
+	editTarget[current_floor].y = y;
 	render("line");
 }
 
@@ -750,9 +761,9 @@ function endEditWall() {
 	let svg = document.getElementsByTagName("svg")[0];
 	svg.removeEventListener('mousemove', editWall);
 	svg.removeEventListener('mouseup', endEditWall);
-	let stepRecorder = steps[steps.length-1];
+	let stepRecorder = steps[current_floor][steps[current_floor].length-1];
 	if (stepRecorder.length == 0 || JSON.stringify(stepRecorder[0].before) === JSON.stringify(stepRecorder[0].after)) {
-		steps.pop();
+		steps[current_floor].pop();
 	} else {
 		removeHighlight();
 		removeRoomHighlight();
@@ -771,31 +782,31 @@ function deleteRoom(room) {
 				.style("fill", "#f0f0f0")
 		}
 	}
-	rooms.splice(rooms.indexOf(room), 1);
+	rooms[current_floor].splice(rooms[current_floor].indexOf(room), 1);
 	resetRoomColor();
 	removeRoomHighlight();
 }
 
 function removeHighlight() {
-	corners = corners.map(corner => {
+	corners[current_floor] = corners[current_floor].map(corner => {
 		corner.r = 4;
 		return corner;
 	});
-	walls = walls.map(wall => {
+	walls[current_floor] = walls[current_floor].map(wall => {
 		wall.width = 2;
 		return wall;
 	});
-	nowCorner.id = "";
-	nowCorner.x = 0;
-	nowCorner.y = 0;
-	previewedWall = [];
+	nowCorner[current_floor].id = "";
+	nowCorner[current_floor].x = 0;
+	nowCorner[current_floor].y = 0;
+	previewedWall[current_floor] = [];
 	render("line");
 	render("previewedWall");
 }
 
 function removeRoomHighlight() {
 	nowRoom = null;
-	previewedRoom = [];
+	previewedRoom[current_floor] = [];
 	render("previewedRoom");
 }
 
@@ -868,10 +879,12 @@ function endMoveFurnish() {
 		.style("stroke", "#B3AFAF")
 		.style("stroke-width", 0.3)
 		.on('click', function(d) {
+
 			if (mode === "line") {
 				if (document.getElementById(`_${d.x}_${d.y}`).classList.contains("chosen")) {//room_*
 					selectRoom(d);
 				} else {
+					//console.log(d);
 					drawline(d, false, false);
 				}
 			}
@@ -890,18 +903,18 @@ function endMoveFurnish() {
 				console.log("overlapping!");
 				temp_chosen.attr("class","square").style("fill", "#f0f0f0");
 				column.on('mousemove', null);
-				new_room=0;
-				isNewRoom = false;
+				new_room[current_floor]=0;
+				isNewRoom[current_floor] = false;
 				//if(mode==='rect'&& new_room!=1){
 			}else{
 				if (mode === "rect"){
 					column.on('mousemove', null);
-					if (isNewRoom) {
+					if (isNewRoom[current_floor]) {
 						row.selectAll(".choosing")
-							.attr("class", "room_"+room_id)
+							.attr("class", "room_"+room_id[current_floor])
 							.classed('chosen',true)
-						rooms.push({
-							color: current_color,
+						rooms[current_floor].push({
+							color: current_color[current_floor],
 							start: {
 								x: pre_x,
 								y: pre_y
@@ -910,14 +923,14 @@ function endMoveFurnish() {
 								x: d.x,
 								y: d.y
 							},
-							id:room_id
+							id:room_id[current_floor]
 						});
-						steps.push([{
+						steps[current_floor].push([{
 							operation: "new",
 							object: "room",
-							value: Object.assign({}, rooms[rooms.length-1])
+							value: Object.assign({}, rooms[current_floor][rooms[current_floor].length-1])
 						}]);
-						isNewRoom = false;
+						isNewRoom[current_floor] = false;
 					}
 				}
 			}
@@ -947,7 +960,7 @@ $('body').click(function () {
 
 
 $('#add_button').click(function(event) {
-	new_room=1;
+	new_room[current_floor]=1;
 	event.stopPropagation();
 	picker.fadeIn();
 });
@@ -958,15 +971,15 @@ function updateScroll(){
 }
 
 document.getElementById("submit").addEventListener('click', async () => {
-	corners.forEach(corner => {
+	corners[current_floor].forEach(corner => {
 		delete corner.r;
 	});
-	walls.forEach(wall => {
+	walls[current_floor].forEach(wall => {
 		delete wall.width;
 		delete wall.corner2.r;
 	});
 	let colors = document.getElementsByClassName("awsome_input_border");
-	rooms.forEach(room => {
+	rooms[current_floor].forEach(room => {
 		for (let iter = 0; iter < colors.length; ++iter) {
 			function componentToHex(c) {
 				let hex = c.toString(16);
@@ -992,10 +1005,10 @@ document.getElementById("submit").addEventListener('click', async () => {
 	let result = {
 		account: localStorage.getItem("account"),
 		floorplan: {
-			corners: corners,
-			walls: walls,
-			rooms: rooms,
-			items: items
+			corners: corners[current_floor],
+			walls: walls[current_floor],
+			rooms: rooms[current_floor],
+			items: items[current_floor]
 		}
 	};
 	let response = await fetch('/saveFloorplan', {
