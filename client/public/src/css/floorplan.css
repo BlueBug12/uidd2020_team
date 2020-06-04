@@ -382,7 +382,16 @@ input.call-picker {
   left:2vw;
   top:40vh;
 }
-
+#add_floor_button{
+  position: absolute;
+  left:2vw;
+  top:30vh;
+}
+#sub_floor_button{
+  position: absolute;
+  left:2vw;
+  top:50vh;
+}
 #submit {
   position: absolute;
   width: 14vw;

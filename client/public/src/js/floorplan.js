@@ -1,4 +1,4 @@
-let mode = "line";
+let mode = ["line"];
 
 document.getElementById("draw_map").addEventListener('click', () => {
 	$("#place_furnish_mode").css({"visibility":"hidden", "height": 0});
@@ -21,8 +21,8 @@ document.getElementById("add_button").addEventListener('click', () => {
 	}
 });*/
 document.getElementById("pen_button").addEventListener('click', () => {
-	if(mode==='rect'&& new_room[current_floor]!=1){
-		mode='line';
+	if(mode[current_floor]==='rect'&& new_room[current_floor]!=1){
+		mode[current_floor]='line';
 		$('#pen').css('background-color', "transparent");
 		picker.fadeOut();
 	}
@@ -67,13 +67,12 @@ let pre_y=1;
 
 let current_floor=0;
 
-let foo =[];
 
 let isNewRoom = [false];
-var rooms = [[]];
+var rooms = [[]];//rooms.push([]);
 let previewedRoom = [[]];
 let corners = [[]];
-let walls = [[]];console.log(walls);
+let walls = [[]];//console.log(walls);
 let previewedWall = [[]];
 let steps = [[]];
 let current_color = ["#fff"];
@@ -98,12 +97,12 @@ let new_room=[1];
 let circle_id;
 
 $(document).on('click','.round',function(){
-	mode='rect';
+	mode[current_floor]='rect';
 	new_room[current_floor]=0;
 	picker.fadeOut();
 	current_color[current_floor] = $(this).css("backgroundColor");
 	$('#pen').css('background-color', current_color[current_floor]);
-	mode="rect";
+	mode[current_floor]="rect";
 
 	circle_id=$(this).attr('id');
 	room_id[current_floor]=parseInt(circle_id.slice(2,circle_id.length),10);
@@ -113,8 +112,53 @@ $(document).on('click','.round',function(){
 $(document).on('mousedown','#svg_canvas',function(){
 	picker.fadeOut();
 });
+
+$(document).on('click','#add_floor_button',function(){
+	d3.selectAll(".chosen").attr("class", "square").style("fill", "#f0f0f0")
+	current_floor+=1;
+	if(mode.length<=current_floor){//if it's new floor, append the data
+		mode.push("line");
+		rooms.push([]);
+		previewedRoom.push([]);
+		corners.push([]);
+		walls.push([]);
+		previewedWall.push([]);
+		//console.log(previewedWall);
+		steps.push([]);
+		current_color.push("#fff");
+		room_id.push(1);
+		room_counter.push(2);
+		isEditing.push(false);
+		editTarget.push(tempTarget);
+		nowCorner.push(tempCorner);
+		items.push([]);
+		new_room.push(1);
+		render("line");
+		render("previewedWall");
+		//render("previewedRoom");
+	}
+	else{
+		//recover floor
+		render("line");
+		render("previewedWall");
+		recoverRoom(current_floor);
+	}
+	console.log(rooms);
+});
+$(document).on('click','#sub_floor_button',function(){
+
+	if(current_floor>0){
+		d3.selectAll(".chosen").attr("class", "square").style("fill", "#f0f0f0");
+		current_floor-=1;
+		//console.log(rooms);
+		render("line");
+		render("previewedWall");
+		recoverRoom(current_floor);
+		//render("previewedRoom");
+	}
+});
 $(document).on('click','.color-item',function(e){
-	mode='rect';
+	mode[current_floor]='rect';
 	var codeHex = $(this).css("backgroundColor");//.data('hex');
 	current_color[current_floor]=codeHex;
 	$('#pickcolor').val(codeHex);
@@ -141,7 +185,18 @@ $(document).on('click','.color-item',function(e){
 		});
 	}
 });
-
+function recoverRoom(f){
+	rooms[f].forEach(room => {
+		for (let i = Math.min(room.start.x, room.end.x); i <= Math.max(room.start.x, room.end.x) ; i+=gridSize) {
+			for (let j = Math.min(room.start.y, room.end.y); j <= Math.max(room.start.y, room.end.y); j+=gridSize) {
+				d3.selectAll("#"+'_'+i.toString(10)+'_'+j.toString(10)+':not(.chosen)')
+					.style("fill", room.color)
+					.classed('choosing', true)	// add class to recognize the chosen one
+					.classed('chosen',true)
+			}
+		}
+	});
+}
 function drawline(d, isDot, isLine) {
 
 	document.getElementsByTagName("svg")[0].removeEventListener('mousemove', previewWall);
@@ -880,7 +935,7 @@ function endMoveFurnish() {
 		.style("stroke-width", 0.3)
 		.on('click', function(d) {
 
-			if (mode === "line") {
+			if (mode[current_floor] === "line") {
 				if (document.getElementById(`_${d.x}_${d.y}`).classList.contains("chosen")) {//room_*
 					selectRoom(d);
 				} else {
@@ -889,7 +944,7 @@ function endMoveFurnish() {
 				}
 			}
 		}).on('mousedown', function(d) {
-			if (mode === "rect"){
+			if (mode[current_floor] === "rect"){
 				pre_x = (Math.floor(event.layerX / gridSize)) * gridSize + 1;
 				pre_y = (Math.floor(event.layerY / gridSize)) * gridSize + 1;
 				column.on('mousemove', drawrect);
@@ -907,7 +962,7 @@ function endMoveFurnish() {
 				isNewRoom[current_floor] = false;
 				//if(mode==='rect'&& new_room!=1){
 			}else{
-				if (mode === "rect"){
+				if (mode[current_floor] === "rect"){
 					column.on('mousemove', null);
 					if (isNewRoom[current_floor]) {
 						row.selectAll(".choosing")
@@ -925,6 +980,7 @@ function endMoveFurnish() {
 							},
 							id:room_id[current_floor]
 						});
+
 						steps[current_floor].push([{
 							operation: "new",
 							object: "room",
