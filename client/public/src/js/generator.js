@@ -105,10 +105,13 @@
                 prevDiv = null;
                 $(this).removeClass('border');
                 choose_region = null;
+                $('.head').html('<i class="fa fa-map-marker" aria-hidden="true"></i>任務地點');
             } else {
                 $(prevDiv).removeClass('border');
                 $(this).addClass('border');
                 prevDiv = $(this);
+                var text = '#'+ choose_region+'text'
+                $('.head').html('<i class="fa fa-map-marker" aria-hidden="true"></i>'+$(text).text())
             }
         })
     }

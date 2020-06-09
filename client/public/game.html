@@ -66,7 +66,7 @@
             <div id="floorplan" class="left-floorplan">
             </div>
 
-            <div class="right-mission">
+            <div class="right-mission" id="app">
 
                 <button class="request-btn active space">發任務</button>
                 <button class="solve-btn space" id="solve_btn">解任務</button>
@@ -75,8 +75,7 @@
 
                 <div class="requestContainer request-mission ">
                     <div class="reqPanel">
-                        <div class="head space">我要發任務</div>
-
+                        <div class="head space"><i class="fa fa-map-marker" aria-hidden="true"></i>任務地點</div>
                         <form class="formset " id="addTasks" novalidate="">
                             <div class="content">
                                 <label class="content-label space" for="inputcontent">任務內容</label>
@@ -101,90 +100,40 @@
 
                 <div class="tabContainer solve-mission">
                     <div class="buttonContainer" id="Panelbtns">
-                        <button onclick="showPanel(0)"></button>
-                        <button onclick="showPanel(1)"></button>
+                        <button v-for="(show,index) in shows" :class={active:show} v-on:click="showPanel(index)"></button>
                     </div>
-                    <div class="tabPanel">
-                        <img class = "member" src="https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=1630746980406636&height=50&width=50&ext=1592581325&hash=AeSy2sNbuYf7BmLa" alt="" class="exhibit">
-                        <div class="dialogue">
-                            <img src="./img/dialogue.png" alt="" class="dialogue-img">
-                            <p class="dialogue-text">掃地</p>
-                        </div>
 
-                        <div class="mission-div">
-                            <span class="mission-text space">任務建議</span>
-                            <span class="white-block">空間較大</span>
-                        </div>
-                        <div class="mission-div">
-                            <span class="mission-text space">成員邀請</span>
-                            <img class="member" src="https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=1887895948007185&height=50&width=50&ext=1592581051&hash=AeT3S6KoQTEl09fU" alt="">
-                            <img class="member" src="https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=1402326563308164&height=50&width=50&ext=1592573321&hash=AeR6zC4POqcPFn0u" alt="">
-                            <img class="member" src="https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=3031227246990774&height=50&width=50&ext=1592580466&hash=AeR3jXp41xgPzDQS" alt="">
-                            <img class="member" src="https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=1648744808613585&height=50&width=50&ext=1592582574&hash=AeTovC72KGYySkVJ" alt="">
-                        </div>
-                        <div class="mission-div">
-                            <span class="mission-text space">剩餘時間</span>
-                            <span class="white-block DeadlineTime"> </span>
-                        </div>
-                        <div class="confirm-solve">
-                            <button type="button" class="btn accept space">接案</button>
-                            <button type="button" class="btn judge space"> 送出審核</button>
-                        </div>
-                    </div>
-                    <div class="tabPanel">
-                        <img class = "member" src="https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=1887895948007185&height=50&width=50&ext=1592581051&hash=AeT3S6KoQTEl09fU" alt="" class="exhibit">
-                        <div class="dialogue">
-                            <img src="./img/dialogue.png" alt="" class="dialogue-img">
-                            <p class="dialogue-text">倒垃圾</p>
-                        </div>
+                    <template v-for="(task,index) in tasks">
+                        <div class="tabPanel" :class={active:shows[index]}>
+                            <img  alt="" class="exhibit" v-bind:src="task.authoricon" >
+                            <div class="dialogue">
+                                <img src="./img/dialogue.png" alt="" class="dialogue-img">
+                                <p class="dialogue-text">{{task.content}}</p>
+                            </div>
 
-                        <div class="mission-div">
-                            <span class="mission-text space">任務建議</span>
-                            <span class="white-block" >不怕臭</span>
+                            <div class="mission-div">
+                                <span class="mission-text space">任務建議</span>
+                                <span class="white-block">{{task.advise}}</span>
+                            </div>
+                            <div class="mission-div">
+                                <span class="mission-text space">成員邀請</span>
+                                <i class="fa fa-arrow-left" aria-hidden="true" v-on:click="turnleft(index)"></i>
+                                <template v-for="(member,index) in members" > 
+                                    <img :class="{member:true,on:member.on,show:(index>=0 && index < 3) }" :src="member.icon" v-on:click="memberchoose(index)"  alt="">
+                                </template >
+                                <i class="fa fa-arrow-right" aria-hidden="true" v-on:click="turnright(index)"></i>
+                            </div>
+                            <div class="mission-div">
+                                <span class="mission-text space">剩餘時間</span>
+                                <span class="white-block DeadlineTime">{{task.remain}}</span>
+                            </div>
+                            <div class="confirm-solve">
+                                <button type="button" class="btn accept space"  :class="{press : task.missionstate}" v-on:click="missiontoggle(index,0)">接案</button>
+                                <button type="button" class="btn judge space" :class="{press :!task.missionstate}"  v-on:click="missiontoggle(index,1)" > 送出審核</button>
+                            </div>
                         </div>
-                        <div class="mission-div">
-                            <span class="mission-text space">成員邀請</span>
-                            <img class="member" src="https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=1630746980406636&height=50&width=50&ext=1592581325&hash=AeSy2sNbuYf7BmLa" alt="">
-                            <img class="member" src="https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=1402326563308164&height=50&width=50&ext=1592573321&hash=AeR6zC4POqcPFn0u" alt="">
-                            <img class="member" src="https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=3031227246990774&height=50&width=50&ext=1592580466&hash=AeR3jXp41xgPzDQS" alt="">
-                            <img class="member" src="https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=1648744808613585&height=50&width=50&ext=1592582574&hash=AeTovC72KGYySkVJ" alt="">
-                        </div>
-                        <div class="mission-div">
-                            <span class="mission-text space">剩餘時間</span>
-                            <span class="white-block DeadlineTime"> </span>
-                        </div>
-                        <div class="confirm-solve">
-                            <button type="button" class="btn accept space"> 接案</button>
-                            <button type="button" class="btn judge space"> 送出審核</button>
-                        </div>
-                    </div>
-                    <div class="tabPanel">
-                        <img class = "member" src="https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=1648744808613585&height=50&width=50&ext=1592582574&hash=AeTovC72KGYySkVJ" alt="" class="exhibit">
-                        <div class="dialogue">
-                            <img src="./img/dialogue.png" alt="" class="dialogue-img">
-                            <p class="dialogue-text">拖地</p>
-                        </div>
+                    </template>
 
-                        <div class="mission-div">
-                            <span class="mission-text space">任務建議</span>
-                            <span class="white-block">地板很髒</span>
-                        </div>
-                        <div class="mission-div">
-                            <span class="mission-text space">成員邀請</span>
-                            <img class="member" src="https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=1887895948007185&height=50&width=50&ext=1592581051&hash=AeT3S6KoQTEl09fU" alt="">
-                            <img class="member" src="https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=1402326563308164&height=50&width=50&ext=1592573321&hash=AeR6zC4POqcPFn0u" alt="">
-                            <img class="member" src="https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=3031227246990774&height=50&width=50&ext=1592580466&hash=AeR3jXp41xgPzDQS" alt="">
-                            <img class="member" src="https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=1630746980406636&height=50&width=50&ext=1592581325&hash=AeSy2sNbuYf7BmLa" alt="">
-                        </div>
-                        <div class="mission-div">
-                            <span class="mission-text space">剩餘時間</span>
-                            <span class="white-block DeadlineTime"> </span>
-                        </div>
-                        <div class="confirm-solve">
-                            <button type="button" class="btn accept space">接案</button>
-                            <button type="button" class="btn judge space"> 送出審核</button>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -199,28 +148,8 @@
     <script src="./src/lib/timepicker/jquery.timepicker.min.js"></script>
     <script src="./src/js/game.js"></script>
     <script src="./src/js/generator.js"></script>
-    <script>
-        var count = $(".buttonContainer").children().length;
-        $('.solve-btn').attr('data-before', count);
-    var tabButtons = document.querySelectorAll(".tabContainer .buttonContainer button");
-        var tabPanels = document.querySelectorAll(".tabContainer  .tabPanel");
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 
-        function showPanel(panelIndex) {
-            tabButtons.forEach(function(node) {
-                node.style.backgroundColor = "#F2D7AD";
-                node.style.color = "";
-            });
-            tabButtons[panelIndex].style.backgroundColor = "#F7F6E4";
-            tabButtons[panelIndex].style.color = "white";
-            tabPanels.forEach(function(node) {
-                node.style.display = "none";
-            });
-            tabPanels[panelIndex].style.display = "block";
-            tabPanels[panelIndex].style.backgroundColor = "#F7F6E4";
-        }
-        showPanel(0);
-        
-    </script>
 </body>
 
 </html>

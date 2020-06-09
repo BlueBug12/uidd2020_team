@@ -1,5 +1,88 @@
 $(document).ready(function() {
-	let bannerbuttons = document.getElementsByClassName('bannerbutton');
+    var tasks = [];
+    var members = [];
+    var vueinstance = new Vue({
+        el: '#app',
+        data: {
+            tasks:tasks,
+            members:members,
+            shows: [],
+            countdown:[],
+        },
+        methods: {
+            showPanel: function(panelIndex) {
+                for (var i = 0; i < this.shows.length; i++) {
+                    this.$set(this.shows, i, false);
+                }
+                this.$set(this.shows, panelIndex, true);
+            },
+            memberchoose: function(index) {
+                if (members[index].on == false)
+                    this.$set(members[index], 'on', true)
+                else
+                    this.$set(members[index], 'on', false)
+            },
+            remaintime: function(index) {
+                    var nowTime = new Date();
+                    var restSec = this.tasks[index].date.getTime() - nowTime.getTime();
+                    var day = parseInt(restSec / (60 * 60 * 24 * 1000));
+                    var hour = parseInt(restSec / (60 * 60 * 1000) % 24);
+                    var minu = parseInt(restSec / (60 * 1000) % 60);
+                    var sec = parseInt(restSec / 1000 % 60);
+                    var timestr = day + "天" + hour + "時" + minu + "分" + sec + "秒"
+                    if (restSec > 0){
+                        setTimeout(this.remaintime, 1000, index);
+                        this.$set(this.tasks[index], 'remain', timestr);
+                        this.$forceUpdate()
+                    }
+                    else {
+                        clearTimeout
+                        this.$delete(this.tasks,index)
+                    }
+            },
+
+            missiontoggle:function(index, num) {
+                if (num == 0) {
+                   // tasks[index].missionstate = true;
+                    this.$set(tasks[index],'missionstate',true);
+                } else {
+                   // tasks[index].missionstate = false;
+                    this.$set(tasks[index],'missionstate',false);
+                }
+            },
+
+            turnright:function(index){
+                var temp = members.pop();
+                members.unshift(temp);
+            },
+            turnleft:function(index){
+                var temp = members.shift();
+                members.push(temp);
+            }
+        },
+
+        watch: {
+            tasks: {
+                handler () {
+                    if (this.tasks.length != 0) {
+                        this.shows = [];
+                        this.countdown=[]
+                        for (var i = 0; i < this.tasks.length; i++) {
+                            this.shows.push(false);
+                            this.countdown.push(true);
+                            this.remaintime(i);
+                        }
+                        this.shows[0] = true;
+                        this.countdown[0] = true;
+                        this.remaintime(0);
+                    }
+                },
+            }
+        }
+    })
+
+
+    let bannerbuttons = document.getElementsByClassName('bannerbutton');
     bannerbuttons[0].classList.add('active');
 
 
@@ -12,8 +95,8 @@ $(document).ready(function() {
         });
     }
 
-	
-	
+
+
     $('.request-btn').css("opacity", "1");
     $('.solve-btn').click(function() {
         $(this).addClass('active');
@@ -32,26 +115,6 @@ $(document).ready(function() {
         $('.solve-mission').css("display", "none");
         $('.request-mission').css("display", "block");
     })
-
-    $('.accept').click(function() {
-        $(this).addClass('press');
-        $(this).css("opacity", "0.5");
-        $(this).siblings('.judge').removeClass('press');
-        $(this).siblings('.judge').css("opacity", "1");
-    })
-
-    $('.judge').click(function() {
-        $(this).addClass('press');
-        $(this).css("opacity", "0.5");
-        $(this).siblings('.accept').removeClass('press');
-        $(this).siblings('.accept').css("opacity", "1");
-    })
-
-    $('.member').click(function() {
-        $(this).toggleClass("on");
-    })
-
-
 
 
     $("#datepicker").datepicker({
@@ -73,6 +136,7 @@ $(document).ready(function() {
 
     });
     $("#timepicker").attr("autocomplete", "off");
+
     function buttonenable() {
         let buttons = document.getElementsByTagName('button');
         for (let i = 0; i < buttons.length; i++) {
@@ -108,6 +172,54 @@ $(document).ready(function() {
         }
     }
 
+    function settasks(res){
+        var index=0;
+        temp = []
+        resultdate = []
+        temp = res.filter((item,index)=>{
+            var date = item.date.split('/');
+            var year = date[2];
+            var day = date[1];
+            var month = date[0];
+            var time = item.time.split(' ');
+            var hour = parseInt(time[0].split(':'));
+            var hour = (time[1][0] == 'P') ? hour + 12 : hour;
+            var nowTime = new Date();
+            var missiondate = new Date(year, month - 1, day, hour, 44, 20);
+            if(missiondate.getTime() - nowTime.getTime() > 0){
+                resultdate.push(missiondate)
+                return true
+            }
+            else{
+                return false
+            }
+        })
+
+        for (var i = 0; i < temp.length; i++) {
+            temp[i].date = resultdate[i];
+            temp[i]["remain"] = 0;
+            temp[i]["missionstate"] = false;
+        }
+
+        count = temp.length;
+        vueinstance.tasks =temp
+        $('.solve-btn').attr('data-before', count);
+    }
+
+
+    function setmembers(res){
+        members = [];
+        for (var i = 0; i < res.length; i++) {
+            var temp = {};
+            temp["icon"] = res[i].icon;
+            temp["name"] = res[i].name;
+            temp["account"] = res[i].account
+            temp["on"] = false;
+            members.push(temp);
+        }
+        vueinstance.members = members;
+    }
+
     $('.checkconfirm').click(function(e) {
         buttonenable();
         hrefenable();
@@ -123,10 +235,10 @@ $(document).ready(function() {
             advise: $('#addTasks textarea[name=advise]').val(),
             date: $('#addTasks input[name=date]').val(),
             time: $('#addTasks input[name=time]').val(),
-            author:localStorage.getItem("account"),
-            classcode:localStorage.getItem("classcode")
+            author: localStorage.getItem("account"),
+            classcode: localStorage.getItem("classcode"),
+            region:$('.border')[0].id/******區域*****/
         }, (res) => {
-            console.log(res);
             buttonunable();
             hrefunable();
             $('#addTasks input[name=content]').val("");
@@ -136,93 +248,36 @@ $(document).ready(function() {
             $('.check').css("visibility", "visible");
             $('.mask').css("visibility", "visible");
         });
-        var newbtn = document.createElement("button");
-        newbtn.onclick = function(){
-            showPanel(2);
-        };
-        newbtn.onclick = "showPanel(2)";
-        newbtn.style["background-color"] =  "rgb(242, 215, 173)"; 
-        document.getElementById("Panelbtns").appendChild(newbtn);
-        var count = $(".buttonContainer").children().length;
-        $('.solve-btn').attr('data-before', count);
-        
+
     });
     $('#solve_btn').click((event) => {
         event.preventDefault()
         var classcode = localStorage.getItem("classcode");
         //get group tasks
-        $.get('./tasks/'+classcode, {}, (res) => {
-            if(res === "null"){
+        $.get('./tasks/' + classcode, {}, (res) => { /********頭像&區域***/
+            if (res === "null") {
                 $('#solve_btn').data('0');
-            }
-            else{  
+            } else {
+                settasks(res);
                 //get group member
-                $.get('./users/'+classcode, {}, (res) => {
-                    if(res === "null"){
+                $.get('./users/' + classcode, {}, (res) => {
+                    if (res === "null") {
                         console.log("123");
+                    } else {
+                        res.forEach(item => console.log(item));
+                        setmembers(res);
                     }
-                    else{
-                        res.forEach(item =>console.log(item));
-                    }
-                }); 
-                res.forEach(item =>console.log(item));
-                
+                });
             }
         });
     });
 });
-function restTime () {
-    var setTime = new Date("2020/5/21 18:00:00");
-    var nowTime = new Date ();
-    var restSec = setTime.getTime() - nowTime.getTime ();
-    var day = parseInt(restSec/ (60*60*24*1000));
-    var hour= parseInt(restSec/(60*60*1000)%24);
-    var minu = parseInt(restSec/(60*1000)% 60);
-    var sec = parseInt(restSec / 1000 % 60);
-    var str =day+"天"+hour+"時"+minu+"分"+sec+"秒";
-    document.getElementsByClassName("DeadlineTime")[0].innerText=str;
-    document.getElementsByClassName("DeadlineTime")[1].innerText=str;
-    document.getElementsByClassName("DeadlineTime")[2].innerText=str;
-    setTimeout (restTime, 1000);
-}
 
-function addTask(num){
-    var newbtn = document.createElement('button');
-    btn.onclick = "showPanel(${num})";
-    var newdiv = document.createElement('div');
-    newdiv.className = "tabPanel";
-    newdiv.innerHTML = `<img src="./img" alt="" class="exhibit">
-    <div class="dialogue">
-        <img src="./img/dialogue.png" alt="" class="dialogue-img">
-        <p class="dialogue-text">廁所有蜘蛛</p>
-    </div>
 
-    <div class="mission-div">
-        <span class="mission-text space">任務建議</span>
-        <span class="white-block"></span>
-    </div>
-    <div class="mission-div">
-        <span class="mission-text space">成員邀請</span>
-        <img class="member" src="./img/brother.png" alt="">
-        <img class="member" src="./img/father.png" alt="">
-        <img class="member" src="./img/grandfather.png" alt="">
-        <img class="member" src="./img/mother.png" alt="">
-    </div>
-    <div class="mission-div">
-        <span class="mission-text space">剩餘時間</span>
-        <span class="white-block"> </span>
-    </div>
-    <div class="confirm-solve">
-        <button type="button" class="btn accept space">接案</button>
-        <button type="button" class="btn judge space"> 送出審核</button>
-    </div>`;
-}
 async function getUser() {
     var account = localStorage.getItem("account");
-    await $.get('./users/find/'+account, {}, (res) => {
+    await $.get('./users/find/' + account, {}, (res) => {
         document.getElementById("UserImg").src = res.icon;
         localStorage.setItem("classcode", res.classcode);
-    }); 
-    restTime();
-    
+    });
 }
