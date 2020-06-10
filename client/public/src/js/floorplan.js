@@ -66,10 +66,12 @@ let pre_x=1;
 let pre_y=1;
 
 let current_floor=0;
-
-
 let isNewRoom = [false];
 var rooms = [[]];//rooms.push([]);
+let rooms_attr=[[{
+	color: "#F1BA9C",
+	name: ""
+}]];
 let previewedRoom = [[]];
 let corners = [[]];
 let walls = [[]];//console.log(walls);
@@ -112,12 +114,20 @@ $(document).on('click','.round',function(){
 $(document).on('mousedown','#svg_canvas',function(){
 	picker.fadeOut();
 });
-
+console.log("test"+room_counter[current_floor]);
 $(document).on('click','#add_floor_button',function(){
+	picker.fadeOut();
+	//record the name of rooms
+	for(let i=1;i<room_counter[current_floor];++i){
+		rooms_attr[current_floor][i-1].name=$("#text_in"+i).val();
+	}
+	$("#color_list").empty();//reset the chosen color
+
 	d3.selectAll(".chosen").attr("class", "square").style("fill", "#f0f0f0")
 	current_floor+=1;
+	console.log(current_floor);
 	if(mode.length<=current_floor){//if it's new floor, append the data
-		mode.push("line");
+
 		rooms.push([]);
 		previewedRoom.push([]);
 		corners.push([]);
@@ -136,25 +146,46 @@ $(document).on('click','#add_floor_button',function(){
 		render("line");
 		render("previewedWall");
 		//render("previewedRoom");
+		$('#pen').css('background-color', "transparent");
+		$('#color_list').append(`<li class=\"round\" id = \"c_1\"style=\" background-color:#F1BA9C\"><div class=\"input_container\"><input type=\"text\" id=\"text_in1\"class=\"awsome_input\" placeholder=\"room_1\"/><span class=\"awsome_input_border\" id=\"b_1\" style=\"background:#F1BA9C\"/></div></li>`);
+		mode.push("line");
+		rooms_attr.push([{
+			color: "#F1BA9C",
+			name: ""
+		}]);
 	}
 	else{
 		//recover floor
 		render("line");
 		render("previewedWall");
 		recoverRoom(current_floor);
+		for(let i=1;i<room_counter[current_floor];++i){
+			$('#color_list').append(`<li class=\"round \" id = \"c_${i}\"style=\" background-color:${rooms_attr[current_floor][i-1].color}\"><div class=\"input_container\"><input type=\"text\" id=\"text_in${i}\"class=\"awsome_input\" placeholder=\"room_${i}\"/><span class=\"awsome_input_border\" id=\"b_${i}\" style=\"background:${rooms_attr[current_floor][i-1].color}\"/></div></li>`);
+			if(rooms_attr[current_floor][i-1].name!="")
+				$('#text_in'+i).val(rooms_attr[current_floor][i-1].name);
+		}
+
 	}
-	console.log(rooms);
+	console.log(rooms_attr);
 });
 $(document).on('click','#sub_floor_button',function(){
-
+	picker.fadeOut();
 	if(current_floor>0){
 		d3.selectAll(".chosen").attr("class", "square").style("fill", "#f0f0f0");
+		for(let i=1;i<room_counter[current_floor];++i){
+			rooms_attr[current_floor][i-1].name=$("#text_in"+i).val();
+		}
 		current_floor-=1;
 		//console.log(rooms);
 		render("line");
 		render("previewedWall");
 		recoverRoom(current_floor);
-		//render("previewedRoom");
+		$("#color_list").empty()
+		for(let i=1;i<room_counter[current_floor];++i){
+			$('#color_list').append(`<li class=\"round \" id = \"c_${i}\"style=\" background-color:${rooms_attr[current_floor][i-1].color}\"><div class=\"input_container\"><input type=\"text\" id=\"text_in${i}\"class=\"awsome_input\" placeholder=\"room_${i}\"/><span class=\"awsome_input_border\" id=\"b_${i}\" style=\"background:${rooms_attr[current_floor][i-1].color}\"/></div></li>`);
+			if(rooms_attr[current_floor][i-1].name!="")
+				$('#text_in'+i).val(rooms_attr[current_floor][i-1].name);
+		}
 	}
 });
 $(document).on('click','.color-item',function(e){
@@ -166,7 +197,11 @@ $(document).on('click','.color-item',function(e){
 	picker.fadeOut();
 	if(new_room[current_floor]===1){
 		room_id[current_floor]=room_counter[current_floor];
-		$('#color_list').append(`<li class=\"round \" id = \"c_${room_counter[current_floor]}\"style=\" background-color:${codeHex}\"><div class=\"input_container\"><input type=\"text\" id=\"text_in1\"class=\"awsome_input\" placeholder=\"room_${room_counter[current_floor]}\"/><span class=\"awsome_input_border\" id=\"b_${room_counter[current_floor]}\" style=\"background:${codeHex}\"/></div></li>`);
+		rooms_attr[current_floor].push({
+			color: codeHex,
+			name: ""
+		});
+		$('#color_list').append(`<li class=\"round \" id = \"c_${room_counter[current_floor]}\"style=\" background-color:${codeHex}\"><div class=\"input_container\"><input type=\"text\" id=\"text_in${room_counter[current_floor]}\"class=\"awsome_input\" placeholder=\"room_${room_counter[current_floor]}\"/><span class=\"awsome_input_border\" id=\"b_${room_counter[current_floor]}\" style=\"background:${codeHex}\"/></div></li>`);
 		updateScroll();
 		room_counter[current_floor]+=1;
 	}
@@ -191,7 +226,7 @@ function recoverRoom(f){
 			for (let j = Math.min(room.start.y, room.end.y); j <= Math.max(room.start.y, room.end.y); j+=gridSize) {
 				d3.selectAll("#"+'_'+i.toString(10)+'_'+j.toString(10)+':not(.chosen)')
 					.style("fill", room.color)
-					.classed('choosing', true)	// add class to recognize the chosen one
+					.attr("class","room_"+room.id)	// add class to recognize the chosen one
 					.classed('chosen',true)
 			}
 		}
