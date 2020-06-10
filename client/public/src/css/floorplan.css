@@ -386,16 +386,26 @@ input.call-picker {
   position: absolute;
   left:2vw;
   top:40vh;
+  height:200px;
+  width:60px;
+}
+
+#add_floor{
+  position: absolute;
+  left:3vw;
+  top:20vh;
 }
 #add_floor_button{
   position: absolute;
-  left:2vw;
-  top:30vh;
+  right:10vw;
+  top:4vh;
+  z-index:10;
 }
 #sub_floor_button{
   position: absolute;
-  left:2vw;
-  top:50vh;
+  right:6vw;
+  top:4vh;
+  z-index:10;
 }
 #submit {
   position: absolute;

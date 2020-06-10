@@ -114,7 +114,65 @@ $(document).on('click','.round',function(){
 $(document).on('mousedown','#svg_canvas',function(){
 	picker.fadeOut();
 });
-console.log("test"+room_counter[current_floor]);
+
+$(document).on('click','#add_floor',function(){
+	picker.fadeOut();
+	//record the name of rooms
+	for(let i=1;i<room_counter[current_floor];++i){
+		rooms_attr[current_floor][i-1].name=$("#text_in"+i).val();
+	}
+	$("#color_list").empty();//reset the chosen color
+
+	d3.selectAll(".chosen").attr("class", "square").style("fill", "#f0f0f0")
+	current_floor+=1;
+	rooms.push([]);
+	previewedRoom.push([]);
+	corners.push([]);
+	walls.push([]);
+	previewedWall.push([]);
+
+	steps.push([]);
+	current_color.push("#fff");
+	room_id.push(1);
+	room_counter.push(2);
+	isEditing.push(false);
+	editTarget.push(tempTarget);
+	nowCorner.push(tempCorner);
+	items.push([]);
+	new_room.push(1);
+	render("line");
+	render("previewedWall");
+	//render("previewedRoom");
+	$('#pen').css('background-color', "transparent");
+	$('#color_list').append(`<li class=\"round\" id = \"c_1\"style=\" background-color:#F1BA9C\"><div class=\"input_container\"><input type=\"text\" id=\"text_in1\"class=\"awsome_input\" placeholder=\"room_1\"/><span class=\"awsome_input_border\" id=\"b_1\" style=\"background:#F1BA9C\"/></div></li>`);
+	mode.push("line");
+	rooms_attr.push([{
+		color: "#F1BA9C",
+		name: ""
+	}]);
+	$("#floor").append(`<div id="floor_animate${current_floor}" class="floor" style="position:absolute;z-index:${100-current_floor}; margin-top:-${12*(current_floor)}px"> <img src="./img/floor_1.png"> </div>`)
+});
+let open=0;
+$("#floor").hover(function(){
+	console.log("hello")
+	for(let i=0;i<=current_floor;i+=1){
+		$("#floor_animate"+i).animate({"top":30*current_floor-30*i+"px"},500);
+	}
+	/*
+	$("#floor").mouseout(function(){
+		for(let i=0;i<=current_floor;i+=1){
+			$("#floor_animate"+i).animate({"top":"0px"},500);
+		}
+	});*/
+});
+
+
+/*
+$(document).on('mouseout','#floor',function(){
+	for(let i=0;i<=current_floor;i+=1){
+		$("#floor_animate"+i).animate({"top":"0px"},500);
+	}
+});*/
 $(document).on('click','#add_floor_button',function(){
 	picker.fadeOut();
 	//record the name of rooms
