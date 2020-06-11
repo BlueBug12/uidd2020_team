@@ -77,7 +77,8 @@
             .attr({
                 'x': Math.min(rooms[i].start.x, rooms[i].end.x) - 100 + 5,
                 'y': Math.min(rooms[i].start.y, rooms[i].end.y) + 25,
-                'fill': 'white'
+                'fill': 'white',
+                'id': "room"+i+'text',
             }).style({
                 'font-size': '25px',
                 'font-family': "GenJyuuGothic-Medium"

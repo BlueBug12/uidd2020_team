@@ -36,6 +36,8 @@ $(document).ready(function() {
                         this.$forceUpdate()
                     }
                     else {
+                        count = temp.length;
+                        $('.solve-btn').attr('data-before', count);
                         clearTimeout
                         this.$delete(this.tasks,index)
                     }
@@ -185,7 +187,7 @@ $(document).ready(function() {
             var hour = parseInt(time[0].split(':'));
             var hour = (time[1][0] == 'P') ? hour + 12 : hour;
             var nowTime = new Date();
-            var missiondate = new Date(year, month - 1, day, hour, 44, 20);
+            var missiondate = new Date(year, month - 1, day, hour, 13, 00);
             if(missiondate.getTime() - nowTime.getTime() > 0){
                 resultdate.push(missiondate)
                 return true
@@ -237,7 +239,7 @@ $(document).ready(function() {
             time: $('#addTasks input[name=time]').val(),
             author: localStorage.getItem("account"),
             classcode: localStorage.getItem("classcode"),
-            region:$('.border')[0].id/******區域*****/
+            region:$('.border')[0].id  //區域
         }, (res) => {
             buttonunable();
             hrefunable();
@@ -254,11 +256,12 @@ $(document).ready(function() {
         event.preventDefault()
         var classcode = localStorage.getItem("classcode");
         //get group tasks
-        $.get('./tasks/' + classcode, {}, (res) => { /********頭像&區域***/
+        $.get('./tasks/' + classcode, {}, (res) => { 
             if (res === "null") {
                 $('#solve_btn').data('0');
             } else {
                 settasks(res);
+                //res 區域和發起人圖片
                 //get group member
                 $.get('./users/' + classcode, {}, (res) => {
                     if (res === "null") {
