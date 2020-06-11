@@ -239,6 +239,7 @@ $(document).ready(function() {
             time: $('#addTasks input[name=time]').val(),
             author: localStorage.getItem("account"),
             classcode: localStorage.getItem("classcode"),
+            icon:document.getElementById("UserImg").src,
             region:$('.border')[0].id  //區域
         }, (res) => {
             buttonunable();

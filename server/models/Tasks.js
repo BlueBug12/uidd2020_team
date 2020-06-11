@@ -24,6 +24,14 @@ const TaskSchema = mongoose.Schema({
     classcode:{
         type:String,
         require:true
+    },
+    icon:{
+        type:String,
+        require:true
+    },
+    region:{
+        type:String,
+        require:true
     }
 
 },{collection: 'Tasks'});

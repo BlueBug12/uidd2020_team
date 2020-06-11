@@ -42,7 +42,9 @@ router.post('/',async(req,res) => {
         date:req.body.date,
         time:req.body.time,
         author:req.body.author,
-        classcode:req.body.classcode
+        classcode:req.body.classcode,
+        icon:req.body.icon,
+        region:req.body.region
     });
     try {
         const savePost = await tasks.save();
