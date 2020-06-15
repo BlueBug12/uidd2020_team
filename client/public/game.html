@@ -86,10 +86,14 @@
                                 <textarea id="inputsuggest" rows="3" cols="20" name="advise" required></textarea>
                             </div>
                             <div class="deadline">
-                                <label class="deadline-date-label space" for="datepicker">任務期限</label>
-                                <input type="text" id="datepicker" name="date" required>
+                                <label class="deadline-date-label space" for="datepicker" >任務期限</label>
+                                <input type="text" id="datepicker" name="date" required readonly>
                                 <label class="deadline-time-label" for="timepicker"></label>
-                                <input type="text" id="timepicker" name="time" required>
+                                <input type="text" id="timepicker" name="time" required readonly>
+                            </div>
+                            <div id="error_space">
+                            </div>
+                            <div id="error_type">
                             </div>
                             <div class="confirm-request">
                                 <button type="submit" class="btn getcase space" id="task_btn">確定</button>
@@ -105,7 +109,7 @@
 
                     <template v-for="(task,index) in tasks">
                         <div class="tabPanel" :class={active:shows[index]}>
-                            <img  alt="" class="exhibit" v-bind:src="task.authoricon" >
+                            <img  alt="" class="exhibit" v-bind:src="task.icon" >
                             <div class="dialogue">
                                 <img src="./img/dialogue.png" alt="" class="dialogue-img">
                                 <p class="dialogue-text">{{task.content}}</p>
@@ -117,11 +121,11 @@
                             </div>
                             <div class="mission-div">
                                 <span class="mission-text space">成員邀請</span>
-                                <i class="fa fa-arrow-left" aria-hidden="true" v-on:click="turnleft(index)"></i>
-                                <template v-for="(member,index) in members" > 
-                                    <img :class="{member:true,on:member.on,show:(index>=0 && index < 3) }" :src="member.icon" v-on:click="memberchoose(index)"  alt="">
+                                <i class="fa fa-arrow-left" :class="{hide: task.members.length<=4 }" aria-hidden="true" v-on:click="turnleft(index)"></i>
+                                <template v-for="(member,mindex) in task.members" > 
+                                    <img :class="{member:true,on:member.on,show:(mindex>=0 && mindex < 4)}" :src="member.icon" v-on:click="memberchoose(index,mindex)"  alt="">
                                 </template >
-                                <i class="fa fa-arrow-right" aria-hidden="true" v-on:click="turnright(index)"></i>
+                                <i class="fa fa-arrow-right" :class="{hide: task.members.length<=4 }" aria-hidden="true" v-on:click="turnright(index)"></i>
                             </div>
                             <div class="mission-div">
                                 <span class="mission-text space">剩餘時間</span>
@@ -146,8 +150,8 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js " integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k " crossorigin="anonymous "></script>
     <script src="https://d3js.org/d3.v3.min.js"></script>
     <script src="./src/lib/timepicker/jquery.timepicker.min.js"></script>
-    <script src="./src/js/game.js"></script>
     <script src="./src/js/generator.js"></script>
+    <script src="./src/js/game.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 
 </body>

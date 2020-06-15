@@ -1,26 +1,30 @@
 $(document).ready(function() {
     var tasks = [];
-    var members = [];
     var vueinstance = new Vue({
         el: '#app',
         data: {
             tasks:tasks,
-            members:members,
             shows: [],
             countdown:[],
+            temprole:''
         },
         methods: {
             showPanel: function(panelIndex) {
                 for (var i = 0; i < this.shows.length; i++) {
                     this.$set(this.shows, i, false);
                 }
+                temp = document.getElementsByClassName('border');
+                temp[0].classList.remove('border');
+                reg = document.getElementById(this.tasks[panelIndex].region);
+                reg.classList.add('border');
                 this.$set(this.shows, panelIndex, true);
+
             },
-            memberchoose: function(index) {
-                if (members[index].on == false)
-                    this.$set(members[index], 'on', true)
+            memberchoose: function(index,mindex) {
+                if (this.tasks[index].members[mindex].on == false)
+                    this.$set(this.tasks[index].members[mindex], 'on', true)
                 else
-                    this.$set(members[index], 'on', false)
+                    this.$set(this.tasks[index].members[mindex], 'on', false)
             },
             remaintime: function(index) {
                     var nowTime = new Date();
@@ -54,12 +58,12 @@ $(document).ready(function() {
             },
 
             turnright:function(index){
-                var temp = members.pop();
-                members.unshift(temp);
+                var temp = this.tasks[index].members.pop();
+                this.tasks[index].members.unshift(temp);
             },
             turnleft:function(index){
-                var temp = members.shift();
-                members.push(temp);
+                var temp = this.tasks[index].members.shift();
+                this.tasks[index].members.push(temp);
             }
         },
 
@@ -77,6 +81,8 @@ $(document).ready(function() {
                         this.shows[0] = true;
                         this.countdown[0] = true;
                         this.remaintime(0);
+                        var reg = document.getElementById(this.tasks[0].region)
+                        reg.classList.add('border')
                     }
                 },
             }
@@ -110,6 +116,18 @@ $(document).ready(function() {
     })
 
     $('.request-btn').click(function() {
+        var i = 0;
+        while(temp = document.getElementById("room"+i)){
+            temp.setAttribute("pointer-events", "auto");
+            if(temp.classList.contains('region_choose')){
+                temp.classList.remove('region_choose')
+                temp.classList.add('border')
+            }
+            else{
+                temp.classList.remove('border')
+            }
+            i = i +1
+        }
         $(this).addClass('active');
         $('.solve-btn').removeClass('active');
         $(this).css("opacity", "1");
@@ -174,7 +192,7 @@ $(document).ready(function() {
         }
     }
 
-    function settasks(res){
+    function settasks(res,members){
         var index=0;
         temp = []
         resultdate = []
@@ -187,7 +205,7 @@ $(document).ready(function() {
             var hour = parseInt(time[0].split(':'));
             var hour = (time[1][0] == 'P') ? hour + 12 : hour;
             var nowTime = new Date();
-            var missiondate = new Date(year, month - 1, day, hour, 13, 00);
+            var missiondate = new Date(year, month - 1, day, hour, 00, 00);
             if(missiondate.getTime() - nowTime.getTime() > 0){
                 resultdate.push(missiondate)
                 return true
@@ -201,6 +219,19 @@ $(document).ready(function() {
             temp[i].date = resultdate[i];
             temp[i]["remain"] = 0;
             temp[i]["missionstate"] = false;
+            temp[i]["members"] = []
+            for (var j = 0; j < members.length; j++) {
+                if(members[j].account != temp[i].author){
+                    var member_temp ={};
+                    member_temp["icon"] = members[j].icon;
+                    member_temp["name"] = members[j].name;
+                    member_temp["account"] = members[j].account
+                    member_temp["on"] = false;
+                    member_temp["isauthor"] = false;
+                    temp[i]["members"].push(member_temp);
+                }
+            }
+
         }
 
         count = temp.length;
@@ -209,18 +240,7 @@ $(document).ready(function() {
     }
 
 
-    function setmembers(res){
-        members = [];
-        for (var i = 0; i < res.length; i++) {
-            var temp = {};
-            temp["icon"] = res[i].icon;
-            temp["name"] = res[i].name;
-            temp["account"] = res[i].account
-            temp["on"] = false;
-            members.push(temp);
-        }
-        vueinstance.members = members;
-    }
+
 
     $('.checkconfirm').click(function(e) {
         buttonenable();
@@ -230,38 +250,138 @@ $(document).ready(function() {
     });
 
 
+    function error(errorarray,errorvalue) {
+        if(errorarray.length>0){
+            var str = errorarray.join(',')
+            str = str + '為必須'
+            $('#error_space').text(str);
+            $('#error_space').addClass('err');
+        }
+        if(errorvalue){
+            $('#error_type').text('時間是回不去的~');
+            $('#error_type').addClass('err');
+        }
+    }
+    
+    function clear() {
+        $('#error_space').text("");
+        $('#error_type').text("");
+        $('#inputcontent').text("");
+        $('#inputsuggest').text("");
+        $('#datepicker').text("");
+        $('#timepicker').text("");
+    }
+    
+    function check() {
+        clear();
+        const inputcontent = $('#inputcontent').val().trim();
+        const inputsuggest = $('#inputsuggest').val().trim();
+        const datepicker = $('#datepicker').val().trim();
+        const timepicker = $('#timepicker').val().trim();
+        const region = $('.head').text();
+        let error_space = []
+        let error_value = false
+        let ans = true;
+    
+        if (region == "任務地點") {
+            error_space.push('地點')
+            ans = false;
+        }
+
+        if (inputcontent == "") {
+            error_space.push('內容')
+            ans = false;
+        }
+    
+        if (inputsuggest == "") {
+            error_space.push('建議')
+            ans = false;
+        } 
+
+        if (datepicker == "") {
+            error_space.push('日期')
+            ans = false;
+        } 
+
+        if (timepicker == "") {
+            error_space.push('時間')
+            ans = false;
+        }
+
+        if(datepicker != "" && timepicker != ""){
+            var date = datepicker.split('/');
+            var year = date[2];
+            var day = date[1];
+            var month = date[0];
+            var time = timepicker.split(' ');
+            var hour = parseInt(time[0].split(':'));
+            var hour = (time[1][0] == 'P') ? hour + 12 : hour;
+            var nowTime = new Date();
+            var missiondate = new Date(year, month - 1, day, hour, 00, 00);
+            if(missiondate.getTime() - nowTime.getTime() <= 0){
+                error_value =true;
+                ans = false;
+            }   
+        }
+        
+        error(error_space,error_value);
+    
+        return ans;
+    
+    }
+
+
+
     $('#task_btn').click((event) => {
         event.preventDefault();
-        $.post('./tasks', {
-            content: $('#addTasks input[name=content]').val(),
-            advise: $('#addTasks textarea[name=advise]').val(),
-            date: $('#addTasks input[name=date]').val(),
-            time: $('#addTasks input[name=time]').val(),
-            author: localStorage.getItem("account"),
-            classcode: localStorage.getItem("classcode"),
-            icon:document.getElementById("UserImg").src,
-            region:$('.border')[0].id  //區域
-        }, (res) => {
-            buttonunable();
-            hrefunable();
-            $('#addTasks input[name=content]').val("");
-            $('#addTasks textarea[name=advise]').val("");
-            $('#addTasks input[name=date]').val("");
-            $('#addTasks input[name=time]').val("");
-            $('.check').css("visibility", "visible");
-            $('.mask').css("visibility", "visible");
-        });
-
+        if(check() == true){
+            $.post('./tasks', {
+                content: $('#addTasks input[name=content]').val(),
+                advise: $('#addTasks textarea[name=advise]').val(),
+                date: $('#addTasks input[name=date]').val(),
+                time: $('#addTasks input[name=time]').val(),
+                author: localStorage.getItem("account"),
+                classcode: localStorage.getItem("classcode"),
+                icon:document.getElementById("UserImg").src,
+                region:$('.border')[0].id  //區域
+            }, (res) => {
+                clear();
+                var j = 0;
+                while(temp = document.getElementById("room"+j)){ 
+                    if(temp.classList.contains('border')){
+                        temp.classList.remove('border')
+                    }
+                    j = j+1;
+                }    
+                $('.head').html('<i class="fa fa-map-marker" aria-hidden="true"></i>任務地點');
+                buttonunable();
+                hrefunable();
+                $('#addTasks input[name=content]').val("");
+                $('#addTasks textarea[name=advise]').val("");
+                $('#addTasks input[name=date]').val("");
+                $('#addTasks input[name=time]').val("");
+                $('.check').css("visibility", "visible");
+                $('.mask').css("visibility", "visible");
+            });
+        }
     });
     $('#solve_btn').click((event) => {
+        var i = 0;
+        while(temp = document.getElementById("room"+i)){
+            temp.setAttribute("pointer-events", "none");
+            if(temp.classList.contains('border')){
+                temp.classList.remove('border');
+                temp.classList.add('region_choose');
+            }
+            i = i +1
+        }
         event.preventDefault()
         var classcode = localStorage.getItem("classcode");
         //get group tasks
-        $.get('./tasks/' + classcode, {}, (res) => { 
-            if (res === "null") {
+        $.get('./tasks/' + classcode, {}, (resup) => { 
+            if (resup === "null") {
                 $('#solve_btn').data('0');
             } else {
-                settasks(res);
                 //res 區域和發起人圖片
                 //get group member
                 $.get('./users/' + classcode, {}, (res) => {
@@ -269,7 +389,7 @@ $(document).ready(function() {
                         console.log("123");
                     } else {
                         res.forEach(item => console.log(item));
-                        setmembers(res);
+                        settasks(resup,res);
                     }
                 });
             }

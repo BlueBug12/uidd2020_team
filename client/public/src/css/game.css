@@ -344,8 +344,8 @@ li {
     color: #F7F6E3;
     right: 0;
     top: 0;
-    height: 3vh;
-    width: 3vh;
+    height: 4vh;
+    width: 4vh;
     border-radius: 50%;
     background-color: #FC9D5D;
     transform: translateY(-50%);
@@ -402,6 +402,18 @@ li {
 .formset div {
     margin-top: 0.5rem;
     padding-left: 0.5rem;
+}
+
+.err {
+    border-color: #dc3545;
+    padding-right: calc(1.5em + 0.75rem);
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%23dc3545' viewBox='0 0 12 12'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right calc(0.375em + 0.1875rem) center;
+    background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+    font-family: GenJyuuGothic-Medium;
+    color: red;
+    text-align: center;
 }
 
 .content {
@@ -495,7 +507,7 @@ li {
 
 .tabContainer .buttonContainer {
     height: 5%;
-    width: 100%;
+    width: 90%;
     display: flex;
     position: relative;
     left: 0.8rem;
@@ -523,7 +535,6 @@ li {
 
 .tabContainer .tabPanel * {
     margin-top: 0.5rem;
-    /* padding: 0.5rem; */
     padding-left: 0.5rem;
 }
 
@@ -532,10 +543,12 @@ li {
     background-color: #F7F6E4;
 }
 
-.exhibit {
-    width: 25%;
-    height: 25%;
+.tabPanel .exhibit {
+    width: 6.5vw;
+    height: 6.5vw;
     border-radius:50%;
+    padding-left: 0rem;
+    margin-left: 0.7rem;
 }
 
 .dialogue {
@@ -569,9 +582,9 @@ li {
     align-self: center;
 }
 
-.mission-div img {
-    width: 15%;
-    height: 100%;
+.mission-div  img {
+    width: 3vw;
+    height: 3vw;
 }
 
 .white-block {
@@ -587,8 +600,10 @@ li {
     display:none;
 }
 
-.member.show{
+.tabContainer .tabPanel .mission-div .member.show{
   display:block;
+  padding-left: 0rem;
+  margin-left:0.5rem;
 }
 
 .member:hover {
@@ -601,6 +616,15 @@ li {
 
 .fa-arrow-left,.fa-arrow-right:hover{
   cursor:pointer;
+}
+
+.fa-arrow-left,.fa-arrow-right{
+    align-self: center;
+    display:block;
+}
+
+.fa-arrow-left.hide,.fa-arrow-right.hide{
+    display: none;
 }
 
 .btn {
@@ -646,7 +670,7 @@ li {
 
 .floor-item.border {
     stroke: #789FB3;
-    stroke-width: 3px;
+    stroke-width: 13px;
     stroke-linejoin: round;
 }
 
@@ -656,3 +680,4 @@ select {
     text-overflow: '';
     cursor: text;
 }
+

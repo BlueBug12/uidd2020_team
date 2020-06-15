@@ -1,7 +1,5 @@
 (async function genPanel() {
     const gridSize = 20;
-    var choose_region;
-    var prevDiv = null;
     let data = await fetch('/readFloorplan', {
         body: JSON.stringify({ account: localStorage.getItem("account") }),
         headers: {
@@ -102,18 +100,36 @@
         temp.classList.add('floor-item');
         temp.addEventListener('click', function(e) {
             choose_region = e.target.id;
-            if (prevDiv != null && prevDiv[0].id == e.target.id) {
-                prevDiv = null;
-                $(this).removeClass('border');
-                choose_region = null;
-                $('.head').html('<i class="fa fa-map-marker" aria-hidden="true"></i>任務地點');
-            } else {
-                $(prevDiv).removeClass('border');
-                $(this).addClass('border');
-                prevDiv = $(this);
-                var text = '#'+ choose_region+'text'
-                $('.head').html('<i class="fa fa-map-marker" aria-hidden="true"></i>'+$(text).text())
+            var j = 0;
+            prevDiv = null
+            while(temp = document.getElementById("room"+j)){ 
+                if(temp.classList.contains('border')){
+                    prevDiv = "room"+j
+                }
+                j = j+1;
             }
+
+            if(choose_region == prevDiv){
+                document.getElementById(choose_region).classList.remove('border')
+                $('.head').html('<i class="fa fa-map-marker" aria-hidden="true"></i>任務地點');
+            }
+            else if(prevDiv == null){
+                document.getElementById(choose_region).classList.add('border')    
+                var text = '#'+ choose_region+'text'
+                $('.head').html('<i class="fa fa-map-marker" aria-hidden="true"></i>'+$(text).text())           
+            }
+            else{
+                document.getElementById(prevDiv).classList.remove('border')
+                document.getElementById(choose_region).classList.add('border')          
+                var text = '#'+ choose_region+'text'
+                $('.head').html('<i class="fa fa-map-marker" aria-hidden="true"></i>'+$(text).text())     
+            }
+
+
+
+
+
+
         })
     }
 })();
