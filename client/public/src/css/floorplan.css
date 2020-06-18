@@ -157,7 +157,9 @@ li {
   position: absolute;
   width: 10vw;
   left: 50vw;
-
+}
+#draw_map:hover, #place_furnish:hover {
+  cursor: pointer;
 }
 .button_text{
 

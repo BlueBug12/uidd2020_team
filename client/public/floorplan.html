@@ -9,7 +9,7 @@
       <!-- Bootstrap CSS -->
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
       <link href="./src/css/floorplan.css" rel="stylesheet" >
-      <linl href="./src/css/style.css" rel="stylesheet">
+      <link href="./src/css/style.css" rel="stylesheet">
       <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
       <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
       <script src="https://d3js.org/d3.v4.min.js"></script>
@@ -74,13 +74,11 @@
         </div>
         <div id="editor">
           <div id="draw_map_mode">
-
             <ul class="list-inline ">
               <li class="list-inline-item">
                   <div class="circle">
                     <img src="./img/editor_icon/plus.png" class="center" id="add_button" >
                   </div>
-
               </li>
               <li class="list-inline-item">
                 <div class="circle">
@@ -98,16 +96,8 @@
                 </div>
               </li>
             </ul>
-
             <div id="color" >
-              <ul class="color_list" id="color_list">
-                <li class="round c1" id="c_1">
-                  <div class="input_container">
-                   <input type="text" id="text_in1"class="awsome_input" placeholder="room_1"/>
-                   <span class="awsome_input_border"/ id="b_1" style="background: #E8C38F;">
-                  </div>
-                </li>
-              </ul>
+              <ul class="color_list" id="color_list"></ul>
           </div>
         </div>
         <div id="place_furnish_mode">
