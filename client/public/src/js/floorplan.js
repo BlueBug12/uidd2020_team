@@ -7,7 +7,7 @@ class Panel {
 		this.height = 520;
 		this.gridSize = 20;
 		this.nowFloor = 0;
-		this.floor = [];
+		this.floor = [new Floor()];
 		this.previewedWall = null;
 		this.steps = [];
 		this.isEditing = false;
@@ -81,9 +81,16 @@ class Panel {
 		}
 	}
 
-	addFloor(floor) {
-		this.floor.push(floor);
+	addFloor() {
+		this.mode = "line";
+		this.floor.push(new Floor());
 		this.nowFloor = this.floor.length - 1;
+		this.steps.push([{
+			operation: "new",
+			object: "floor",
+			floor: this.nowFloor
+		}]);
+		this.render();
 	}
 
 	drawWall() {
@@ -404,6 +411,7 @@ class Panel {
 		let lastStep = this.steps.pop();
 		if (!lastStep) return;
 		lastStep.forEach(step => {
+			this.nowFloor = step.floor;
 			if (step.operation === "new") {
 				if (step.object === "wall") {
 					this.floor[step.floor].walls.pop();
@@ -413,6 +421,11 @@ class Panel {
 				}
 				if (step.object === "room") {
 					this.floor[step.floor].rooms.pop();
+				}
+				if (step.object === "floor") {
+					this.floor.pop();
+					this.nowFloor--;
+					document.getElementsByClassName("floor")[document.getElementsByClassName("floor").length-1].remove();
 				}
 			}
 			if (step.operation === "delete") {
@@ -811,19 +824,18 @@ class Area extends Component {
 }
 
 const panel = new Panel();
-panel.addFloor(new Floor());
 
 
 document.getElementById("draw_map").addEventListener('click', () => {
-	$("#place_furnish_mode").css({"visibility":"hidden", "height": 0});
-	$("#draw_map_mode").css({"visibility":"visible", "height": "100%"});
+	$("#place_furnish_mode").css({"visibility": "hidden", "height": 0});
+	$("#draw_map_mode").css({"visibility": "visible", "height": "100%"});
 	$('#place_furnish').css({"opacity": 0.5});
 	$('#draw_map').css({"opacity": 1});
 
 });
 document.getElementById("place_furnish").addEventListener('click', () => {
-	$("#draw_map_mode").css({"visibility":"hidden", "height": 0});
-	$("#place_furnish_mode").css({"visibility":"visible", "height": "100%"});
+	$("#draw_map_mode").css({"visibility": "hidden", "height": 0});
+	$("#place_furnish_mode").css({"visibility": "visible", "height": "100%"});
 	$('#place_furnish').css({"opacity": 1});
 	$('#draw_map').css({"opacity": 0.5});
 });
@@ -883,135 +895,33 @@ document.addEventListener('mousedown', () => {
 });
 
 
-// let room_id=[1];
-// let room_counter=[2];
-
-// let new_room=[1];
-// let circle_id;
-
-/*
-$(document).on('click','#add_floor',function(){
-	picker.fadeOut();
-	//record the name of rooms
-	for(let i=1;i<room_counter[current_floor];++i){
-		rooms_attr[current_floor][i-1].name=$("#text_in"+i).val();
-	}
-	$("#color_list").empty();//reset the chosen color
-
-	d3.selectAll(".chosen").attr("class", "square").style("fill", "#f0f0f0")
-	current_floor+=1;
-	rooms.push([]);
-	previewedRoom.push([]);
-	corners.push([]);
-	walls.push([]);
-	previewedWall.push([]);
-
-	steps.push([]);
-	current_color.push("#fff");
-	room_id.push(1);
-	room_counter.push(2);
-	isEditing.push(false);
-	editTarget.push(tempTarget);
-	nowCorner.push(tempCorner);
-	items.push([]);
-	new_room.push(1);
-	render("line");
-	render("previewedWall");
-	//render("previewedRoom");
+$(document).on('click', '#add_floor', function () {
+	panel.addFloor();
 	$('#pen').css('background-color', "transparent");
-	$('#color_list').append(`<li class=\"round\" id = \"c_1\"style=\" background-color:#F1BA9C\"><div class=\"input_container\"><input type=\"text\" id=\"text_in1\"class=\"awsome_input\" placeholder=\"room_1\"/><span class=\"awsome_input_border\" id=\"b_1\" style=\"background:#F1BA9C\"/></div></li>`);
-	mode.push("line");
-	rooms_attr.push([{
-		color: "#F1BA9C",
-		name: ""
-	}]);
-	$("#floor").append(`<div id="floor_animate${current_floor}" class="floor" style="position:absolute;z-index:${100-current_floor}; margin-top:-${12*(current_floor)}px"> <img src="./img/floor_1.png"> </div>`)
-});
-let open=0;
-$("#floor").hover(function(){
-	console.log("hello")
-	for(let i=0;i<=current_floor;i+=1){
-		$("#floor_animate"+i).animate({"top":30*current_floor-30*i+"px"},500);
-	}
-});
-*/
-
-/*
-$(document).on('click','#add_floor_button',function(){
-	picker.fadeOut();
-	//record the name of rooms
-	for(let i=1;i<room_counter[current_floor];++i){
-		rooms_attr[current_floor][i-1].name=$("#text_in"+i).val();
-	}
-	$("#color_list").empty();//reset the chosen color
-
-	d3.selectAll(".chosen").attr("class", "square").style("fill", "#f0f0f0")
-	current_floor+=1;
-	console.log(current_floor);
-	if(mode.length<=current_floor){//if it's new floor, append the data
-
-		rooms.push([]);
-		previewedRoom.push([]);
-		corners.push([]);
-		walls.push([]);
-		previewedWall.push([]);
-		//console.log(previewedWall);
-		steps.push([]);
-		current_color.push("#fff");
-		room_id.push(1);
-		room_counter.push(2);
-		isEditing.push(false);
-		editTarget.push(tempTarget);
-		nowCorner.push(tempCorner);
-		items.push([]);
-		new_room.push(1);
-		render("line");
-		render("previewedWall");
-		//render("previewedRoom");
-		$('#pen').css('background-color', "transparent");
-		$('#color_list').append(`<li class=\"round\" id = \"c_1\"style=\" background-color:#F1BA9C\"><div class=\"input_container\"><input type=\"text\" id=\"text_in1\"class=\"awsome_input\" placeholder=\"room_1\"/><span class=\"awsome_input_border\" id=\"b_1\" style=\"background:#F1BA9C\"/></div></li>`);
-		mode.push("line");
-		rooms_attr.push([{
-			color: "#F1BA9C",
-			name: ""
-		}]);
-	}
-	else{
-		//recover floor
-		render("line");
-		render("previewedWall");
-		recoverRoom(current_floor);
-		for(let i=1;i<room_counter[current_floor];++i){
-			$('#color_list').append(`<li class=\"round \" id = \"c_${i}\"style=\" background-color:${rooms_attr[current_floor][i-1].color}\"><div class=\"input_container\"><input type=\"text\" id=\"text_in${i}\"class=\"awsome_input\" placeholder=\"room_${i}\"/><span class=\"awsome_input_border\" id=\"b_${i}\" style=\"background:${rooms_attr[current_floor][i-1].color}\"/></div></li>`);
-			if(rooms_attr[current_floor][i-1].name!="")
-				$('#text_in'+i).val(rooms_attr[current_floor][i-1].name);
-		}
-
-	}
-	console.log(rooms_attr);
+	$("#floor").append(`<div id="floor_animate${panel.floor.length-1}" class="floor" style="position:absolute;z-index:${100-(panel.floor.length-1)}; margin-top:-${12*(panel.floor.length-1)}px"> <img src="./img/floor_1.png"> </div>`)
 });
 
-$(document).on('click','#sub_floor_button',function(){
-	picker.fadeOut();
-	if(current_floor>0){
-		d3.selectAll(".chosen").attr("class", "square").style("fill", "#f0f0f0");
-		for(let i=1;i<room_counter[current_floor];++i){
-			rooms_attr[current_floor][i-1].name=$("#text_in"+i).val();
-		}
-		current_floor-=1;
-		//console.log(rooms);
-		render("line");
-		render("previewedWall");
-		recoverRoom(current_floor);
-		$("#color_list").empty()
-		for(let i=1;i<room_counter[current_floor];++i){
-			$('#color_list').append(`<li class=\"round \" id = \"c_${i}\"style=\" background-color:${rooms_attr[current_floor][i-1].color}\"><div class=\"input_container\"><input type=\"text\" id=\"text_in${i}\"class=\"awsome_input\" placeholder=\"room_${i}\"/><span class=\"awsome_input_border\" id=\"b_${i}\" style=\"background:${rooms_attr[current_floor][i-1].color}\"/></div></li>`);
-			if(rooms_attr[current_floor][i-1].name!="")
-				$('#text_in'+i).val(rooms_attr[current_floor][i-1].name);
-		}
+// let open=0;
+// $("#floor").hover(function(){
+// 	console.log("hello")
+// 	for(let i=0;i<=current_floor;i+=1){
+// 		$("#floor_animate"+i).animate({"top":30*current_floor-30*i+"px"},500);
+// 	}
+// });
+
+$(document).on('click', '#add_floor_button', function () {
+	if (panel.floor[panel.nowFloor+1]) {
+		panel.nowFloor++;
 	}
+	panel.render();
 });
-*/
+
+$(document).on('click', '#sub_floor_button', function () {
+	if (panel.floor[panel.nowFloor-1]) {
+		panel.nowFloor--;
+	}
+	panel.render();
+});
 
 // function updateScroll(){
 //     var element = document.getElementById("color");
