@@ -856,6 +856,7 @@ document.getElementById("add_button").addEventListener('click', () => {
 		picker.fadeIn();
 	}
 	isPickerDisplay = !isPickerDisplay;
+	removeHighlight();
 }, true);
 
 $(document).on('click', '.color-item', () => {
@@ -890,6 +891,7 @@ document.getElementById("pen_button").addEventListener('click', () => {
 
 $(document).on('click','.round', () => {
 	panel.mode = "rect";
+	removeHighlight();
 
 	let colorChoices = document.getElementsByClassName("round");
 	for (let iter = 0; iter < colorChoices.length; ++iter) {
@@ -906,6 +908,7 @@ $(document).on('click','.round', () => {
 
 
 $(document).on('click', '#add_floor', function () {
+	removeHighlight();
 	panel.addFloor();
 	$('#pen').css('background-color', "transparent");
 	$("#floor").append(`<div id="floor_animate${panel.floor.length-1}" class="floor" style="position:absolute;z-index:${100-(panel.floor.length-1)}; margin-top:-${12*(panel.floor.length-1)}px"> <img src="./img/floor_1.png"> </div>`)
@@ -923,14 +926,14 @@ $(document).on('click', '#add_floor_button', function () {
 	if (panel.floor[panel.nowFloor+1]) {
 		panel.nowFloor++;
 	}
-	panel.render();
+	removeHighlight();
 });
 
 $(document).on('click', '#sub_floor_button', function () {
 	if (panel.floor[panel.nowFloor-1]) {
 		panel.nowFloor--;
 	}
-	panel.render();
+	removeHighlight();
 });
 
 // function updateScroll(){
@@ -939,6 +942,7 @@ $(document).on('click', '#sub_floor_button', function () {
 // }
 
 document.getElementById("submit").addEventListener('click', async () => {
+	removeHighlight();
 	let floorplan = [];
 	panel.floor.forEach(floor => {
 		let newFloor = {
@@ -1012,6 +1016,12 @@ document.getElementById("submit").addEventListener('click', async () => {
 		location.href = './game.html';
 	}
 });
+
+function removeHighlight() {
+	panel.removeRoomHighlight();
+	panel.removeWallHighlight();
+	panel.render();
+}
 
 async function getUser() {
     var account = localStorage.getItem("account");
