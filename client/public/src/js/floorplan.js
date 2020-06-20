@@ -846,13 +846,38 @@ for (let iter = 0; iter < colorList.length; iter++) {
 	picker.append(`<li class="color-item" data-hex="#${colorList[iter]}" style="background-color: #${colorList[iter]}"></li>`);
 }
 let isPickerDisplay = false;
+let isAddingColor = false;
 let nowColorIndex = 0;
 
 document.getElementById("add_button").addEventListener('click', () => {
 	if (!isPickerDisplay) {
+		isAddingColor = true;
 		picker.fadeIn();
 	}
 	isPickerDisplay = !isPickerDisplay;
+}, true);
+
+$(document).on('click', '.color-item', () => {
+	panel.mode = "rect";
+	isAddingColor = false;
+
+	let color = event.target.style["background-color"];
+	$('#pickcolor').val(color);
+	$('#pen').css('background-color', color);
+		
+	panel.floor[panel.nowFloor].addColor(color);
+});
+
+document.getElementById("color-picker").addEventListener('click', () => {
+	isAddingColor = true;
+}, true);
+
+document.addEventListener('click', () => {
+	if (!isAddingColor) {
+		picker.fadeOut();
+		isPickerDisplay = false;
+	}
+	isAddingColor = false;
 });
 
 document.getElementById("pen_button").addEventListener('click', () => {
@@ -876,21 +901,6 @@ $(document).on('click','.round', () => {
 	if (event.target.children.length) {
 		$('#pen').css('background-color', event.target.children[1].style["background-color"]);
 	}
-});
-
-$(document).on('click', '.color-item', () => {
-	panel.mode = "rect";
-
-	let color = event.target.style["background-color"];
-	$('#pickcolor').val(color);
-	$('#pen').css('background-color', color);
-	
-	panel.floor[panel.nowFloor].addColor(color);
-});
-
-document.addEventListener('mousedown', () => {
-	picker.fadeOut();
-	isPickerDisplay = false;
 });
 
 
