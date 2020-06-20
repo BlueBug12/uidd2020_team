@@ -107,7 +107,7 @@ class Panel {
 			if (corner.x == x && corner.y == y) isDrawPoint = false;
 		});
 		if (isDrawPoint) {
-			let newCorner = new Point(Math.random().toString(36).slice(-8), x, y, 4);
+			let newCorner = new Point(x, y, 4);
 			floor.corners.push(newCorner);
 			newStep.push({
 				operation: "new",
@@ -662,9 +662,8 @@ class Component {
 
 class Point extends Component {
 
-	constructor(id, x, y, r) {
+	constructor(x, y, r) {
 		super();
-		this.id = id;
 		this.x = x;
 		this.y = y;
 		this.r = r;
