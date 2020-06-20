@@ -227,6 +227,7 @@ class Panel {
 					 (floor.rooms[iter].corner2.x == floor.rooms[floor.rooms.length-1].corner1.x && floor.rooms[iter].corner2.y == floor.rooms[floor.rooms.length-1].corner1.y))) {
 					floor.rooms.pop();
 					this.steps.pop();
+					this.render();
 					break;
 				}
 			}
