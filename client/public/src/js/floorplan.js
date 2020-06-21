@@ -84,12 +84,20 @@ class Panel {
 	addFloor() {
 		this.mode = "line";
 		this.floor.push(new Floor());
-		this.nowFloor = this.floor.length - 1;
+		this.switchFloor(this.floor.length - 1);
 		this.steps.push([{
 			operation: "new",
 			object: "floor",
 			floor: this.nowFloor
 		}]);
+	}
+
+	switchFloor(floorNum) {
+		panel.removeRoomHighlight();
+		panel.removeWallHighlight();
+		this.floor[this.nowFloor].recordText();
+		this.nowFloor = floorNum;
+		this.floor[this.nowFloor].render();
 		this.render();
 	}
 
@@ -630,12 +638,20 @@ class Floor {
 		this.walls = [];
 		this.rooms = [];
 		this.colors = ["#F1BA9C"];
-		this.render();
+		this.text = [];
 	}
 
 	addColor(color) {
 		this.colors.push(color);
 		this.render();
+	}
+
+	recordText() {
+		let input = document.getElementsByClassName("input_container");
+		for (let iter = 0; iter < input.length; ++iter) {
+			let value = input[iter].children[0].value;
+			this.text[iter] = value;
+		}
 	}
 
 	render() {
@@ -644,7 +660,7 @@ class Floor {
 			result += `
 				<li class="round" id = "c_${iter}" style="background-color: ${this.colors[iter-1]}">
 					<div class="input_container">
-						<input type="text" id="text_in${iter}" class="awsome_input" placeholder="room_${iter}"/>
+						<input type="text" id="text_in${iter}" class="awsome_input" placeholder="room_${iter}" value="${this.text[iter-1]? this.text[iter-1]: ""}"/>
 						<span class="awsome_input_border" id="b_${iter}" style="background-color: ${this.colors[iter-1]}"/>
 					</div>
 				</li>
@@ -824,6 +840,7 @@ class Area extends Component {
 }
 
 const panel = new Panel();
+panel.floor[0].render();
 
 
 document.getElementById("draw_map").addEventListener('click', () => {
@@ -854,6 +871,7 @@ document.getElementById("add_button").addEventListener('click', () => {
 	if (!isPickerDisplay) {
 		isAddingColor = true;
 		picker.fadeIn();
+		panel.floor[panel.nowFloor].recordText();
 	}
 	isPickerDisplay = !isPickerDisplay;
 	removeHighlight();
@@ -862,6 +880,7 @@ document.getElementById("add_button").addEventListener('click', () => {
 $(document).on('click', '.color-item', () => {
 	panel.mode = "rect";
 	isAddingColor = false;
+	nowColorIndex = document.getElementsByClassName("round").length;
 
 	let color = event.target.style["background-color"];
 	$('#pickcolor').val(color);
@@ -908,7 +927,6 @@ $(document).on('click','.round', () => {
 
 
 $(document).on('click', '#add_floor', function () {
-	removeHighlight();
 	panel.addFloor();
 	$('#pen').css('background-color', "transparent");
 	$("#floor").append(`<div id="floor_animate${panel.floor.length-1}" class="floor" style="position:absolute;z-index:${100-(panel.floor.length-1)}; margin-top:-${12*(panel.floor.length-1)}px"> <img src="./img/floor_1.png"> </div>`)
@@ -924,16 +942,14 @@ $(document).on('click', '#add_floor', function () {
 
 $(document).on('click', '#add_floor_button', function () {
 	if (panel.floor[panel.nowFloor+1]) {
-		panel.nowFloor++;
+		panel.switchFloor(panel.nowFloor+1);
 	}
-	removeHighlight();
 });
 
 $(document).on('click', '#sub_floor_button', function () {
 	if (panel.floor[panel.nowFloor-1]) {
-		panel.nowFloor--;
+		panel.switchFloor(panel.nowFloor-1);
 	}
-	removeHighlight();
 });
 
 // function updateScroll(){
@@ -942,7 +958,7 @@ $(document).on('click', '#sub_floor_button', function () {
 // }
 
 document.getElementById("submit").addEventListener('click', async () => {
-	removeHighlight();
+	panel.floor[panel.nowFloor].recordText();
 	let floorplan = [];
 	panel.floor.forEach(floor => {
 		let newFloor = {
@@ -958,16 +974,17 @@ document.getElementById("submit").addEventListener('click', async () => {
 			newFloor.corners.push(target);
 		});
 		floor.walls.forEach(wall => {
-			let target = Object.assign({}, wall)
+			let target = Object.assign({}, wall);
 			delete target.width;
 			delete target.isSelected;
 			newFloor.walls.push(target);
 		});
 		floor.rooms.forEach(room => {
-			let target = Object({}, room);
-			let text = document.getElementsByClassName("input_container")[room.colorIndex].children[0];
-			target.text = text.value? text.value: text.placeholder;
+			let target = Object.assign({}, room);
+			target.text = floor.text[target.colorIndex]? floor.text[target.colorIndex]: `room_${target.colorIndex+1}`;
 			delete target.colorIndex;
+			delete target.width;
+			delete target.isSelected;
 			newFloor.rooms.push(target);
 		});
 		floorplan.push(newFloor);
