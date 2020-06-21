@@ -863,42 +863,60 @@ const picker = $('#color-picker');
 for (let iter = 0; iter < colorList.length; iter++) {
 	picker.append(`<li class="color-item" data-hex="#${colorList[iter]}" style="background-color: #${colorList[iter]}"></li>`);
 }
+let hasPickerDisplay = false;
 let isPickerDisplay = false;
 let isAddingColor = false;
+let isChangingColor = false;
 let nowColorIndex = 0;
 
 document.getElementById("add_button").addEventListener('click', () => {
-	if (!isPickerDisplay) {
-		isAddingColor = true;
-		picker.fadeIn();
+	removeHighlight();
+	isAddingColor = true;
+	isChangingColor = false;
+	if (!hasPickerDisplay) {
+		isPickerDisplay = true;
 		panel.floor[panel.nowFloor].recordText();
 	}
-	isPickerDisplay = !isPickerDisplay;
-	removeHighlight();
-}, true);
+});
 
 $(document).on('click', '.color-item', () => {
 	panel.mode = "rect";
-	isAddingColor = false;
-	nowColorIndex = document.getElementsByClassName("round").length;
+	isPickerDisplay = false;
 
 	let color = event.target.style["background-color"];
 	$('#pickcolor').val(color);
 	$('#pen').css('background-color', color);
 		
-	panel.floor[panel.nowFloor].addColor(color);
+	if (isChangingColor) {
+		panel.floor[panel.nowFloor].colors[nowColorIndex] = color;
+		panel.floor[panel.nowFloor].render();
+		panel.floor[panel.nowFloor].rooms.forEach(room => {
+			if (room.colorIndex == nowColorIndex) {
+				room.color = color;
+			}
+		});
+		panel.render();
+	} else {
+		nowColorIndex = document.getElementsByClassName("round").length;
+		panel.floor[panel.nowFloor].addColor(color);
+	}
 });
 
 document.getElementById("color-picker").addEventListener('click', () => {
-	isAddingColor = true;
+	isPickerDisplay = true;
 }, true);
 
 document.addEventListener('click', () => {
-	if (!isAddingColor) {
+	if (isPickerDisplay) {
+		picker.fadeIn();
+		hasPickerDisplay = true;
+	} else {
 		picker.fadeOut();
-		isPickerDisplay = false;
+		hasPickerDisplay = false;
+		isAddingColor = false;
+		isChangingColor = false;
 	}
-	isAddingColor = false;
+	isPickerDisplay = false;
 });
 
 document.getElementById("pen_button").addEventListener('click', () => {
@@ -908,14 +926,17 @@ document.getElementById("pen_button").addEventListener('click', () => {
 	}
 });
 
-$(document).on('click','.round', () => {
-	panel.mode = "rect";
+$(document).on('click', '.round', () => {
 	removeHighlight();
+	panel.mode = "rect";
 
 	let colorChoices = document.getElementsByClassName("round");
 	for (let iter = 0; iter < colorChoices.length; ++iter) {
 		if (colorChoices[iter].children[0] === event.target) {
 			nowColorIndex = iter;
+			isPickerDisplay = true;
+			isAddingColor = false;
+			isChangingColor = true;
 			break;
 		}
 	}
