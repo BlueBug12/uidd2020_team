@@ -857,6 +857,7 @@ document.getElementById("place_furnish").addEventListener('click', () => {
 	$('#draw_map').css({"opacity": 0.5});
 });
 
+
 const colorList = ['F1BA9C','F5A96B','F8C780','D4C793','C7DF93','669A7D','9ED5D2','7DBEDF','C4D5D9','A889AD','D788AD','A9A696',
 				   'D57456','E0742D','EBAB4B','A1986E','81863A','365545','388185','0F4867','384851','715D75','4F3239','696758'];
 const picker = $('#color-picker');
@@ -1015,6 +1016,19 @@ function addFloorLinstener(floor){
 //     var element = document.getElementById("color");
 //     element.scrollTop = element.scrollHeight;
 // }
+
+
+let furnishPanel = document.getElementsByClassName("column_2")[0];
+let furnish = ["bed", "chair", "chair2", "desk", "oven", "sink", "sink2", "sink3", "sink4", "sink5",
+			   "sofa", "table", "toilet"];
+furnish.forEach(ele => {
+	furnishPanel.innerHTML += (`
+		<li class="item_margin">
+			<img src="./img/furnish/icon/${ele}_icon.svg" id="${ele}">
+		</li>
+	`);
+});
+
 
 document.getElementById("submit").addEventListener('click', async () => {
 	panel.floor[panel.nowFloor].recordText();
