@@ -46,7 +46,7 @@ router.get('/:classcode',async(req,res) => {
                         console.log(item._id);
                         item._id = item._id.toString();
                         console.log(item._id);
-                        tasks.push({item});
+                        tasks.push(item);
                     });
                     await Users.find({ "classcode":req.params.classcode}).exec((err2, member) => {
                         if (err2) {
@@ -61,10 +61,10 @@ router.get('/:classcode',async(req,res) => {
                                 member.forEach(function(item){
                                     users.push({_id:item._id.toString(),icon:item.icon});
                                   });
-                                  res.send(JSON.stringify(`{
-                                    "task": ${tasks},
-                                    "user": ${users}
-                                  }`));
+                                  res.send({
+                                    task: tasks,
+                                    user: users
+                                  });
                             }
                         }
                     });
@@ -103,7 +103,7 @@ router.post('/expired',(req,res) => {
     console.log(req.body.id);
     console.log(mongoose.Types.ObjectId(req.body.id));
     var id = mongoose.Types.ObjectId(req.body.id);
-    Tasks.find({ _id:req.body.id}).exec(async (err, res2) => {
+    Tasks.find({ _id:id}).exec(async (err, res2) => {
         if (err) {
             console.log('fail to query:', err)
             return;
@@ -112,7 +112,7 @@ router.post('/expired',(req,res) => {
             console.log(res2);
         }
     });
-    Tasks.findOneAndUpdate({ _id:req.body.id}, { expired: 1 }, err => {
+    Tasks.findOneAndUpdate({ _id:id}, { expired: 1 }, err => {
         console.log(err);
         if (!err) {
             res.status(200).send({ isSuccess: true });

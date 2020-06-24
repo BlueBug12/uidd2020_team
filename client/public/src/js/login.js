@@ -43,9 +43,8 @@ $('#login_btn').click((event) => {
         }, (res) => {
           localStorage.setItem("account", res.account);
             if (res.text === "登入失敗！") {
-                var modal = $('#myModal');
-                modal.find('.modal-body p').text(res.text);
-                $('#myModal').modal('show');
+                $('.check').css("visibility", "visible");
+                $('.mask').css("visibility", "visible");
             } else {
                 location.href = './game.html';
             }
@@ -142,4 +141,35 @@ $("#fb_btn").click(async function() {
         else
             location.href = './game.html';
     });
+});
+function buttonunable() {
+    let buttons = document.getElementsByTagName('button');
+    for (let i = 0; i < buttons.length; i++) {
+        buttons[i].disabled = true;
+        buttons[i].style.cursor = "default";
+    }
+    $('.checkconfirm').css("cursor", "pointer");
+    $('.checkconfirm').prop("disabled", false);
+}
+function buttonenable() {
+    let buttons = document.getElementsByTagName('button');
+    for (let i = 0; i < buttons.length; i++) {
+        buttons[i].disabled = false;
+        buttons[i].style.cursor = "pointer";
+    }
+}
+
+function hrefenable() {
+    let hrefs = document.getElementsByTagName('a');
+    for (let i = 0; i < hrefs.length; i++) {
+        hrefs[i].style.cursor = "pointer";
+        hrefs[i].style.pointerEvents = "auto";
+
+    }
+}
+$('.checkconfirm').click(function(e) {
+    buttonenable();
+    hrefenable();
+    $('.check').css("visibility", "hidden");
+    $('.mask').css("visibility", "hidden");
 });

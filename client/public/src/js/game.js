@@ -213,7 +213,7 @@ $(document).ready(function() {
             var hour = parseInt(time[0].split(':'));
             var hour = (time[1][0] == 'P') ? hour + 12 : hour;
             var nowTime = new Date();
-            var missiondate = new Date(year, month - 1, day, hour, 45, 00);
+            var missiondate = new Date(year, month - 1, day, hour, 20, 00);
             if(missiondate.getTime() - nowTime.getTime() > 0){
                 resultdate.push(missiondate)
                 return true
@@ -325,7 +325,7 @@ $(document).ready(function() {
             var hour = parseInt(time[0].split(':'));
             var hour = (time[1][0] == 'P') ? hour + 12 : hour;
             var nowTime = new Date();
-            var missiondate = new Date(year, month - 1, day, hour,45, 00);
+            var missiondate = new Date(year, month - 1, day, hour,20, 00);
             if(missiondate.getTime() - nowTime.getTime() <= 0){
                 error_value =true;
                 ans = false;
@@ -400,9 +400,8 @@ $(document).ready(function() {
                         settasks(resup,res);
                     }
                 });*/
-                let temp = JSON.parse(resup);
-                console.log(temp.task);
-                console.log(resup);
+                console.log(resup.user[0]);
+                console.log(resup.task[0]);
             }
         });
     });
