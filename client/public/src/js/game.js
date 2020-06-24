@@ -40,6 +40,13 @@ $(document).ready(function() {
                         this.$forceUpdate()
                     }
                     else {
+                        
+                        console.log(JSON.stringify(this.tasks[index]._id));
+                        $.post('./tasks/expired'),{
+                            id: JSON.stringify(this.tasks[index]._id)
+                        },(res) => {
+                            console.log(res);
+                        };
                         count = temp.length;
                         $('.solve-btn').attr('data-before', count);
                         clearTimeout
@@ -51,6 +58,7 @@ $(document).ready(function() {
                 if (num == 0) {
                    // tasks[index].missionstate = true;
                     this.$set(tasks[index],'missionstate',true);
+
                 } else {
                    // tasks[index].missionstate = false;
                     this.$set(tasks[index],'missionstate',false);
@@ -205,7 +213,7 @@ $(document).ready(function() {
             var hour = parseInt(time[0].split(':'));
             var hour = (time[1][0] == 'P') ? hour + 12 : hour;
             var nowTime = new Date();
-            var missiondate = new Date(year, month - 1, day, hour, 00, 00);
+            var missiondate = new Date(year, month - 1, day, hour, 45, 00);
             if(missiondate.getTime() - nowTime.getTime() > 0){
                 resultdate.push(missiondate)
                 return true
@@ -317,7 +325,7 @@ $(document).ready(function() {
             var hour = parseInt(time[0].split(':'));
             var hour = (time[1][0] == 'P') ? hour + 12 : hour;
             var nowTime = new Date();
-            var missiondate = new Date(year, month - 1, day, hour, 00, 00);
+            var missiondate = new Date(year, month - 1, day, hour,45, 00);
             if(missiondate.getTime() - nowTime.getTime() <= 0){
                 error_value =true;
                 ans = false;
@@ -384,23 +392,25 @@ $(document).ready(function() {
             } else {
                 //res 區域和發起人圖片
                 //get group member
-                $.get('./users/' + classcode, {}, (res) => {
+                /*$.get('./users/' + classcode, {}, (res) => {
                     if (res === "null") {
                         console.log("123");
                     } else {
                         res.forEach(item => console.log(item));
                         settasks(resup,res);
                     }
-                });
+                });*/
+                let temp = JSON.parse(resup);
+                console.log(temp.task);
+                console.log(resup);
             }
         });
     });
 });
 
-
-async function getUser() {
+function getUser() {
     var account = localStorage.getItem("account");
-    await $.get('./users/find/' + account, {}, (res) => {
+     $.get('./users/find/' + account, {}, (res) => {
         document.getElementById("UserImg").src = res.icon;
         localStorage.setItem("classcode", res.classcode);
     });
