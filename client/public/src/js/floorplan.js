@@ -969,20 +969,18 @@ $(document).on('mouseleave', '#floor', function () {
 		 }
 		 floor_span=0;
 	}
-
-
-	console.log("leave");
 });
-$(document).on('mouseover', '#floor_animate0', function () {
-	if(floor_span){
-		console.log("123");/*
-		for(let i=0;i<panel.floor.length;i+=1){
-		 		$("#floor_animate"+i).animate({"top":30*panel.floor.length-30*i+"px"},500;
-				$("#floor_animate"+i).animate({"top":30*panel.floor.length-30*i+"px"},500;
-				margin-top:-${12*(panel.floor.length-1)}px
-		 }*/
-	}
-});
+for(let i=0;i<10;i+=1){
+	$(document).on('mouseenter', `#floor_animate${i}`, function () {
+		if(floor_span){
+			$(`#floor_animate${i}`).css('opacity','0.5');
+		}
+	}).on('mouseleave', `#floor_animate${i}`, function () {
+		$(`#floor_animate${i}`).css('opacity','1');
+	}).on('click', `#floor_animate${i}`, function () {
+		panel.switchFloor(i);
+	});
+}
 
 // let open=0;
 // $("#floor").hover(function(){
