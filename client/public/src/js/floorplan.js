@@ -16,7 +16,7 @@ class Panel {
 			let data = new Array();
 			let xpos = 0;
 			let ypos = 0;
-			
+
 			for (let row = 0; row < panel.height / panel.gridSize; row++) {
 				data.push(new Array());
 				for (let column = 0; column < panel.width / panel.gridSize; column++) {
@@ -31,18 +31,18 @@ class Panel {
 				xpos = 0;
 				ypos += panel.gridSize;
 			}
-		
+
 			let grid = d3.select("#grid")
 				.append("svg")
 				.attr("width", panel.width+2)
 				.attr("height", panel.height+2)
 				.style("border-radius","30px");
-		
+
 			var row = grid.selectAll(".row")
 				.data(data)
 				.enter().append("g")
 				.attr("class", "row");
-		
+
 			row.selectAll(".square")
 				.data(function(d) { return d; })
 				.enter().append("rect")
@@ -56,13 +56,13 @@ class Panel {
 				.style("stroke-width", 0.3)
 				.on('click', function() { panel.onClick(); })
 				.on('mousedown', function() { panel.onMouseDown(); });
-		
+
 			grid.append("g").attr("id", "previewRoom");
 			grid.append("g").attr("id", "previewWall");
 			grid.append("g").attr("id", "rooms");
 			grid.append("g").attr("id", "walls");
 			grid.append("g").attr("id", "corners");
-		
+
 		})(this);
 		document.getElementById("undo_button").addEventListener('click', () => { this.undo(this); });
 		document.getElementById("delete").addEventListener('click', () => { this.delete(this); });
@@ -145,7 +145,7 @@ class Panel {
 			floor.walls.forEach(wall => {
 				if (((wall.corner1.x == this.previewedWall.corner1.x && wall.corner1.y == this.previewedWall.corner1.y) &&
 					 (wall.corner2.x == x && wall.corner2.y == y)) ||
-					((wall.corner2.x == this.previewedWall.corner1.x && wall.corner2.y == this.previewedWall.corner1.y) && 
+					((wall.corner2.x == this.previewedWall.corner1.x && wall.corner2.y == this.previewedWall.corner1.y) &&
 					 (wall.corner1.x == x && wall.corner1.y == y))) {
 					isDrawWall = false;
 				}
@@ -172,7 +172,7 @@ class Panel {
 		this.previewWall(event, this);
 
 	}
-	
+
 	previewWall(event) {
 		let isPreviewWall = false;
 		let targetCorner;
@@ -576,7 +576,7 @@ class Panel {
 			.attr("y2", (d) => { return d.corner2.y; })
 			.attr("stroke-width", (d) => { return d.width; })
 			.exit().remove();
-		
+
 		// previewedWall
 		d3.select("#previewWall")
 			.selectAll(".wall")
@@ -886,7 +886,7 @@ $(document).on('click', '.color-item', () => {
 	let color = event.target.style["background-color"];
 	$('#pickcolor').val(color);
 	$('#pen').css('background-color', color);
-		
+
 	if (isChangingColor) {
 		panel.floor[panel.nowFloor].colors[nowColorIndex] = color;
 		panel.floor[panel.nowFloor].render();
@@ -950,7 +950,38 @@ $(document).on('click', '.round', () => {
 $(document).on('click', '#add_floor', function () {
 	panel.addFloor();
 	$('#pen').css('background-color', "transparent");
-	$("#floor").append(`<div id="floor_animate${panel.floor.length-1}" class="floor" style="position:absolute;z-index:${100-(panel.floor.length-1)}; margin-top:-${12*(panel.floor.length-1)}px"> <img src="./img/floor_1.png"> </div>`)
+	$("#floor").append(`<div id="floor_animate${panel.floor.length-1}" style="position:absolute;z-index:${100-(panel.floor.length-1)}; margin-top:-${12*(panel.floor.length-1)}px"> <img src="./img/floor_1.png"> </div>`)
+});
+var floor_span=0;
+$(document).on('mouseenter', '#floor', function () {
+	//console.log(panel.floor.length);
+	if(!floor_span){
+		for(let i=0;i<panel.floor.length;i+=1){
+				$("#floor_animate"+i).animate({"top":30*(panel.floor.length-i)+"px"},500);
+		 }
+		 floor_span=1;
+	}
+});
+$(document).on('mouseleave', '#floor', function () {
+	if(floor_span){
+		for(let i=0;i<panel.floor.length;i+=1){
+				$("#floor_animate"+i).animate({"top":"0px"},500);
+		 }
+		 floor_span=0;
+	}
+
+
+	console.log("leave");
+});
+$(document).on('mouseover', '#floor_animate0', function () {
+	if(floor_span){
+		console.log("123");/*
+		for(let i=0;i<panel.floor.length;i+=1){
+		 		$("#floor_animate"+i).animate({"top":30*panel.floor.length-30*i+"px"},500;
+				$("#floor_animate"+i).animate({"top":30*panel.floor.length-30*i+"px"},500;
+				margin-top:-${12*(panel.floor.length-1)}px
+		 }*/
+	}
 });
 
 // let open=0;

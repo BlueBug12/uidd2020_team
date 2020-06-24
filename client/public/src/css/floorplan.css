@@ -386,10 +386,14 @@ input.call-picker {
 
 #floor{
   position: absolute;
+  display: block;
+  text-align:center;
+  margin-top: 20px;
+  margin-bottom: 20px;
   left:2vw;
   top:40vh;
   height:200px;
-  width:60px;
+  width:80px;
 }
 
 #add_floor{
