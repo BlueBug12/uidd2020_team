@@ -3,35 +3,39 @@ const mongoose = require('mongoose');
 const TaskSchema = mongoose.Schema({
     content:{ 
         type: String,
-        require:true
     },
     advise:{
-        type:String,
-        require:true
+        type:String
     },
     date:{
-        type:String,
-        require:true
+        type:String
     },
     time:{
-        type:String,
-        require:true
+        type:String
     },
     author:{
-        type:String,
-        require:true
+        type:String
     },
     classcode:{
-        type:String,
-        require:true
+        type:String
     },
     icon:{
-        type:String,
-        require:true
+        type:String
     },
     region:{
-        type:String,
-        require:true
+        type:String
+    },
+    invite:[{
+        id: String,
+    }],
+    participate:[{
+        id: String,
+    }],
+    expired:{
+        type:Number
+    },
+    point:{
+        type:Number
     }
 
 },{collection: 'Tasks'});

@@ -182,3 +182,52 @@ body {
     font-family: GenJyuuGothic-Medium;
     src: url("../../font/GenJyuuGothic-Medium.ttf");
 }
+.mask {
+    background-color: darkgray;
+    opacity: 0.9;
+    z-index: 10;
+    position: absolute;
+    height: 100vh;
+    width: 100vw;
+    visibility: hidden;
+}
+
+.check {
+    position: absolute;
+    margin: 0 auto;
+    top: 50vh;
+    left: 50vw;
+    margin-left: -15vw;
+    margin-top: -15vh;
+    width: 30vw;
+    height: 30vh;
+    background-color: #F7F6E4;
+    z-index: 11;
+    box-shadow: 5px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    visibility: hidden;
+    font-family: GenJyuuGothic-Medium;
+}
+
+.notify {
+    font-size: 3vh;
+}
+
+.alert-mess {
+    font-size: 5vh;
+    text-align: center;
+}
+.checkconfirm {
+    bottom: 1vh;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #4B515F;
+    color: #F7F6E3;
+    height: 12%;
+    width: 35%;
+    border-radius: 20px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+}

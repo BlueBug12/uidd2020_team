@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const Users = require('../models/Users');
+const { db } = require('../models/Users');
+
 
 //Check login
 router.post('/',async(req,res) => {
@@ -71,6 +73,9 @@ router.post('/CheckData',async(req,res) => {
                     }`));
                 }
                 else{
+                    Users.findOneAndUpdate({ account: res2.account }, { icon: req.body.url }, err => {
+                        console.log(err)
+                    });
                     res.send(JSON.parse(`{
                         "first": "false"
                     }`));
