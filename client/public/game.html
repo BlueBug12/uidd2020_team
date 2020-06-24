@@ -81,12 +81,16 @@
                                 <label class="content-label space" for="inputcontent">任務內容</label>
                                 <input type="text" id="inputcontent" name="content" required>
                             </div>
+                            <div class="point">
+                                <label class="point-label space" for="inputpoint">任務積分</label>
+                                <input type="text" id="inputpoint" name="point" required>
+                            </div>
                             <div class="suggest">
                                 <label class="suggest-label space" for="inputsuggest">任務建議</label>
-                                <textarea id="inputsuggest" rows="3" cols="20" name="advise" required></textarea>
+                                <textarea id="inputsuggest" rows="2" cols="20" name="advise" required></textarea>
                             </div>
                             <div class="deadline">
-                                <label class="deadline-date-label space" for="datepicker" >任務期限</label>
+                                <label class="deadline-date-label space" for="datepicker">任務期限</label>
                                 <input type="text" id="datepicker" name="date" required readonly>
                                 <label class="deadline-time-label" for="timepicker"></label>
                                 <input type="text" id="timepicker" name="time" required readonly>
@@ -132,8 +136,7 @@
                                 <span class="white-block DeadlineTime">{{task.remain}}</span>
                             </div>
                             <div class="confirm-solve">
-                                <button type="button" class="btn accept space"  :class="{press : task.missionstate}" v-on:click="missiontoggle(index,0)">接案</button>
-                                <button type="button" class="btn judge space" :class="{press :!task.missionstate}"  v-on:click="missiontoggle(index,1)" > 送出審核</button>
+                                <button type="button" class="btn accept space"  :class="{press : task.missionstate}" v-on:click="accept(index,0)">接案</button>
                             </div>
                         </div>
                     </template>
