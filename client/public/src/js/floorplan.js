@@ -589,7 +589,6 @@ class Panel {
 			.attr("y2", (d) => { return d.corner2.y; })
 			.attr("stroke", "black")
 			.attr("stroke-width", 2)
-			.style("z-index", 0)
 			.style("opacity", 0.5)
 			.on('click', () => { this.drawWall(event, this); });
 		d3.select("#previewWall")
@@ -627,6 +626,27 @@ class Panel {
 			.attr("stroke-width", (d) => { return d.width; })
 			.exit().remove();
 
+		// items
+		let items = "";
+		for (let iter = 0; iter < floor.items.length; ++iter) {
+			let item = floor.items[iter];
+			items += `
+				<img
+					class="item"
+					src="./img/furnish/item/${item.name}.svg"
+					width="${item.width}"
+					height="${item.height}"
+					style="
+						position: absolute;
+						top: calc(${item.y}px - 1vh);
+						left: calc(${item.x}px - 1vw);
+						transform: rotate(${item.rotation}deg);
+					"
+				/>
+			`;
+		}
+		document.getElementById("items").innerHTML = items;
+
 	}
 
 }
@@ -639,6 +659,7 @@ class Floor {
 		this.rooms = [];
 		this.colors = ["#F1BA9C"];
 		this.text = [];
+		this.items = [];
 	}
 
 	addColor(color) {
@@ -652,6 +673,11 @@ class Floor {
 			let value = input[iter].children[0].value;
 			this.text[iter] = value;
 		}
+	}
+
+	addItem(item) {
+		this.items.push(item);
+		panel.render();
 	}
 
 	render() {
@@ -835,6 +861,26 @@ class Area extends Component {
 			this.width = 2;
 		}
 		this.isSelected = !this.isSelected;
+	}
+
+}
+
+class Item extends Component {
+
+	constructor(name, x, y, width, height) {
+		super();
+		this.name = name;
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		this.height = height;
+		this.rotation = 0;
+	}
+
+	move(x, y) {
+		this.x = x;
+		this.y = y;
+		panel.render();
 	}
 
 }
@@ -1024,11 +1070,29 @@ let furnish = ["bed", "chair", "chair2", "desk", "oven", "sink", "sink2", "sink3
 furnish.forEach(ele => {
 	furnishPanel.innerHTML += (`
 		<li class="item_margin">
-			<img src="./img/furnish/icon/${ele}_icon.svg" id="${ele}">
+			<img src="./img/furnish/icon/${ele}_icon.svg" id="${ele}" draggable="false">
 		</li>
 	`);
 });
 
+let icon = document.getElementsByClassName("item_margin");
+for (let iter = 0; iter < icon.length; ++iter) {
+	icon[iter].addEventListener('mousedown', () => {
+		panel.floor[panel.nowFloor].addItem(new Item(event.target.id, event.clientX, event.clientY, 30, 30));
+		let onMouseMove = () => {
+			event.preventDefault();
+			let floor = panel.floor[panel.nowFloor];
+			floor.items[floor.items.length-1].move(event.clientX, event.clientY);
+		};
+		let onMouseUp = () => {
+			document.removeEventListener('mousemove', onMouseMove);
+			document.removeEventListener('mouseup', onMouseUp);
+
+		};
+		document.addEventListener('mousemove', onMouseMove);
+		document.addEventListener('mouseup', onMouseUp);
+	});
+}
 
 document.getElementById("submit").addEventListener('click', async () => {
 	panel.floor[panel.nowFloor].recordText();
