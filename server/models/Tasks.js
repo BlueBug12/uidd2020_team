@@ -26,10 +26,10 @@ const TaskSchema = mongoose.Schema({
         type:String
     },
     invite:[{
-        id: String,
+        type: String,
     }],
     participate:[{
-        id: String,
+        type: String,
     }],
     expired:{
         type:Number
