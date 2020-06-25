@@ -431,6 +431,9 @@ class Panel {
 				if (step.object === "room") {
 					this.floor[step.floor].rooms.pop();
 				}
+				if (step.object === "item") {
+					this.floor[step.floor].items.pop();
+				}
 				if (step.object === "floor") {
 					this.floor.pop();
 					this.nowFloor--;
@@ -461,6 +464,12 @@ class Panel {
 				}
 				if (step.object === "room") {
 					// TODO
+				}
+				if (step.object === "item") {
+					if (step.type === "position") {
+						this.floor[this.nowFloor].items[step.index].x = step.before.x;
+						this.floor[this.nowFloor].items[step.index].y = step.before.y;
+					}
 				}
 			}
 		});
@@ -627,12 +636,43 @@ class Panel {
 			.exit().remove();
 
 		// items
-		let items = "";
+		let onMouseDownItem = () => {
+			let index = parseInt(event.target.id.slice(4));
+			let target = this.floor[this.nowFloor].items[index];
+			let onMouseMove = () => {
+				target.move(event.clientX, event.clientY, 1);
+				removeSelection();
+			};
+			let onMouseUp = () => {
+				document.removeEventListener('mousemove', onMouseMove);
+				document.removeEventListener('mouseup', onMouseUp);
+				target.checkPosition(event.clientX, event.clientY, 1);
+			}
+			document.addEventListener('mousemove', onMouseMove);
+			document.addEventListener('mouseup', onMouseUp);
+			this.steps.push([{
+				operation: "edit",
+				object: "item",
+				floor: panel.nowFloor,
+				type: "position",
+				before: {
+					x: target.x,
+					y: target.y
+				},
+				index: index
+			}]);
+		};
+		let items = document.getElementsByClassName("item");
+		for (let iter = 0; iter < items.length; ++iter) {
+			items[iter].removeEventListener('mousedown', onMouseDownItem);
+		}
+		let itemsContent = "";
 		for (let iter = 0; iter < floor.items.length; ++iter) {
 			let item = floor.items[iter];
-			items += `
+			itemsContent += `
 				<img
 					class="item"
+					id="item${iter}"
 					src="./img/furnish/item/${item.name}.svg"
 					width="${item.width}"
 					height="${item.height}"
@@ -642,10 +682,15 @@ class Panel {
 						left: calc(${item.x}px - 1vw);
 						transform: rotate(${item.rotation}deg);
 					"
+					draggable="false"
 				/>
 			`;
 		}
-		document.getElementById("items").innerHTML = items;
+		document.getElementById("items").innerHTML = itemsContent;
+		items = document.getElementsByClassName("item");
+		for (let iter = 0; iter < items.length; ++iter) {
+			items[iter].addEventListener('mousedown', onMouseDownItem);
+		}
 
 	}
 
@@ -875,12 +920,56 @@ class Item extends Component {
 		this.width = width;
 		this.height = height;
 		this.rotation = 0;
+		this.boundary = {
+			x1: 200,
+			x2: 1280,
+			y1: 200,
+			y2: 700
+		};
 	}
 
-	move(x, y) {
+	move(x, y, isEditting = 0) {
 		this.x = x;
 		this.y = y;
+		if (isEditting) {
+			if (this.x < this.boundary.x1) {
+				this.x = this.boundary.x1;
+			}
+			if (this.x > this.boundary.x2) {
+				this.x = this.boundary.x2;
+			}
+			if (this.y < this.boundary.y1) {
+				this.y = this.boundary.y1;
+			}
+			if (this.y > this.boundary.y2) {
+				this.y = this.boundary.y2;
+			}
+		}
 		panel.render();
+	}
+
+	checkPosition(x, y, isEditting = 0) {
+		let isOutside = false;
+		if (x < this.boundary.x1 || x > this.boundary.x2 || y < this.boundary.y1 || y > this.boundary.y2) {
+			isOutside = true;
+		}
+		if (isEditting) {
+			if (x == panel.steps[panel.steps.length-1].before.x && y == panel.steps[panel.steps.length-1].before.y) {
+				panel.steps.pop();
+				panel.render();
+			}
+		} else {
+			if (isOutside) {
+				panel.floor[panel.nowFloor].items.pop();
+				panel.render();
+			} else {
+				panel.steps.push([{
+					operation: "new",
+					object: "item",
+					floor: panel.nowFloor
+				}]);
+			}
+		}
 	}
 
 }
@@ -1080,14 +1169,15 @@ for (let iter = 0; iter < icon.length; ++iter) {
 	icon[iter].addEventListener('mousedown', () => {
 		panel.floor[panel.nowFloor].addItem(new Item(event.target.id, event.clientX, event.clientY, 30, 30));
 		let onMouseMove = () => {
-			event.preventDefault();
 			let floor = panel.floor[panel.nowFloor];
 			floor.items[floor.items.length-1].move(event.clientX, event.clientY);
+			removeSelection();
 		};
 		let onMouseUp = () => {
 			document.removeEventListener('mousemove', onMouseMove);
 			document.removeEventListener('mouseup', onMouseUp);
-
+			let floor = panel.floor[panel.nowFloor];
+			floor.items[floor.items.length-1].checkPosition(event.clientX, event.clientY);
 		};
 		document.addEventListener('mousemove', onMouseMove);
 		document.addEventListener('mouseup', onMouseUp);
@@ -1175,6 +1265,14 @@ function removeHighlight() {
 	panel.removeRoomHighlight();
 	panel.removeWallHighlight();
 	panel.render();
+}
+
+function removeSelection() {
+	if (document.selection) {
+	  	document.selection.empty();
+	} else {
+	  	window.getSelection().removeAllRanges();
+	}
 }
 
 async function getUser() {
