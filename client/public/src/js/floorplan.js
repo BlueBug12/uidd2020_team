@@ -617,8 +617,16 @@ class Panel {
 			.attr("class", "room")
 			.attr("x", (d) => { return Math.min(d.corner1.x, d.corner2.x); })
 			.attr("y", (d) => { return Math.min(d.corner1.y, d.corner2.y); })
-			.attr("width", (d) => { return Math.abs(d.corner1.x - d.corner2.x); })
-			.attr("height", (d) => { return Math.abs(d.corner1.y - d.corner2.y); })
+			.attr("width", (d) => {
+				return (d.corner1.x < d.corner2.x)
+					? Math.abs(d.corner1.x - d.corner2.x)
+					: (Math.abs(d.corner1.x - d.corner2.x) + this.gridSize);
+			})
+			.attr("height", (d) => {
+				return (d.corner1.y < d.corner2.y)
+					? Math.abs(d.corner1.y - d.corner2.y)
+					: (Math.abs(d.corner1.y - d.corner2.y) + this.gridSize);
+			})
 			.attr("fill", (d) => { return d.color; })
 			.attr("stroke", "black")
 			.attr("stroke-width", 1)
@@ -629,8 +637,16 @@ class Panel {
 			.data(floor.rooms)
 			.attr("x", (d) => { return Math.min(d.corner1.x, d.corner2.x); })
 			.attr("y", (d) => { return Math.min(d.corner1.y, d.corner2.y); })
-			.attr("width", (d) => { return Math.abs(d.corner1.x - d.corner2.x); })
-			.attr("height", (d) => { return Math.abs(d.corner1.y - d.corner2.y); })
+			.attr("width", (d) => {
+				return (d.corner1.x < d.corner2.x)
+					? Math.abs(d.corner1.x - d.corner2.x)
+					: (Math.abs(d.corner1.x - d.corner2.x) + this.gridSize);
+			})
+			.attr("height", (d) => {
+				return (d.corner1.y < d.corner2.y)
+					? Math.abs(d.corner1.y - d.corner2.y)
+					: (Math.abs(d.corner1.y - d.corner2.y) + this.gridSize);
+			})
 			.attr("fill", (d) => { return d.color; })
 			.attr("stroke-width", (d) => { return d.width; })
 			.exit().remove();
