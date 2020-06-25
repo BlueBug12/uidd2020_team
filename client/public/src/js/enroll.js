@@ -78,6 +78,19 @@ function check() {
 
 }
 
+function CheckAccount(){
+    $.post('./users/checkaccount', {
+        account: $('#signin input[name=account]').val().trim()
+    }, (res) => {
+        if(res.enroll === false){
+            error("#account", '此帳號已被註冊');
+        }
+        else{
+            clear();
+        }
+    });
+}
+
 $('#enroll_btn').click((event) => {
     event.preventDefault();
     if (check() == true) {
@@ -95,7 +108,7 @@ $('#enroll_btn').click((event) => {
     }
 
 });
-window.fbAsyncInit = function() {
+/*window.fbAsyncInit = function() {
     FB.init({
         appId: myAppId,
         xfbml: true,
@@ -164,4 +177,4 @@ $(function() {
         });
         //location.href = './join.html';
     });
-});
+});*/
