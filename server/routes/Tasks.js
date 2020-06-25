@@ -16,6 +16,24 @@ router.get('/', async (req,res) => {
 
 });
 
+router.get('/isaccepted',async(req,resup) => {
+    var temp;
+    try {
+        await Tasks.findOne({ "_id":req.query.id}).exec(async (err, res) => {
+            if (err) {
+                console.log('fail to query:', err)
+                return;
+            }
+            else{           
+                temp = (res.participate==null)  ? false : true
+                resup.status(200).send({ isaccepted: temp });
+            }
+        });
+    }catch(err){
+        resup.json({message:err});
+    }
+});
+
 //get specific classcode data
 router.get('/:classcode',async(req,res) => {
     var tasks = [];
@@ -133,4 +151,6 @@ router.post('/participate',async(req,res) => {
     }
     res.status(200).send({ isSuccess: true });
 });
+
+
 module.exports = router;
