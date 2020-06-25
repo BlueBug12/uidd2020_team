@@ -38,15 +38,14 @@ router.get('/:classcode',async(req,res) => {
                                 return;
                             }
                             else{
-                                console.log(build[0]);
-                                console.log(build[0].icon);
                                 item.icon = build[0].icon;
                             } 
                         });
-                        console.log(item._id);
-                        item._id = item._id.toString();
-                        console.log(item._id);
-                        tasks.push(item);
+                        if(item.participate == null)
+                        {
+                            item._id = item._id.toString();
+                            tasks.push(item);
+                        }
                     });
                     await Users.find({ "classcode":req.params.classcode}).exec((err2, member) => {
                         if (err2) {
@@ -59,7 +58,7 @@ router.get('/:classcode',async(req,res) => {
                             }
                             else{
                                 member.forEach(function(item){
-                                    users.push({_id:item._id.toString(),icon:item.icon});
+                                    users.push({_id:item._id.toString(),icon:item.icon,account:item.account});
                                   });
                                   res.send({
                                     task: tasks,
@@ -89,7 +88,8 @@ router.post('/',async(req,res) => {
         icon:req.body.icon,
         region:req.body.region,
         expired:0,
-        point:req.body.point
+        point:req.body.point,
+        participate:null
     });
     try {
         const savePost = await tasks.save();
@@ -100,18 +100,7 @@ router.post('/',async(req,res) => {
 
 });
 router.post('/expired',(req,res) => {
-    console.log(req.body.id);
-    console.log(mongoose.Types.ObjectId(req.body.id));
     var id = mongoose.Types.ObjectId(req.body.id);
-    Tasks.find({ _id:id}).exec(async (err, res2) => {
-        if (err) {
-            console.log('fail to query:', err)
-            return;
-        }
-        else{
-            console.log(res2);
-        }
-    });
     Tasks.findOneAndUpdate({ _id:id}, { expired: 1 }, err => {
         console.log(err);
         if (!err) {
@@ -121,6 +110,7 @@ router.post('/expired',(req,res) => {
         }
     });
 });
+
 router.post('/participate',async(req,res) => {
     try {
         await Tasks.findOne({ "_id":req.body.id}).exec(async (err, res) => {

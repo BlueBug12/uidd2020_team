@@ -31,6 +31,29 @@ router.post('/',async(req,res) => {
     }
 });
 
+//check repeat account
+router.post('/checkaccount',async(req,res) => {
+    try {
+        await Users.findOne({ "account":req.body.account}).exec(async (err, res2) => {
+            if (err) {
+                console.log('fail to query:', err)
+                return;
+            }
+            else{
+                if(res2 === null){
+                    res.status(200).send({ enroll: true });   
+                }
+                else{
+                    res.status(200).send({ enroll: false });
+                }
+            }
+        });
+    }catch(err){
+        res.json({message:err});
+    }
+});
+
+
 //store enroll data
 router.post('/enroll',async(req,res) => {
     const users = new Users({

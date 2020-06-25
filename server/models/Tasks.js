@@ -36,8 +36,10 @@ const TaskSchema = mongoose.Schema({
     },
     point:{
         type:Number
+    },
+    state:{
+        type:Number
     }
-
 },{collection: 'Tasks'});
 
 module.exports = mongoose.model('Tasks',TaskSchema);
