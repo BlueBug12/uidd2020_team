@@ -16,6 +16,7 @@ router.get('/', async (req,res) => {
 
 });
 
+//get whether mission has been accepted
 router.get('/isaccepted',async(req,resup) => {
     var temp;
     try {
