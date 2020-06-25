@@ -124,6 +124,10 @@
                                 <span class="white-block">{{task.advise}}</span>
                             </div>
                             <div class="mission-div">
+                                <label class="mission-text space" >任務積分</label>
+                                <span class="white-block">{{task.point}}</span>
+                            </div>
+                            <div class="mission-div">
                                 <span class="mission-text space">成員邀請</span>
                                 <i class="fa fa-arrow-left" :class="{hide: task.members.length<=4 }" aria-hidden="true" v-on:click="turnleft(index)"></i>
                                 <template v-for="(member,mindex) in task.members" > 

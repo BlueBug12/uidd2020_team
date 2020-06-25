@@ -7,10 +7,36 @@
     font-family: GenJyuuGothic-Light;
     src: url("../../font/GenJyuuGothic-Light.ttf")
 }
+#back {
+    width: 100vw;
+    height: 100vh;
+    background-color: #4b515f;
+    text-align: center;
+}
+.head{
+    margin-top: 4rem;
+    padding-right:22rem;
+    display: inline-block;
+    position: absolute;
+    text-align: center;
+    z-index: 1;
+}
+
+.message{
+    background-color: #f7f6e4;
+    height: 60vh;
+    margin-top: 5.5rem;
+    margin-left: 10rem;
+    display: inline-block;
+    position: absolute;
+    border-radius: 28px;
+    text-align: center;
+}
 .container-fluid {
     padding: 0;
-    background-color: #4B515F;
+    height:100%;
 }
+
 .bannerbutton {
     border-radius: 20px;
     text-decoration: none;

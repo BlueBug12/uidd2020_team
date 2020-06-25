@@ -70,23 +70,31 @@ $(document).ready(function() {
                 for (var i = 0; i < invite_before.length; i++) {
                     invite_after.push(invite_before[i]._id)
                 }
-                console.log(invite_after)
-                $.post('./tasks/participate', {
-                    id: this.tasks[index]._id,
-                    invite: invite_after,
-                    participate: ['test']
-                }, (res) => {
-                    console.log(res);
+
+                $.get('./tasks/isaccepted' , {id:this.tasks[index]._id}, (resup) => {
+                    console.log(resup)
+                    if (resup.isaccepted == true) {
+                        $('.alert-mess').text('任務已被搶走囉!')
+                  
+                    } else {
+                        $.post('./tasks/participate', {
+                            id: this.tasks[index]._id,
+                            invite: invite_after,
+                            participate: ['test']
+                        }, (res) => {
+                            $('.alert-mess').text('任務已接受')
+                        });
+                    }
                     document.getElementById(this.tasks[index].region).classList.remove('border')
                     this.$delete(this.tasks, index)
                     count = this.tasks.length;
                     $('.solve-btn').attr('data-before', count);
                     buttonunable();
                     hrefunable();
-                    $('.alert-mess').text('任務已接受')
                     $('.check').css("visibility", "visible");
-                    $('.mask').css("visibility", "visible");
+                    $('.mask').css("visibility", "visible");   
                 });
+ 
             }
         },
 
@@ -106,6 +114,10 @@ $(document).ready(function() {
                         this.remaintime(0);
                         var reg = document.getElementById(this.tasks[0].region)
                         reg.classList.add('border')
+                    }
+                    else{
+                        this.shows = [];
+                        this.countdown = []
                     }
                 },
             }
@@ -235,7 +247,13 @@ $(document).ready(function() {
             rec_task[i].date = resultdate[i];
             rec_task[i]["remain"] = 0;
             rec_task[i]["missionstate"] = false;
-            rec_task[i]["members"] = rec_user
+            rec_task[i]["members"] = [];
+            for(var k= 0;k < rec_user.length;++k){
+               if(rec_task[i].author != rec_user[k].account){
+                    rec_task[i]["members"][index] = rec_user[k];
+                    index++;
+                }
+            }
             for (var j = 0; j < rec_task[i]["members"].length; j++) {
                 rec_task[i]["members"][j]["on"] = false;
             }
@@ -371,7 +389,7 @@ $(document).ready(function() {
                 classcode: localStorage.getItem("classcode"),
                 icon: document.getElementById("UserImg").src,
                 region: $('.border')[0].id,
-                point: $('#inputpoint').val()
+                point: $('#inputpoint').val(),
             }, (res) => {
                 clear();
                 var j = 0;
@@ -412,16 +430,7 @@ $(document).ready(function() {
             if (resup === "null") {
                 $('#solve_btn').data('0');
             } else {
-                //res 區域和發起人圖片
-                //get group member
-                /*$.get('./users/' + classcode, {}, (res) => {
-                    if (res === "null") {
-                        console.log("123");
-                    } else {
-                        res.forEach(item => console.log(item));
-                        settasks(resup,res);
-                    }
-                });*/
+                console.log(resup);
                 settasks(resup)
             }
         });
