@@ -301,7 +301,7 @@ li {
 
 .right-mission {
     width: 35%;
-    height: 70vh;
+    height: 75vh;
     background-color: #4B515F;
 }
 
@@ -353,7 +353,7 @@ li {
 
 .requestContainer {
     width: 90%;
-    height: 75%;
+    height: 85%;
     padding: 4%;
     margin: auto;
     position: relative;
@@ -378,10 +378,10 @@ li {
     box-shadow: 5px 10px #FFCA28;
 }
 
-.region{
-  position:absolute;
-  left:10%;
-  top:10%;
+.region {
+    position: absolute;
+    left: 10%;
+    top: 10%;
 }
 
 .head {
@@ -390,8 +390,8 @@ li {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size:3vw;
-    color:#EBD864
+    font-size: 3vw;
+    color: #EBD864
 }
 
 .formset {
@@ -416,18 +416,21 @@ li {
     text-align: center;
 }
 
-.content {
+.content,
+.point {
     height: 100%;
     display: flex;
 }
 
-.content-label {
+.content-label,
+.point-label {
     margin-right: 3%;
     align-self: center;
     margin-bottom: 0;
 }
 
-#inputcontent {
+#inputcontent,
+#inputpoint {
     width: 60%;
     height: 100%;
 }
@@ -546,7 +549,7 @@ li {
 .tabPanel .exhibit {
     width: 6.5vw;
     height: 6.5vw;
-    border-radius:50%;
+    border-radius: 50%;
     padding-left: 0rem;
     margin-left: 0.7rem;
 }
@@ -582,7 +585,7 @@ li {
     align-self: center;
 }
 
-.mission-div  img {
+.mission-div img {
     width: 3vw;
     height: 3vw;
 }
@@ -593,17 +596,16 @@ li {
     height: 100%;
 }
 
-
 .member {
     opacity: 0.5;
     border-radius: 50%;
-    display:none;
+    display: none;
 }
 
-.tabContainer .tabPanel .mission-div .member.show{
-  display:block;
-  padding-left: 0rem;
-  margin-left:0.5rem;
+.tabContainer .tabPanel .mission-div .member.show {
+    display: block;
+    padding-left: 0rem;
+    margin-left: 0.5rem;
 }
 
 .member:hover {
@@ -614,16 +616,19 @@ li {
     opacity: 1;
 }
 
-.fa-arrow-left,.fa-arrow-right:hover{
-  cursor:pointer;
+.fa-arrow-left,
+.fa-arrow-right:hover {
+    cursor: pointer;
 }
 
-.fa-arrow-left,.fa-arrow-right{
+.fa-arrow-left,
+.fa-arrow-right {
     align-self: center;
-    display:block;
+    display: block;
 }
 
-.fa-arrow-left.hide,.fa-arrow-right.hide{
+.fa-arrow-left.hide,
+.fa-arrow-right.hide {
     display: none;
 }
 
@@ -649,8 +654,9 @@ li {
     color: #F7F6E3;
     height: 12%;
     width: 35%;
-    box-shadow:1px 1px 3px  rgba(0,0,0,0.53)
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.53)
 }
+
 .accept {
     opacity: 1;
 }
@@ -680,4 +686,3 @@ select {
     text-overflow: '';
     cursor: text;
 }
-

@@ -946,13 +946,19 @@ $(document).on('click', '.round', () => {
 	}
 });
 
+var floor_span=0;
+var current_floor=0;
+addFloorLinstener(current_floor);
 
 $(document).on('click', '#add_floor', function () {
 	panel.addFloor();
 	$('#pen').css('background-color', "transparent");
-	$("#floor").append(`<div id="floor_animate${panel.floor.length-1}" style="position:absolute;z-index:${100-(panel.floor.length-1)}; margin-top:-${12*(panel.floor.length-1)}px"> <img src="./img/floor_1.png"> </div>`)
+	$("#floor").append(`<div id="floor_animate${panel.floor.length-1}" style="position:absolute;z-index:${panel.floor.length}; margin-top:-${12*(panel.floor.length-1)}px"> <img src="./img/floor_1.png"> </div>`);
+	$("#floor_animate"+current_floor).css('z-index',1+current_floor);
+	current_floor+=1;
+	addFloorLinstener(current_floor);
 });
-var floor_span=0;
+
 $(document).on('mouseenter', '#floor', function () {
 	//console.log(panel.floor.length);
 	if(!floor_span){
@@ -969,20 +975,28 @@ $(document).on('mouseleave', '#floor', function () {
 		 }
 		 floor_span=0;
 	}
-
-
-	console.log("leave");
 });
-$(document).on('mouseover', '#floor_animate0', function () {
-	if(floor_span){
-		console.log("123");/*
+
+function addFloorLinstener(floor){
+	$(document).on('mouseenter', `#floor_animate${floor}`, function () {
+		if(floor_span){
+			$(`#floor_animate${floor}`).css('opacity','0.5');
+			panel.switchFloor(floor);
+		}
+	}).on('mouseleave', `#floor_animate${floor}`, function () {
+		$(`#floor_animate${floor}`).css('opacity','1');
+		panel.switchFloor(current_floor);
+	}).on('click', `#floor_animate${floor}`, function () {
+		$("#floor_animate"+current_floor).css('z-index',1+current_floor);
+		panel.switchFloor(floor);
+		current_floor=floor;
+		$("#floor_animate"+current_floor).css('z-index',100);
 		for(let i=0;i<panel.floor.length;i+=1){
-		 		$("#floor_animate"+i).animate({"top":30*panel.floor.length-30*i+"px"},500;
-				$("#floor_animate"+i).animate({"top":30*panel.floor.length-30*i+"px"},500;
-				margin-top:-${12*(panel.floor.length-1)}px
-		 }*/
-	}
-});
+				$("#floor_animate"+i).animate({"top":"0px"},500);
+		 }
+		 floor_span=0;
+	});
+}
 
 // let open=0;
 // $("#floor").hover(function(){
@@ -991,7 +1005,7 @@ $(document).on('mouseover', '#floor_animate0', function () {
 // 		$("#floor_animate"+i).animate({"top":30*current_floor-30*i+"px"},500);
 // 	}
 // });
-
+/*
 $(document).on('click', '#add_floor_button', function () {
 	if (panel.floor[panel.nowFloor+1]) {
 		panel.switchFloor(panel.nowFloor+1);
@@ -1003,7 +1017,7 @@ $(document).on('click', '#sub_floor_button', function () {
 		panel.switchFloor(panel.nowFloor-1);
 	}
 });
-
+*/
 // function updateScroll(){
 //     var element = document.getElementById("color");
 //     element.scrollTop = element.scrollHeight;
