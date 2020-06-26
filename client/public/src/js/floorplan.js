@@ -1106,7 +1106,7 @@ $(document).on('click', '#add_floor', function () {
 	panel.addFloor();
 	$('#pen').css('background-color', "transparent");
 	//$("#floor").append(`<div id="floor_animate${panel.floor.length-1}" style="position:absolute;z-index:${panel.floor.length}; margin-top:-${12*(panel.floor.length-1)}px"> <img src="./img/floor_1.png"> </div>`);
-	$("#floor").append(`<div id="floor_animate${panel.floor.length-1}" class="diamond" style="top:0px;z-index:${panel.floor.length+1}; margin-top:-${12*(panel.floor.length-1)}px">
+	$("#floor").append(`<div id="floor_animate${panel.floor.length-1}" class="diamond" style="top:100px;z-index:${panel.floor.length+1}; margin-top:-${12*(panel.floor.length-1)}px">
 												<div>${panel.floor.length}F</div>
 											</div>`);
 	$("#floor_animate"+current_floor).css('z-index',1+current_floor);
@@ -1118,7 +1118,7 @@ $(document).on('click', '#add_floor', function () {
 $(document).on('mouseenter', '#floor', function () {
 	if(!floor_span && panel.floor.length!=1){
 		for(let i=0;i<panel.floor.length;i+=1){
-				$("#floor_animate"+i).animate({"top":30*(panel.floor.length-i)+"px"},500);
+				$("#floor_animate"+i).animate({"top":30*(panel.floor.length-i)+100+"px"},500);
 		 }
 		 console.log(current_floor);
 		 $(`#floor_animate${current_floor}`).css('background','#F4DF62');
@@ -1127,7 +1127,7 @@ $(document).on('mouseenter', '#floor', function () {
 }).on('mouseleave', '#floor', function () {
 	if(floor_span){
 		for(let i=0;i<panel.floor.length;i+=1){
-				$("#floor_animate"+i).animate({"top":"0px"},500);
+				$("#floor_animate"+i).animate({"top":"100px"},500);
 		 }
 		 console.log("leave "+current_floor);
 
@@ -1157,7 +1157,7 @@ function addFloorLinstener(floor){
 		$("#floor_animate"+current_floor).css('z-index',100).css('background',"#799FB4");
 
 		for(let i=0;i<panel.floor.length;i+=1){
-				$("#floor_animate"+i).animate({"top":"0px"},500);
+				$("#floor_animate"+i).animate({"top":"100px"},500);
 		 }
 		 floor_span=0;
 	});
