@@ -1111,7 +1111,7 @@ $(document).on('click', '#add_floor', function () {
 											</div>`);
 	$("#floor_animate"+current_floor).css('z-index',1+current_floor);
 	$("#floor_animate"+current_floor).css('background','#F4DF62');
-	current_floor+=1;
+	current_floor=panel.floor.length-1;
 	addFloorLinstener(current_floor);
 });
 
