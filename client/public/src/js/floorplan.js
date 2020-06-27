@@ -959,10 +959,10 @@ class Item extends Component {
 		this.height = height;
 		this.rotation = 0;
 		this.boundary = {
-			x1: 200,
-			x2: 1280,
-			y1: 200,
-			y2: 700
+			x1: Math.round(parseInt(window.innerHeight)*0.2),
+			x2: Math.round(parseInt(window.innerHeight)*0.2)+1100-30,
+			y1: Math.round(parseInt(window.innerHeight)*0.96)-520,
+			y2: Math.round(parseInt(window.innerHeight)*0.96)-15
 		};
 	}
 
@@ -1172,9 +1172,31 @@ furnish.forEach(ele => {
 });
 
 let icon = document.getElementsByClassName("item_margin");
+/*
+var size_list = {
+	'bed':50,
+	'chair':30,
+	'chair2':30,
+	'desk':50,
+	'oven':30,
+	'sink':40,
+	'sink2':40,
+	'sink3':40,
+	'sink4':40,
+	'sink5':40,
+	'sofa':60,
+	'table':60,
+	'toilet':50};*/
+
 for (let iter = 0; iter < icon.length; ++iter) {
 	icon[iter].addEventListener('mousedown', () => {
+<<<<<<< Updated upstream
 		panel.floor[panel.nowFloor].addItem(new Item(event.target.id, event.clientX, event.clientY));
+=======
+		//console.log(size_list[event.target.id]);
+		//console.log(event.target.id);
+		panel.floor[panel.nowFloor].addItem(new Item(event.target.id, event.clientX, event.clientY, 30, 30));
+>>>>>>> Stashed changes
 		let onMouseMove = () => {
 			let floor = panel.floor[panel.nowFloor];
 			floor.items[floor.items.length-1].move(event.clientX, event.clientY);
