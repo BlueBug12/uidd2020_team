@@ -112,11 +112,13 @@ class Panel {
 		this.floor[this.nowFloor].recordText();
 		$(`#floor_animate${this.nowFloor}`).css({
 			"z-index": this.nowFloor+1,
-			background: "#F4DF62"
+			background: "#F4DF62",
+			transition: "0s"
 		});
 		$(`#floor_animate${floorNum}`).css({
 			"z-index": 100,
-			background: "#799FB4"
+			background: "#799FB4",
+			transition: "0s"
 		});
 		this.nowFloor = floorNum;
 		this.floor[this.nowFloor].render();
@@ -459,7 +461,7 @@ class Panel {
 				if (step.object === "floor") {
 					this.floor.pop();
 					this.nowFloor--;
-					// document.getElementsByClassName("floor")[document.getElementsByClassName("floor").length-1].remove();
+					document.getElementsByClassName("diamond")[document.getElementsByClassName("diamond").length-1].remove();
 				}
 			}
 			if (step.operation === "delete") {
