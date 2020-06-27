@@ -1192,13 +1192,7 @@ var size_list = {
 
 for (let iter = 0; iter < icon.length; ++iter) {
 	icon[iter].addEventListener('mousedown', () => {
-<<<<<<< Updated upstream
 		panel.floor[panel.nowFloor].addItem(new Item(event.target.id, event.clientX, event.clientY));
-=======
-		//console.log(size_list[event.target.id]);
-		//console.log(event.target.id);
-		panel.floor[panel.nowFloor].addItem(new Item(event.target.id, event.clientX, event.clientY, 30, 30));
->>>>>>> Stashed changes
 		let onMouseMove = () => {
 			let floor = panel.floor[panel.nowFloor];
 			floor.items[floor.items.length-1].move(event.clientX, event.clientY);
