@@ -84,6 +84,20 @@ class Panel {
 	addFloor() {
 		this.mode = "line";
 		this.floor.push(new Floor());
+		$("#floor").append(`
+			<div
+				id="floor_animate${this.floor.length-1}"
+				class="diamond"
+				style="
+					top: 100px;
+					z-index: ${this.floor.length};
+					margin-top: -${12*(this.floor.length-1)}px;
+				"
+			>
+				<div>${this.floor.length}F</div>
+			</div>
+		`);
+		addFloorListener(this.floor.length - 1)
 		this.switchFloor(this.floor.length - 1);
 		this.steps.push([{
 			operation: "new",
@@ -96,6 +110,14 @@ class Panel {
 		panel.removeRoomHighlight();
 		panel.removeWallHighlight();
 		this.floor[this.nowFloor].recordText();
+		$(`#floor_animate${this.nowFloor}`).css({
+			"z-index": this.nowFloor+1,
+			background: "#F4DF62"
+		});
+		$(`#floor_animate${floorNum}`).css({
+			"z-index": 100,
+			background: "#799FB4"
+		});
 		this.nowFloor = floorNum;
 		this.floor[this.nowFloor].render();
 		this.render();
@@ -437,7 +459,7 @@ class Panel {
 				if (step.object === "floor") {
 					this.floor.pop();
 					this.nowFloor--;
-					document.getElementsByClassName("floor")[document.getElementsByClassName("floor").length-1].remove();
+					// document.getElementsByClassName("floor")[document.getElementsByClassName("floor").length-1].remove();
 				}
 			}
 			if (step.operation === "delete") {
@@ -928,7 +950,7 @@ class Area extends Component {
 
 class Item extends Component {
 
-	constructor(name, x, y, width, height) {
+	constructor(name, x, y, width= 30, height = 30) {
 		super();
 		this.name = name;
 		this.x = x;
@@ -1098,75 +1120,44 @@ $(document).on('click', '.round', () => {
 	}
 });
 
-var floor_span=0;
-var current_floor=0;
-addFloorLinstener(current_floor);
 
-$(document).on('click', '#add_floor', function () {
+$(document).on('click', "#add_floor", function () {
 	panel.addFloor();
-	$('#pen').css('background-color', "transparent");
-	//$("#floor").append(`<div id="floor_animate${panel.floor.length-1}" style="position:absolute;z-index:${panel.floor.length}; margin-top:-${12*(panel.floor.length-1)}px"> <img src="./img/floor_1.png"> </div>`);
-	$("#floor").append(`<div id="floor_animate${panel.floor.length-1}" class="diamond" style="top:100px;z-index:${panel.floor.length+1}; margin-top:-${12*(panel.floor.length-1)}px">
-												<div>${panel.floor.length}F</div>
-											</div>`);
-	$("#floor_animate"+current_floor).css('z-index',1+current_floor);
-	$("#floor_animate"+current_floor).css('background','#F4DF62');
-	current_floor=panel.floor.length-1;
-	addFloorLinstener(current_floor);
+	$("#pen").css("background-color", "transparent");
 });
 
-$(document).on('mouseenter', '#floor', function () {
-	if(!floor_span && panel.floor.length!=1){
-		for(let i=0;i<panel.floor.length;i+=1){
-				$("#floor_animate"+i).animate({"top":30*(panel.floor.length-i)+100+"px"},500);
-		 }
-		 console.log(current_floor);
-		 $(`#floor_animate${current_floor}`).css('background','#F4DF62');
-		 floor_span=1;
+let floor_span = 0;
+let current_floor = 0;
+let onMouseEnterFloor = () => {
+	for (let iter = 0; iter < panel.floor.length; ++iter) {
+		$(`#floor_animate${iter}`).css({ transition: "0.5s" });
+		$(`#floor_animate${iter}`).css({ top: (30*(panel.floor.length-iter-1)+100)+"px" });
 	}
-}).on('mouseleave', '#floor', function () {
-	if(floor_span){
-		for(let i=0;i<panel.floor.length;i+=1){
-				$("#floor_animate"+i).animate({"top":"100px"},500);
-		 }
-		 console.log("leave "+current_floor);
-
-
-		 $(`#floor_animate${current_floor}`).css('background','#799FB4');
-		 floor_span=0;
-	}
-});
-
-function addFloorLinstener(floor){
-	$(document).on('mouseenter', `#floor_animate${floor}`, function () {
-		if(floor_span){
-			$(`#floor_animate${floor}`).css('background','#799FB4');
-			panel.switchFloor(floor);
-		}
-	}).on('mouseleave', `#floor_animate${floor}`, function () {
-		if(floor_span){
-			$(`#floor_animate${floor}`).css('background','#F4DF62');
-			//$("#floor_animate"+current_floor).css('background',"#799FB4");
-		}
+	floor_span = 1;
+	current_floor = panel.nowFloor;
+};
+let onMouseLeaveFloor = () => {
+	if (floor_span) {
 		panel.switchFloor(current_floor);
-	}).on('click', `#floor_animate${floor}`, function () {
-		floor_span=0;
-		$("#floor_animate"+current_floor).css('z-index',1+current_floor).css('background','#F4DF62');
-		panel.switchFloor(floor);
-		current_floor=floor;
-		$("#floor_animate"+current_floor).css('z-index',100).css('background',"#799FB4");
+		floor_span = 0;
+	}
+	for (let iter = 0; iter < panel.floor.length; ++iter) {
+		$(`#floor_animate${iter}`).css({ transition: "0.5s" });
+		$(`#floor_animate${iter}`).css({ top: "100px" });
+	}
+};
+document.getElementById("floor").addEventListener('mouseenter', onMouseEnterFloor);
+document.getElementById("floor").addEventListener('mouseleave', onMouseLeaveFloor);
 
-		for(let i=0;i<panel.floor.length;i+=1){
-				$("#floor_animate"+i).animate({"top":"100px"},500);
-		 }
-		 floor_span=0;
+function addFloorListener(floor) {
+	$(document).on('mouseenter', `#floor_animate${floor}`, function () {
+		if (floor_span) panel.switchFloor(floor);
+	}).on('click', `#floor_animate${floor}`, function () {
+		floor_span = 0;
+		onMouseLeaveFloor();
 	});
 }
-
-// function updateScroll(){
-//     var element = document.getElementById("color");
-//     element.scrollTop = element.scrollHeight;
-// }
+addFloorListener(0);
 
 
 let furnishPanel = document.getElementsByClassName("column_2")[0];
@@ -1183,7 +1174,7 @@ furnish.forEach(ele => {
 let icon = document.getElementsByClassName("item_margin");
 for (let iter = 0; iter < icon.length; ++iter) {
 	icon[iter].addEventListener('mousedown', () => {
-		panel.floor[panel.nowFloor].addItem(new Item(event.target.id, event.clientX, event.clientY, 30, 30));
+		panel.floor[panel.nowFloor].addItem(new Item(event.target.id, event.clientX, event.clientY));
 		let onMouseMove = () => {
 			let floor = panel.floor[panel.nowFloor];
 			floor.items[floor.items.length-1].move(event.clientX, event.clientY);
