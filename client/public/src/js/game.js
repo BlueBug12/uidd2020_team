@@ -77,7 +77,7 @@ $(document).ready(function() {
                     participate: [{id:localStorage.account,state:1}]
                 }, (res) => {
                     console.log(res);
-
+                });
                 $.get('./tasks/isaccepted' , {id:this.tasks[index]._id}, (resup) => {
                     console.log(resup)
                     if (resup.isaccepted == true) {
@@ -255,11 +255,7 @@ $(document).ready(function() {
             rec_task[i]["remain"] = 0;
             rec_task[i]["missionstate"] = false;
             rec_task[i]["members"] = [];
-<<<<<<< HEAD
-            index=0;
-=======
             index = 0;
->>>>>>> 81ca9f3b687ec94d85932c36297e0a65a05c6327
             for(var k= 0;k < rec_user.length;++k){
                if(rec_task[i].author != rec_user[k].account){
                     rec_task[i]["members"][index] = rec_user[k];
