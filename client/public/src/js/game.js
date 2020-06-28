@@ -478,6 +478,7 @@ $(document).ready(function() {
 function getUser() {
     var account = localStorage.getItem("account");
     $.get('./users/find/' + account, {}, (res) => {
+        console.log(res);
         document.getElementById("UserImg").src = res.icon;
         localStorage.setItem("classcode", res.classcode);
     });

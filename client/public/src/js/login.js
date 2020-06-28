@@ -77,7 +77,7 @@ $("#fb_btn").click(async function() {
     await new Promise((resolve, reject) => {
         FB.getLoginStatus(async function(response) {
             if (response.authResponse) {
-                await new Promise(resolve1 => {
+                new Promise(resolve1 => {
                     FB.api('/me', { fields: 'id,name,email' }, function(response) {
                         localStorage.setItem("account", response.id);
                         account = response.id;

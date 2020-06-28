@@ -153,7 +153,6 @@ router.post('/participate',async(req,res) => {
     res.status(200).send({ isSuccess: true });
 });
 
-<<<<<<< HEAD
 router.post('/progress',async(req,res) => {
     try {
         console.log(req.body.account);
@@ -170,7 +169,39 @@ router.post('/progress',async(req,res) => {
         res.json({message:err});
     }
 });
-=======
->>>>>>> 81ca9f3b687ec94d85932c36297e0a65a05c6327
+
+router.post('/invite',async(req,res) => {
+    try {
+        console.log(req.body.account);
+        await Tasks.find({ "participate.id": req.body.account,"participate.state": 1}).exec(async (err, res2) => {
+            if (err) {
+                console.log('fail to query:', err)
+                return;
+            }
+            else{
+                res.send(res2);
+            }
+        });
+    }catch(err){
+        res.json({message:err});
+    }
+});
+
+router.post('/progress',async(req,res) => {
+    try {
+        console.log(req.body.account);
+        await Tasks.find({ "participate.id": req.body.account,"participate.state": 1}).exec(async (err, res2) => {
+            if (err) {
+                console.log('fail to query:', err)
+                return;
+            }
+            else{
+                res.send(res2);
+            }
+        });
+    }catch(err){
+        res.json({message:err});
+    }
+});
 
 module.exports = router;
