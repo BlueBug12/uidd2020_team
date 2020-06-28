@@ -102,7 +102,7 @@ class Panel {
 		this.steps.push([{
 			operation: "new",
 			object: "floor",
-			floor: this.nowFloor
+			floor: this.floor.length-2
 		}]);
 	}
 
@@ -444,7 +444,9 @@ class Panel {
 		let lastStep = this.steps.pop();
 		if (!lastStep) return;
 		lastStep.forEach(step => {
-			this.nowFloor = step.floor;
+			if (this.nowFloor != step.floor) {
+				this.switchFloor(step.floor);
+			}
 			if (step.operation === "new") {
 				if (step.object === "wall") {
 					this.floor[step.floor].walls.pop();
@@ -460,7 +462,6 @@ class Panel {
 				}
 				if (step.object === "floor") {
 					this.floor.pop();
-					this.nowFloor--;
 					document.getElementsByClassName("diamond")[document.getElementsByClassName("diamond").length-1].remove();
 				}
 			}
