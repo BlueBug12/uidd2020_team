@@ -1239,6 +1239,12 @@ document.getElementById("submit").addEventListener('click', async () => {
 			delete target.isSelected;
 			newFloor.rooms.push(target);
 		});
+		floor.items.forEach(item => {
+			let target = Object.assign({}, item);
+			delete target.boundary;
+			delete target.isSelected;
+			newFloor.items.push(target);
+		});
 		floorplan.push(newFloor);
 	});
 	/*
