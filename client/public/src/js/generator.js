@@ -1,21 +1,109 @@
-(async function genPanel(floor) {
-    const gridSize = 20;
-    let data = await fetch('/readFloorplan', {
-        body: JSON.stringify({ account: localStorage.getItem("account") }),
-        headers: {
-            "Content-Type": "application/json"
-        },
-        method: 'POST'
-    }).then(res => {
-        return res.json();
-    });
+const gridSize = 20;
+let floorplan;
+let floor_span = 0;
+let current_floor = 0;
+(async () => {
+
+    await (async function getFloorplan() {
+        let data = await fetch('/readFloorplan', {
+            body: JSON.stringify({ account: localStorage.getItem("account") }),
+            headers: {
+                "Content-Type": "application/json"
+            },
+            method: 'POST'
+        }).then(res => {
+            return res.json();
+        });
+        floorplan = data.floorplan;
+    })();
+    
+    genPanel(current_floor);
+    
+})();
+
+let onMouseEnterFloor = () => {
+    for (let iter = 0; iter < floorplan.length; ++iter) {
+        $(`#floor_animate${iter}`).css({ transition: "0.5s" });
+        $(`#floor_animate${iter}`).css({ top: `calc(${30*(floorplan.length-iter-1)}px + 50vh)` });
+    }
+    floor_span = 1;
+};
+let onMouseLeaveFloor = () => {
+    for (let iter = 0; iter < floorplan.length; ++iter) {
+        $(`#floor_animate${iter}`).css({ transition: "0.5s" });
+        $(`#floor_animate${iter}`).css({ top: "50vh" });
+    }
+    if (floor_span) {
+        floor_span = 0;
+        genPanel(current_floor);
+    }
+};
+document.getElementById("floors").addEventListener('mouseenter', onMouseEnterFloor);
+document.getElementById("floors").addEventListener('mouseleave', onMouseLeaveFloor);
+
+function genPanel(floor) {
+
+    if (!floor_span) {
+        let floors = document.getElementById("floors");
+        let content = "";
+        for (let iter = 0; iter < floorplan.length; ++iter) {
+            content += `
+                <div
+                    id="floor_animate${iter}"
+                    class="diamond"
+                    style="
+                        top: 50vh;
+                        z-index: ${(iter == floor)? 100: (iter+1)};
+                        margin-top: -${12*iter}px;
+                        background: ${(iter == floor)? "#799FB4": "#C4D5D9"}
+                    "
+                >
+                    <div>${iter+1}F</div>
+                </div>
+            `;
+        }
+        floors.innerHTML = content;
+        for (let iter = 0; iter < floorplan.length; ++iter) {
+            $(document).on('mouseenter', `#floor_animate${iter}`, function () {
+                if (floor_span) {
+                    genPanel(iter);
+                    $(`#floor_animate${iter}`).css({
+                        transition: "0s",
+                        background: "#799FB4"
+                    });
+                }
+            }).on('click', `#floor_animate${iter}`, function () {
+                floor_span = 0;
+                current_floor = iter;
+                for (let i = 0; i < floorplan.length; ++i) {
+                    $(`#floor_animate${i}`).css({
+                        transition: "0s",
+                        "z-index": i+1
+                    });
+                }
+                $(`#floor_animate${iter}`).css({
+                    transition: "0s",
+                    "z-index": 100
+                });
+                onMouseLeaveFloor();
+            });
+        }
+    } else {
+        for (let iter = 0; iter < floorplan.length; ++iter) {
+            $(`#floor_animate${iter}`).css({
+                transition: "0s",
+                background: "#C4D5D9"
+            });
+        }
+    }
 
     let data_point = [];
-    let walls = data.floorplan[floor].walls;
-    let corners = data.floorplan[floor].corners;
+    let walls = floorplan[floor].walls;
+    let corners = floorplan[floor].corners;
     walls = walls? walls: [];
     corners = corners? corners: [];
 
+    document.getElementById("floorplan").innerHTML = "";
     let line = d3.svg.line()
         .x(function(d) {
             return d.x;
@@ -52,7 +140,7 @@
             fill: "#F7F6E4"
         });
 
-    let rooms = data.floorplan[floor].rooms;
+    let rooms = floorplan[floor].rooms;
     rooms = rooms? rooms: [];
     rooms.forEach((room, key) => {
         svg.append("rect")
@@ -77,7 +165,7 @@
             }).text(room.text);
     });
         
-    let items = data.floorplan[floor].items;
+    let items = floorplan[floor].items;
     items = items? items: [];
     items.forEach(item => {
         svg.append("image")
@@ -119,13 +207,7 @@
                 var text = '#'+ choose_region+'text'
                 $('.head').html('<i class="fa fa-map-marker" aria-hidden="true"></i>'+$(text).text())
             }
-
-
-
-
-
-
         })
     }
     
-})(0);
+}
