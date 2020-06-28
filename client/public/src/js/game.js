@@ -378,25 +378,25 @@ $(document).ready(function() {
 
     function houseworktype(content){
         if(content.includes('洗碗')){
-            return 'https://luffy.ee.ncku.edu.tw:2222/img/housework/bowl.svg'
+            return 'https://luffy.ee.ncku.edu.tw:2222/img/housework/bowl.png'
         }
         else if (content.includes('垃圾')){
-            return 'https://luffy.ee.ncku.edu.tw:2222/img/housework/garbage.svg'       
+            return 'https://luffy.ee.ncku.edu.tw:2222/img/housework/garbage.png'       
         }
         else if (content.includes('衣服')){
-            return 'https://luffy.ee.ncku.edu.tw:2222/img/housework/cloth.svg'       
+            return 'https://luffy.ee.ncku.edu.tw:2222/img/housework/cloth.png'       
         }
         else if (content.includes('掃地')){
-            return 'https://luffy.ee.ncku.edu.tw:2222/img/housework/sweep.svg'       
+            return 'https://luffy.ee.ncku.edu.tw:2222/img/housework/sweep.png'       
         }
         else if (content.includes('拖地')){
-            return 'https://luffy.ee.ncku.edu.tw:2222/img/housework/mop.svg'       
+            return 'https://luffy.ee.ncku.edu.tw:2222/img/housework/mop.png'       
         }
         else if (content.includes('廁所')){
-            return 'https://luffy.ee.ncku.edu.tw:2222/img/housework/toilet.svg'       
+            return 'https://luffy.ee.ncku.edu.tw:2222/img/housework/toilet.png'       
         }
         else{
-            return 'https://luffy.ee.ncku.edu.tw:2222/img/housework/share.svg'
+            return 'https://luffy.ee.ncku.edu.tw:2222/img/housework/share.png'
         }
 
 
@@ -406,10 +406,8 @@ $(document).ready(function() {
         event.preventDefault();
         if (check() == true) {
             housework = houseworktype($('#addTasks input[name=content]').val())
-            console.log(typeof housework)
-            console.log(housework)
             $.post('./tasks', {
-                contnt: $('#addTasks input[name=content]').val(),
+                content: $('#addTasks input[name=content]').val(),
                 advise: $('#addTasks textarea[name=advise]').val(),
                 date: $('#addTasks input[name=date]').val(),
                 time: $('#addTasks input[name=time]').val(),
