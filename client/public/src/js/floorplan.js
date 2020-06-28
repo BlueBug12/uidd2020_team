@@ -84,6 +84,20 @@ class Panel {
 	addFloor() {
 		this.mode = "line";
 		this.floor.push(new Floor());
+		$("#floor").append(`
+			<div
+				id="floor_animate${this.floor.length-1}"
+				class="diamond"
+				style="
+					top: 100px;
+					z-index: ${this.floor.length};
+					margin-top: -${12*(this.floor.length-1)}px;
+				"
+			>
+				<div>${this.floor.length}F</div>
+			</div>
+		`);
+		addFloorListener(this.floor.length - 1)
 		this.switchFloor(this.floor.length - 1);
 		this.steps.push([{
 			operation: "new",
@@ -96,6 +110,16 @@ class Panel {
 		panel.removeRoomHighlight();
 		panel.removeWallHighlight();
 		this.floor[this.nowFloor].recordText();
+		$(`#floor_animate${this.nowFloor}`).css({
+			"z-index": this.nowFloor+1,
+			background: "#F4DF62",
+			transition: "0s"
+		});
+		$(`#floor_animate${floorNum}`).css({
+			"z-index": 100,
+			background: "#799FB4",
+			transition: "0s"
+		});
 		this.nowFloor = floorNum;
 		this.floor[this.nowFloor].render();
 		this.render();
@@ -431,10 +455,13 @@ class Panel {
 				if (step.object === "room") {
 					this.floor[step.floor].rooms.pop();
 				}
+				if (step.object === "item") {
+					this.floor[step.floor].items.pop();
+				}
 				if (step.object === "floor") {
 					this.floor.pop();
 					this.nowFloor--;
-					document.getElementsByClassName("floor")[document.getElementsByClassName("floor").length-1].remove();
+					document.getElementsByClassName("diamond")[document.getElementsByClassName("diamond").length-1].remove();
 				}
 			}
 			if (step.operation === "delete") {
@@ -461,6 +488,12 @@ class Panel {
 				}
 				if (step.object === "room") {
 					// TODO
+				}
+				if (step.object === "item") {
+					if (step.type === "position") {
+						this.floor[this.nowFloor].items[step.index].x = step.before.x;
+						this.floor[this.nowFloor].items[step.index].y = step.before.y;
+					}
 				}
 			}
 		});
@@ -589,7 +622,6 @@ class Panel {
 			.attr("y2", (d) => { return d.corner2.y; })
 			.attr("stroke", "black")
 			.attr("stroke-width", 2)
-			.style("z-index", 0)
 			.style("opacity", 0.5)
 			.on('click', () => { this.drawWall(event, this); });
 		d3.select("#previewWall")
@@ -609,8 +641,16 @@ class Panel {
 			.attr("class", "room")
 			.attr("x", (d) => { return Math.min(d.corner1.x, d.corner2.x); })
 			.attr("y", (d) => { return Math.min(d.corner1.y, d.corner2.y); })
-			.attr("width", (d) => { return Math.abs(d.corner1.x - d.corner2.x); })
-			.attr("height", (d) => { return Math.abs(d.corner1.y - d.corner2.y); })
+			.attr("width", (d) => {
+				return (d.corner1.x < d.corner2.x)
+					? Math.abs(d.corner1.x - d.corner2.x)
+					: (Math.abs(d.corner1.x - d.corner2.x) + this.gridSize);
+			})
+			.attr("height", (d) => {
+				return (d.corner1.y < d.corner2.y)
+					? Math.abs(d.corner1.y - d.corner2.y)
+					: (Math.abs(d.corner1.y - d.corner2.y) + this.gridSize);
+			})
 			.attr("fill", (d) => { return d.color; })
 			.attr("stroke", "black")
 			.attr("stroke-width", 1)
@@ -621,11 +661,76 @@ class Panel {
 			.data(floor.rooms)
 			.attr("x", (d) => { return Math.min(d.corner1.x, d.corner2.x); })
 			.attr("y", (d) => { return Math.min(d.corner1.y, d.corner2.y); })
-			.attr("width", (d) => { return Math.abs(d.corner1.x - d.corner2.x); })
-			.attr("height", (d) => { return Math.abs(d.corner1.y - d.corner2.y); })
+			.attr("width", (d) => {
+				return (d.corner1.x < d.corner2.x)
+					? Math.abs(d.corner1.x - d.corner2.x)
+					: (Math.abs(d.corner1.x - d.corner2.x) + this.gridSize);
+			})
+			.attr("height", (d) => {
+				return (d.corner1.y < d.corner2.y)
+					? Math.abs(d.corner1.y - d.corner2.y)
+					: (Math.abs(d.corner1.y - d.corner2.y) + this.gridSize);
+			})
 			.attr("fill", (d) => { return d.color; })
 			.attr("stroke-width", (d) => { return d.width; })
 			.exit().remove();
+
+		// items
+		let onMouseDownItem = () => {
+			let index = parseInt(event.target.id.slice(4));
+			let target = this.floor[this.nowFloor].items[index];
+			let onMouseMove = () => {
+				target.move(event.clientX, event.clientY, 1);
+				removeSelection();
+			};
+			let onMouseUp = () => {
+				document.removeEventListener('mousemove', onMouseMove);
+				document.removeEventListener('mouseup', onMouseUp);
+				target.checkPosition(event.clientX, event.clientY, 1);
+			}
+			document.addEventListener('mousemove', onMouseMove);
+			document.addEventListener('mouseup', onMouseUp);
+			this.steps.push([{
+				operation: "edit",
+				object: "item",
+				floor: panel.nowFloor,
+				type: "position",
+				before: {
+					x: target.x,
+					y: target.y
+				},
+				index: index
+			}]);
+		};
+		let items = document.getElementsByClassName("item");
+		for (let iter = 0; iter < items.length; ++iter) {
+			items[iter].removeEventListener('mousedown', onMouseDownItem);
+		}
+		let itemsContent = "";
+		for (let iter = 0; iter < floor.items.length; ++iter) {
+			let item = floor.items[iter];
+			itemsContent += `
+				<img
+					class="item"
+					id="item${iter}"
+					src="./img/furnish/item/${item.name}.svg"
+					width="${item.width}"
+					height="${item.height}"
+					style="
+						position: absolute;
+						top: calc(${item.y}px - 1vh);
+						left: calc(${item.x}px - 1vw);
+						transform: rotate(${item.rotation}deg);
+					"
+					draggable="false"
+				/>
+			`;
+		}
+		document.getElementById("items").innerHTML = itemsContent;
+		items = document.getElementsByClassName("item");
+		for (let iter = 0; iter < items.length; ++iter) {
+			items[iter].addEventListener('mousedown', onMouseDownItem);
+		}
 
 	}
 
@@ -639,6 +744,7 @@ class Floor {
 		this.rooms = [];
 		this.colors = ["#F1BA9C"];
 		this.text = [];
+		this.items = [];
 	}
 
 	addColor(color) {
@@ -652,6 +758,11 @@ class Floor {
 			let value = input[iter].children[0].value;
 			this.text[iter] = value;
 		}
+	}
+
+	addItem(item) {
+		this.items.push(item);
+		panel.render();
 	}
 
 	render() {
@@ -839,6 +950,70 @@ class Area extends Component {
 
 }
 
+class Item extends Component {
+
+	constructor(name, x, y, width= 30, height = 30) {
+		super();
+		this.name = name;
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		this.height = height;
+		this.rotation = 0;
+		this.boundary = {
+			x1: Math.round(parseInt(window.innerHeight)*0.2),
+			x2: Math.round(parseInt(window.innerHeight)*0.2)+1100-30,
+			y1: Math.round(parseInt(window.innerHeight)*0.96)-520,
+			y2: Math.round(parseInt(window.innerHeight)*0.96)-15
+		};
+	}
+
+	move(x, y, isEditting = 0) {
+		this.x = x;
+		this.y = y;
+		if (isEditting) {
+			if (this.x < this.boundary.x1) {
+				this.x = this.boundary.x1;
+			}
+			if (this.x > this.boundary.x2) {
+				this.x = this.boundary.x2;
+			}
+			if (this.y < this.boundary.y1) {
+				this.y = this.boundary.y1;
+			}
+			if (this.y > this.boundary.y2) {
+				this.y = this.boundary.y2;
+			}
+		}
+		panel.render();
+	}
+
+	checkPosition(x, y, isEditting = 0) {
+		let isOutside = false;
+		if (x < this.boundary.x1 || x > this.boundary.x2 || y < this.boundary.y1 || y > this.boundary.y2) {
+			isOutside = true;
+		}
+		if (isEditting) {
+			if (x == panel.steps[panel.steps.length-1].before.x && y == panel.steps[panel.steps.length-1].before.y) {
+				panel.steps.pop();
+				panel.render();
+			}
+		} else {
+			if (isOutside) {
+				panel.floor[panel.nowFloor].items.pop();
+				panel.render();
+			} else {
+				panel.steps.push([{
+					operation: "new",
+					object: "item",
+					floor: panel.nowFloor
+				}]);
+			}
+		}
+	}
+
+}
+
 const panel = new Panel();
 panel.floor[0].render();
 
@@ -856,6 +1031,7 @@ document.getElementById("place_furnish").addEventListener('click', () => {
 	$('#place_furnish').css({"opacity": 1});
 	$('#draw_map').css({"opacity": 0.5});
 });
+
 
 const colorList = ['F1BA9C','F5A96B','F8C780','D4C793','C7DF93','669A7D','9ED5D2','7DBEDF','C4D5D9','A889AD','D788AD','A9A696',
 				   'D57456','E0742D','EBAB4B','A1986E','81863A','365545','388185','0F4867','384851','715D75','4F3239','696758'];
@@ -946,82 +1122,92 @@ $(document).on('click', '.round', () => {
 	}
 });
 
-var floor_span=0;
-var current_floor=0;
-addFloorLinstener(current_floor);
 
-$(document).on('click', '#add_floor', function () {
+$(document).on('click', "#add_floor", function () {
 	panel.addFloor();
-	$('#pen').css('background-color', "transparent");
-	$("#floor").append(`<div id="floor_animate${panel.floor.length-1}" style="position:absolute;z-index:${panel.floor.length}; margin-top:-${12*(panel.floor.length-1)}px"> <img src="./img/floor_1.png"> </div>`);
-	$("#floor_animate"+current_floor).css('z-index',1+current_floor);
-	current_floor+=1;
-	addFloorLinstener(current_floor);
+	$("#pen").css("background-color", "transparent");
 });
 
-$(document).on('mouseenter', '#floor', function () {
-	//console.log(panel.floor.length);
-	if(!floor_span){
-		for(let i=0;i<panel.floor.length;i+=1){
-				$("#floor_animate"+i).animate({"top":30*(panel.floor.length-i)+"px"},500);
-		 }
-		 floor_span=1;
+let floor_span = 0;
+let current_floor = 0;
+let onMouseEnterFloor = () => {
+	for (let iter = 0; iter < panel.floor.length; ++iter) {
+		$(`#floor_animate${iter}`).css({ transition: "0.5s" });
+		$(`#floor_animate${iter}`).css({ top: (30*(panel.floor.length-iter-1)+100)+"px" });
 	}
-});
-$(document).on('mouseleave', '#floor', function () {
-	if(floor_span){
-		for(let i=0;i<panel.floor.length;i+=1){
-				$("#floor_animate"+i).animate({"top":"0px"},500);
-		 }
-		 floor_span=0;
-	}
-});
-
-function addFloorLinstener(floor){
-	$(document).on('mouseenter', `#floor_animate${floor}`, function () {
-		if(floor_span){
-			$(`#floor_animate${floor}`).css('opacity','0.5');
-			panel.switchFloor(floor);
-		}
-	}).on('mouseleave', `#floor_animate${floor}`, function () {
-		$(`#floor_animate${floor}`).css('opacity','1');
+	floor_span = 1;
+	current_floor = panel.nowFloor;
+};
+let onMouseLeaveFloor = () => {
+	if (floor_span) {
 		panel.switchFloor(current_floor);
+		floor_span = 0;
+	}
+	for (let iter = 0; iter < panel.floor.length; ++iter) {
+		$(`#floor_animate${iter}`).css({ transition: "0.5s" });
+		$(`#floor_animate${iter}`).css({ top: "100px" });
+	}
+};
+document.getElementById("floor").addEventListener('mouseenter', onMouseEnterFloor);
+document.getElementById("floor").addEventListener('mouseleave', onMouseLeaveFloor);
+
+function addFloorListener(floor) {
+	$(document).on('mouseenter', `#floor_animate${floor}`, function () {
+		if (floor_span) panel.switchFloor(floor);
 	}).on('click', `#floor_animate${floor}`, function () {
-		$("#floor_animate"+current_floor).css('z-index',1+current_floor);
-		panel.switchFloor(floor);
-		current_floor=floor;
-		$("#floor_animate"+current_floor).css('z-index',100);
-		for(let i=0;i<panel.floor.length;i+=1){
-				$("#floor_animate"+i).animate({"top":"0px"},500);
-		 }
-		 floor_span=0;
+		floor_span = 0;
+		onMouseLeaveFloor();
 	});
 }
+addFloorListener(0);
 
-// let open=0;
-// $("#floor").hover(function(){
-// 	console.log("hello")
-// 	for(let i=0;i<=current_floor;i+=1){
-// 		$("#floor_animate"+i).animate({"top":30*current_floor-30*i+"px"},500);
-// 	}
-// });
+
+let furnishPanel = document.getElementsByClassName("column_2")[0];
+let furnish = ["bed", "chair", "chair2", "desk", "oven", "sink", "sink2", "sink3", "sink4", "sink5",
+			   "sofa", "table", "toilet"];
+furnish.forEach(ele => {
+	furnishPanel.innerHTML += (`
+		<li class="item_margin">
+			<img src="./img/furnish/icon/${ele}_icon.svg" id="${ele}" draggable="false">
+		</li>
+	`);
+});
+
+let icon = document.getElementsByClassName("item_margin");
 /*
-$(document).on('click', '#add_floor_button', function () {
-	if (panel.floor[panel.nowFloor+1]) {
-		panel.switchFloor(panel.nowFloor+1);
-	}
-});
+var size_list = {
+	'bed':50,
+	'chair':30,
+	'chair2':30,
+	'desk':50,
+	'oven':30,
+	'sink':40,
+	'sink2':40,
+	'sink3':40,
+	'sink4':40,
+	'sink5':40,
+	'sofa':60,
+	'table':60,
+	'toilet':50};*/
 
-$(document).on('click', '#sub_floor_button', function () {
-	if (panel.floor[panel.nowFloor-1]) {
-		panel.switchFloor(panel.nowFloor-1);
-	}
-});
-*/
-// function updateScroll(){
-//     var element = document.getElementById("color");
-//     element.scrollTop = element.scrollHeight;
-// }
+for (let iter = 0; iter < icon.length; ++iter) {
+	icon[iter].addEventListener('mousedown', () => {
+		panel.floor[panel.nowFloor].addItem(new Item(event.target.id, event.clientX, event.clientY));
+		let onMouseMove = () => {
+			let floor = panel.floor[panel.nowFloor];
+			floor.items[floor.items.length-1].move(event.clientX, event.clientY);
+			removeSelection();
+		};
+		let onMouseUp = () => {
+			document.removeEventListener('mousemove', onMouseMove);
+			document.removeEventListener('mouseup', onMouseUp);
+			let floor = panel.floor[panel.nowFloor];
+			floor.items[floor.items.length-1].checkPosition(event.clientX, event.clientY);
+		};
+		document.addEventListener('mousemove', onMouseMove);
+		document.addEventListener('mouseup', onMouseUp);
+	});
+}
 
 document.getElementById("submit").addEventListener('click', async () => {
 	panel.floor[panel.nowFloor].recordText();
@@ -1052,6 +1238,12 @@ document.getElementById("submit").addEventListener('click', async () => {
 			delete target.width;
 			delete target.isSelected;
 			newFloor.rooms.push(target);
+		});
+		floor.items.forEach(item => {
+			let target = Object.assign({}, item);
+			delete target.boundary;
+			delete target.isSelected;
+			newFloor.items.push(target);
 		});
 		floorplan.push(newFloor);
 	});
@@ -1104,6 +1296,14 @@ function removeHighlight() {
 	panel.removeRoomHighlight();
 	panel.removeWallHighlight();
 	panel.render();
+}
+
+function removeSelection() {
+	if (document.selection) {
+	  	document.selection.empty();
+	} else {
+	  	window.getSelection().removeAllRanges();
+	}
 }
 
 async function getUser() {

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const TaskSchema = mongoose.Schema({
-    content:{ 
+    contnt:{ 
         type: String,
     },
     advise:{
@@ -38,7 +38,9 @@ const TaskSchema = mongoose.Schema({
     point:{
         type:Number
     },
-    
+    housework:{
+        type:String
+    }
 },{collection: 'Tasks'});
 
 module.exports = mongoose.model('Tasks',TaskSchema);

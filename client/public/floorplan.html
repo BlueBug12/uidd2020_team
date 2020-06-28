@@ -19,7 +19,6 @@
 
   <body onload="getUser()">
       <div class="container-fluid">
-
           <div class="banner">
               <div class="nav-bg">
                   <nav class="navbar " id="navbar">
@@ -41,7 +40,7 @@
               </div>
           </div>
       </div>
-
+      <div id="items"></div>
       <div id="background">
         <div id="mode_bar">
           <div id="draw_map">
@@ -55,10 +54,13 @@
         <div id="add_floor">
           <img src="./img/add_floor.png" >
         </div>
+
         <div id="floor">
-          <div id="floor_animate0" style="position:absolute;z-index:1;">
-            <img src="./img/floor_1.png">
+
+          <div id="floor_animate0" class="diamond" style="top:100px;z-index:1">
+            <div>1F</div>
           </div>
+
         </div>
 
         <div id="canvas">
@@ -94,57 +96,16 @@
             </ul>
             <div id="color" >
               <ul class="color_list" id="color_list"></ul>
+            </div>
           </div>
-        </div>
-        <div id="place_furnish_mode">
-          <div id="furnish">
-            <ul class="column_2">
-              <li class="item_margin">
-                <img src="./img/furnish/icon/bed_icon.svg" id="bathtub_img">
-              </li>
-              <li class="item_margin">
-                <img src="./img/furnish/icon/chair_icon.svg" id="chair_img">
-              </li>
-              <li class="item_margin">
-                <img src="./img/furnish/icon/chair2_icon.svg" id="door_img">
-              </li>
-              <li class="item_margin">
-                <img src="./img/furnish/icon/desk_icon.svg" id="sink_img">
-              </li>
-              <li class="item_margin">
-                <img src="./img/furnish/icon/oven_icon.svg" id="toilet.img">
-              </li>
-              <li class="item_margin">
-                <img src="./img/furnish/icon/sink_icon.svg" id="sink_img">
-              </li>
-              <li class="item_margin">
-                <img src="./img/furnish/icon/sink2_icon.svg" id="toilet.img">
-              </li>
-              <li class="item_margin">
-                <img src="./img/furnish/icon/sink3_icon.svg" id="toilet.img">
-              </li>
-              <li class="item_margin">
-                <img src="./img/furnish/icon/sink4_icon.svg" id="toilet.img">
-              </li>
-              <li class="item_margin">
-                <img src="./img/furnish/icon/sink5_icon.svg" id="toilet.img">
-              </li>
-              <li class="item_margin">
-                <img src="./img/furnish/icon/sofa_icon.svg" id="toilet.img">
-              </li>
-              <li class="item_margin">
-                <img src="./img/furnish/icon/table_icon.svg" id="toilet.img">
-              </li>
-              <li class="item_margin">
-                <img src="./img/furnish/icon/toilet_icon.svg" id="toilet.img">
-              </li>
-            </ul>
+          <div id="place_furnish_mode">
+            <div id="furnish">
+              <ul class="column_2"></ul>
+            </div>
           </div>
+          <div id="submit">送出</div>
         </div>
-        <div id="submit">送出</div>
       </div>
-
-    </div>
 
 
     <script src="./src/js/color.js" type="text/javascript"></script>

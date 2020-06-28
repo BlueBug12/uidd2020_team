@@ -10,8 +10,14 @@ const FloorplanSchema = new Schema({
             y: Number
         }],
         walls: [{
-            corner1: { id: String },
-            corner2: { id: String }
+            corner1: {
+                x: Number,
+                y: Number
+            },
+            corner2: {
+                x: Number,
+                y: Number
+            }
         }],
         rooms: [{
             text: String,
@@ -26,7 +32,12 @@ const FloorplanSchema = new Schema({
             }
         }],
         items: [{
-
+            name: String,
+            x: Number,
+            y: Number,
+            width: Number,
+            height: Number,
+            rotation: Number
         }]
     }]
 });
