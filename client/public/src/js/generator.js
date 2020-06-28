@@ -102,7 +102,7 @@
             choose_region = e.target.id;
             var j = 0;
             prevDiv = null
-            while(temp = document.getElementById("room"+j)){ 
+            while(temp = document.getElementById("room"+j)){
                 if(temp.classList.contains('border')){
                     prevDiv = "room"+j
                 }
@@ -114,15 +114,15 @@
                 $('.head').html('<i class="fa fa-map-marker" aria-hidden="true"></i>任務地點');
             }
             else if(prevDiv == null){
-                document.getElementById(choose_region).classList.add('border')    
+                document.getElementById(choose_region).classList.add('border')
                 var text = '#'+ choose_region+'text'
-                $('.head').html('<i class="fa fa-map-marker" aria-hidden="true"></i>'+$(text).text())           
+                $('.head').html('<i class="fa fa-map-marker" aria-hidden="true"></i>'+$(text).text())
             }
             else{
                 document.getElementById(prevDiv).classList.remove('border')
-                document.getElementById(choose_region).classList.add('border')          
+                document.getElementById(choose_region).classList.add('border')
                 var text = '#'+ choose_region+'text'
-                $('.head').html('<i class="fa fa-map-marker" aria-hidden="true"></i>'+$(text).text())     
+                $('.head').html('<i class="fa fa-map-marker" aria-hidden="true"></i>'+$(text).text())
             }
 
 
