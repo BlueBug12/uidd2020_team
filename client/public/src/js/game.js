@@ -70,17 +70,7 @@ $(document).ready(function() {
                 for (var i = 0; i < invite_before.length; i++) {
                     invite_after.push(invite_before[i].account)
                 }
-                console.log(invite_after)
-<<<<<<< HEAD
-=======
-                $.post('./tasks/participate', {
-                    id: this.tasks[index]._id,
-                    invite: invite_after,
-                    participate: [{id:localStorage.account,state:1}]
-                }, (res) => {
-                    console.log(res);
-                });
->>>>>>> ac6f5739424c37a1af285cf3d34896fcd7da1b1d
+                console.log(invite_after);
                 $.get('./tasks/isaccepted' , {id:this.tasks[index]._id}, (resup) => {
                     console.log(resup)
                     if (resup.isaccepted == true) {
@@ -256,11 +246,7 @@ $(document).ready(function() {
             rec_task[i]["remain"] = 0;
             rec_task[i]["missionstate"] = false;
             rec_task[i]["members"] = [];
-<<<<<<< HEAD
             index=0;
-=======
-            index = 0;
->>>>>>> ac6f5739424c37a1af285cf3d34896fcd7da1b1d
             for(var k= 0;k < rec_user.length;++k){
                if(rec_task[i].author != rec_user[k].account){
                     rec_task[i]["members"][index] = rec_user[k];
