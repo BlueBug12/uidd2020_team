@@ -3,43 +3,32 @@ const { Schema } = mongoose;
 
 const FloorplanSchema = new Schema({
     class: String,
-    floorplan: [{
+    floorplan: {
         corners: [{
             id: String,
             x: Number,
             y: Number
         }],
         walls: [{
-            corner1: {
-                x: Number,
-                y: Number
-            },
-            corner2: {
-                x: Number,
-                y: Number
-            }
+            corner1: { id: String },
+            corner2: { id: String }
         }],
         rooms: [{
             text: String,
             color: String,
-            corner1: {
+            start: {
                 x: Number,
                 y: Number
             },
-            corner2: {
+            end: {
                 x: Number,
                 y: Number
             }
         }],
         items: [{
-            name: String,
-            x: Number,
-            y: Number,
-            width: Number,
-            height: Number,
-            rotation: Number
+
         }]
-    }]
+    }
 });
 
 mongoose.model('Floorplan', FloorplanSchema);

@@ -68,16 +68,9 @@ $(document).ready(function() {
                 })
                 var invite_after = []
                 for (var i = 0; i < invite_before.length; i++) {
-                    invite_after.push(invite_before[i]._id)
+                    invite_after.push(invite_before[i].account)
                 }
                 console.log(invite_after)
-                $.post('./tasks/participate', {
-                    id: this.tasks[index]._id,
-                    invite: invite_after,
-                    participate: [{id:localStorage.account,state:1}]
-                }, (res) => {
-                    console.log(res);
-
                 $.get('./tasks/isaccepted' , {id:this.tasks[index]._id}, (resup) => {
                     console.log(resup)
                     if (resup.isaccepted == true) {
@@ -87,7 +80,7 @@ $(document).ready(function() {
                         $.post('./tasks/participate', {
                             id: this.tasks[index]._id,
                             invite: invite_after,
-                            participate: ['test']
+                            participate: [{id:localStorage.account,state:1}]
                         }, (res) => {
                             $('.alert-mess').text('任務已接受')
                         });
@@ -101,10 +94,8 @@ $(document).ready(function() {
                     $('.check').css("visibility", "visible");
                     $('.mask').css("visibility", "visible");   
                 });
- 
             }
         },
-
         watch: {
             tasks: {
                 handler() {
@@ -255,11 +246,7 @@ $(document).ready(function() {
             rec_task[i]["remain"] = 0;
             rec_task[i]["missionstate"] = false;
             rec_task[i]["members"] = [];
-<<<<<<< HEAD
             index=0;
-=======
-            index = 0;
->>>>>>> 81ca9f3b687ec94d85932c36297e0a65a05c6327
             for(var k= 0;k < rec_user.length;++k){
                if(rec_task[i].author != rec_user[k].account){
                     rec_task[i]["members"][index] = rec_user[k];
@@ -478,7 +465,6 @@ $(document).ready(function() {
 function getUser() {
     var account = localStorage.getItem("account");
     $.get('./users/find/' + account, {}, (res) => {
-        console.log(res);
         document.getElementById("UserImg").src = res.icon;
         localStorage.setItem("classcode", res.classcode);
     });
