@@ -74,7 +74,7 @@ $(document).ready(function() {
                 $.post('./tasks/participate', {
                     id: this.tasks[index]._id,
                     invite: invite_after,
-                    participate: ['test']
+                    participate: [{id:localStorage.account,state:1}]
                 }, (res) => {
                     console.log(res);
                     document.getElementById(this.tasks[index].region).classList.remove('border')
@@ -236,6 +236,7 @@ $(document).ready(function() {
             rec_task[i]["remain"] = 0;
             rec_task[i]["missionstate"] = false;
             rec_task[i]["members"] = [];
+            index=0;
             for(var k= 0;k < rec_user.length;++k){
                if(rec_task[i].author != rec_user[k].account){
                     rec_task[i]["members"][index] = rec_user[k];
