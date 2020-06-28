@@ -15,8 +15,13 @@ $(document).ready(function() {
             e.target.classList.add('active');
         });
     }
-
-});
+    $( function() {
+      $( "#datepicker" ).datepicker({
+        showOtherMonths: true,
+        selectOtherMonths: true
+      });
+    });
+  });
 
 function getUser() {
     var account = localStorage.getItem("account");
