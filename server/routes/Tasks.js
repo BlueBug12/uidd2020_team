@@ -133,4 +133,22 @@ router.post('/participate',async(req,res) => {
     }
     res.status(200).send({ isSuccess: true });
 });
+
+router.post('/progress',async(req,res) => {
+    try {
+        console.log(req.body.account);
+        await Tasks.find({ "participate.id": req.body.account,"participate.state": 1}).exec(async (err, res2) => {
+            if (err) {
+                console.log('fail to query:', err)
+                return;
+            }
+            else{
+                res.send(res2);
+            }
+        });
+    }catch(err){
+        res.json({message:err});
+    }
+});
+
 module.exports = router;
