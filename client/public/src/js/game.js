@@ -68,9 +68,19 @@ $(document).ready(function() {
                 })
                 var invite_after = []
                 for (var i = 0; i < invite_before.length; i++) {
-                    invite_after.push(invite_before[i]._id)
+                    invite_after.push(invite_before[i].account)
                 }
-
+                console.log(invite_after)
+<<<<<<< HEAD
+=======
+                $.post('./tasks/participate', {
+                    id: this.tasks[index]._id,
+                    invite: invite_after,
+                    participate: [{id:localStorage.account,state:1}]
+                }, (res) => {
+                    console.log(res);
+                });
+>>>>>>> ac6f5739424c37a1af285cf3d34896fcd7da1b1d
                 $.get('./tasks/isaccepted' , {id:this.tasks[index]._id}, (resup) => {
                     console.log(resup)
                     if (resup.isaccepted == true) {
@@ -80,7 +90,7 @@ $(document).ready(function() {
                         $.post('./tasks/participate', {
                             id: this.tasks[index]._id,
                             invite: invite_after,
-                            participate: ['test']
+                            participate: [{id:localStorage.account,state:1}]
                         }, (res) => {
                             $('.alert-mess').text('任務已接受')
                         });
@@ -94,10 +104,8 @@ $(document).ready(function() {
                     $('.check').css("visibility", "visible");
                     $('.mask').css("visibility", "visible");   
                 });
- 
             }
         },
-
         watch: {
             tasks: {
                 handler() {
@@ -248,6 +256,11 @@ $(document).ready(function() {
             rec_task[i]["remain"] = 0;
             rec_task[i]["missionstate"] = false;
             rec_task[i]["members"] = [];
+<<<<<<< HEAD
+            index=0;
+=======
+            index = 0;
+>>>>>>> ac6f5739424c37a1af285cf3d34896fcd7da1b1d
             for(var k= 0;k < rec_user.length;++k){
                if(rec_task[i].author != rec_user[k].account){
                     rec_task[i]["members"][index] = rec_user[k];
@@ -375,11 +388,36 @@ $(document).ready(function() {
 
     }
 
+    function houseworktype(content){
+        if(content.includes('洗碗')){
+            return 'https://luffy.ee.ncku.edu.tw:2222/img/housework/bowl.png'
+        }
+        else if (content.includes('垃圾')){
+            return 'https://luffy.ee.ncku.edu.tw:2222/img/housework/garbage.png'       
+        }
+        else if (content.includes('衣服')){
+            return 'https://luffy.ee.ncku.edu.tw:2222/img/housework/cloth.png'       
+        }
+        else if (content.includes('掃地')){
+            return 'https://luffy.ee.ncku.edu.tw:2222/img/housework/sweep.png'       
+        }
+        else if (content.includes('拖地')){
+            return 'https://luffy.ee.ncku.edu.tw:2222/img/housework/mop.png'       
+        }
+        else if (content.includes('廁所')){
+            return 'https://luffy.ee.ncku.edu.tw:2222/img/housework/toilet.png'       
+        }
+        else{
+            return 'https://luffy.ee.ncku.edu.tw:2222/img/housework/share.png'
+        }
 
+
+    }
 
     $('#task_btn').click((event) => {
         event.preventDefault();
         if (check() == true) {
+            housework = houseworktype($('#addTasks input[name=content]').val())
             $.post('./tasks', {
                 content: $('#addTasks input[name=content]').val(),
                 advise: $('#addTasks textarea[name=advise]').val(),
@@ -390,6 +428,7 @@ $(document).ready(function() {
                 icon: document.getElementById("UserImg").src,
                 region: $('.border')[0].id,
                 point: $('#inputpoint').val(),
+                housework: housework
             }, (res) => {
                 clear();
                 var j = 0;

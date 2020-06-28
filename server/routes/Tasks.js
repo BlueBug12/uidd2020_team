@@ -138,6 +138,7 @@ router.post('/participate',async(req,res) => {
                 return;
             }
             else{
+
                 res.invite = req.body.invite;
                 res.participate = req.body.participate;
                 res.save(function (err) {
@@ -154,4 +155,53 @@ router.post('/participate',async(req,res) => {
 });
 
 
+router.post('/invite',async(req,res) => {
+    try {
+        await Tasks.find({"invite":  req.body.account}).exec(async (err, res2) => {
+            if (err) {
+                console.log('fail to query:', err)
+                return;
+            }
+            else{
+                res.send(res2);
+            }
+        });
+    }catch(err){
+        res.json({message:err});
+    }
+});
+
+router.post('/progress',async(req,res) => {
+    try {
+        await Tasks.find({ "participate.id": req.body.account,"participate.state": 1}).exec(async (err, res2) => {
+            if (err) {
+                console.log('fail to query:', err)
+                return;
+            }
+            else{
+                res.send(res2);
+            }
+        });
+    }catch(err){
+        res.json({message:err});
+    }
+});
+
+router.post('/changestate',async(req,res)=>{
+    try {
+        await Tasks.updateOne({ "_id":req.body.id,"participate.id":req.body.account},{'$set': {
+            'participate.$.state': req.body.state}}, function(err) {
+            if (err) {
+                console.log('fail to query:', err)
+                return;
+            }
+            else{
+                res.status(200).send({ isSuccess: true });
+            }
+        });
+    }catch(err){
+        res.json({message:err});
+    }
+    
+})
 module.exports = router;
