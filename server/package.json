@@ -17,5 +17,8 @@
     "mongo-express": "^0.54.0",
     "mongoose": "^5.9.12",
     "nodemon": "^2.0.3"
+  },
+  "devDependencies": {
+    "pm2": "^4.4.0"
   }
 }
