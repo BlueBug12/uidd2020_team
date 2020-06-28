@@ -194,6 +194,7 @@ li {
   border-color:#799FB4;
   border-style:solid;
   border-width:2px;
+  cursor: pointer;
 }
 
 #mydata{
@@ -414,9 +415,10 @@ div#signin div#logo img {
   margin-left:30%;
   font-size:1.5em;
   font-family:GenJyuuGothic-Medium;
-  background:#D0D9DC;
-  color:#4B515F;
+  background:#799FB4;
+  color:#F7F6E4;
   text-align:center;
+  cursor: pointer;
 }
 
 #datepicker{
@@ -434,6 +436,7 @@ div#signin div#logo img {
   border-style: solid;
   border-width: 17.5px 0 17.5px 20px;
   border-color: transparent transparent transparent #789fb3;
+  cursor: pointer;
 }
 .anti-triangle{
   position:absolute;
@@ -444,6 +447,7 @@ div#signin div#logo img {
   border-style: solid;
   border-width: 17.5px 20px 17.5px 0;
   border-color: transparent #789fb3 transparent transparent ;
+  cursor: pointer;
 }
 .menubar{
 
@@ -459,7 +463,7 @@ div#signin div#logo img {
  z-index:10;
  text-align:center;
  visibility:hidden;
-
+ cursor: pointer;
 }
 #bar1{
   position: absolute;
@@ -474,25 +478,146 @@ div#signin div#logo img {
   right:90px;
 }
 
-#upload_img{
-  position: absolute;
-  border-radius: 2px;
-  width:20vw;
-  height:10vh;
 
-}
 
 #upload_img{
   position: absolute;
   border-radius:20px;
   padding-top: 10px;
   right:15%;
-  bottom:20%;
+  bottom:10%;
   width:10%;
   height:10%;
-  background:white;
-
+  background:#799FB4;
+  color:#F7F6E4;
   font-size: 1.1em;
   font-family:GenJyuuGothic-Medium;
   text-align: center;
+  cursor: pointer;
+}
+
+#img_post{
+  position: absolute;
+  right:14%;
+  bottom:35%;
+}
+
+
+
+
+
+@import url(//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css);
+@font-face {
+  font-family: 'Source Code Pro';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Source Code Pro Regular'), local('SourceCodePro-Regular'), url(https://fonts.gstatic.com/s/sourcecodepro/v11/HI_SiYsKILxRpg3hIP6sJ7fM7PqlPevT.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Source Code Pro';
+  font-style: normal;
+  font-weight: 500;
+  src: local('Source Code Pro Medium'), local('SourceCodePro-Medium'), url(https://fonts.gstatic.com/s/sourcecodepro/v11/HI_XiYsKILxRpg3hIP6sJ7fM7PqtzsjDs-cv.ttf) format('truetype');
+}
+@-webkit-keyframes roll {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0;
+    -webkit-transform: translate(-150%, -50%) rotate(-90deg) scale(0.3);
+            transform: translate(-150%, -50%) rotate(-90deg) scale(0.3);
+    box-shadow: none;
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: translate(-50%, -50%) rotate(0deg) scale(1);
+            transform: translate(-50%, -50%) rotate(0deg) scale(1);
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+  }
+}
+
+.wrapper {
+
+  position: fixed;
+  left: 68%;
+  top: 56%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  padding: 25px;
+  background: #16a085;
+  border-radius: 50%;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+}
+.wrapper #img-result {
+  cursor: pointer;
+  margin: 0;
+  position: relative;
+  background: #1abc9c;
+  background-size: cover;
+  background-position: center;
+  display: block;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+
+  color: rgba(0, 0, 0, 0);
+
+}
+.wrapper #img-result.no-image:before {
+  font-family: 'FontAwesome';
+  content: "\f030";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  color: #fff;
+  font-size: 48px;
+  opacity: 0.8;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  text-shadow: 0 0px 5px rgba(0, 0, 0, 0.4);
+}
+.wrapper button {
+  margin-top: 20px;
+  display: block;
+  font-family: 'Open Sans Condensed', sans-serif;
+  background: #1abc9c;
+  width: 100%;
+  border: none;
+  color: #fff;
+  padding: 10px;
+  letter-spacing: 1.3px;
+  font-size: 1.05em;
+  border-radius: 5px;
+  
+  outline: 0;
+
+}
+.wrapper button:active {
+  box-shadow: none;
+  margin-top: 24px;
+  padding: 8px;
+}
+.show-button {
+  background: #264974;
+  border: none;
+  color: #fff;
+  padding: 10px 20px;
+  float: right;
+  display: none;
+}
+.upload-result {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  overflow-y: auto;
+}
+.upload-result__content {
+  word-break: break-all;
+  font-family: 'Source Code Pro';
+  overflow-wrap: break-word;
 }

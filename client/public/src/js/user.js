@@ -21,13 +21,55 @@ $(document).ready(function() {
         selectOtherMonths: true
       });
     });
+    (function () {//upload img file
+      var uploader = document.createElement('input'),
+        image = document.getElementById('img-result');
+
+      uploader.type = 'file';
+      uploader.accept = 'image/*';
+
+      image.onclick = function() {
+        uploader.click();
+      }
+
+      uploader.onchange = function() {
+        var reader = new FileReader();
+        reader.onload = function(evt) {
+          image.classList.remove('no-image');
+          image.style.backgroundImage = 'url(' + evt.target.result + ')';
+          var request = {
+            itemtype: 'test 1',
+            brand: 'test 2',
+            images: [{
+              data: evt.target.result
+            }]
+          };
+
+          document.querySelector('.show-button').style.display = 'block';
+          document.querySelector('.upload-result__content').innerHTML = JSON.stringify(request, null, '  ');
+        }
+        reader.readAsDataURL(uploader.files[0]);
+      }
+
+      document.querySelector('.hide-button').onclick = function () {
+        document.querySelector('.upload-result').style.display = 'none';
+      };
+
+      document.querySelector('.show-button').onclick = function () {
+        document.querySelector('.upload-result').style.display = 'block';
+      };
+    })();
 
     $(document).on('mouseenter', '#send_button', function () {
-      $(this).css('background','#799FB4').css('color','#F7F6E4');
+      $(this).css('background','#D0D9DC').css('color','#4B515F');
   	}).on('mouseleave', '#send_button', function () {
-      $(this).css('background','#D0D9DC').css('color','black');
+      $(this).css('background','#799FB4').css('color','#F7F6E4');
   	});
-
+    $(document).on('mouseenter', '#upload_img', function () {
+      $(this).css('background','#D0D9DC').css('color','#4B515F');
+    }).on('mouseleave', '#upload_img', function () {
+      $(this).css('background','#799FB4').css('color','#F7F6E4');
+    });
     $(document).on('mouseenter', '#switch_data', function () {
       $(this).css('opacity',0.75);
   	}).on('mouseleave', '#switch_data', function () {
@@ -69,6 +111,7 @@ $(document).ready(function() {
         document.getElementById('data_bar').textContent='我的足跡';
         $('#left_data').css('visibility','hidden');
         $('#upload_img').css('visibility','hidden');
+        $('#img_post').css('visibility','hidden');
         document.getElementById('switch_data').classList.remove('triangle');
         document.getElementById('switch_data').classList.add('anti-triangle');
         tri=1;
@@ -77,6 +120,7 @@ $(document).ready(function() {
         document.getElementById('data_bar').textContent='我的檔案';
         $('#left_data').css('visibility','visible');
         $('#upload_img').css('visibility','visible');
+        $('#img_post').css('visibility','visible');
         document.getElementById('switch_data').classList.remove('anti-triangle');
         document.getElementById('switch_data').classList.add('triangle');
         tri=0;
