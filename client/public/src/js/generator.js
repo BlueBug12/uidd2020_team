@@ -1,4 +1,4 @@
-(async function genPanel() {
+(async function genPanel(floor) {
     const gridSize = 20;
     let data = await fetch('/readFloorplan', {
         body: JSON.stringify({ account: localStorage.getItem("account") }),
@@ -9,12 +9,14 @@
     }).then(res => {
         return res.json();
     });
-    var data_point = [];
-    var walls = data.floorplan.walls;
-    var corners = data.floorplan.corners;
 
+    let data_point = [];
+    let walls = data.floorplan[floor].walls;
+    let corners = data.floorplan[floor].corners;
+    walls = walls? walls: [];
+    corners = corners? corners: [];
 
-    var line = d3.svg.line()
+    let line = d3.svg.line()
         .x(function(d) {
             return d.x;
         })
@@ -22,78 +24,71 @@
             return d.y;
         })
         .interpolate('linear-closed');
-    var svg = d3.select('#floorplan')
-        .append('svg')
+    let svg = d3.select("#floorplan")
+        .append("svg")
         .attr({
-            'position': 'absolute',
-            'width': "100%",
-            'height': "100%"
+            position: "absolute",
+            width: "100%",
+            height: "100%"
         });
-    data_point = []
-    for (let i = 0; i < walls.length; ++i) {
-        let corner1, corner2;
-        corners.forEach(corner => {
-            if (corner.id === walls[i].corner1.id) {
-                corner1 = Object.assign({}, corner);
-            };
-            if (corner.id === walls[i].corner2.id) {
-                corner2 = Object.assign({}, corner);
-            }
+        
+    walls.forEach(wall => {
+        data_point.push({
+            x: wall.corner1.x - 100,
+            y: wall.corner1.y
         });
         data_point.push({
-            x: corner1.x - 100,
-            y: corner1.y
+            x: wall.corner2.x - 100,
+            y: wall.corner2.y
         });
-        data_point.push({
-            x: corner2.x - 100,
-            y: corner2.y
-        });
-    }
-    svg.append('path')
+    });
+    svg.append("path")
         .attr({
-            'position': 'absolute',
-            'd': line(data_point),
-            'y': 0,
-            'stroke': '#F7F6E4',
-            'stroke-width': '5px',
-            'fill': '#F7F6E4'
+            position: "absolute",
+            d: line(data_point),
+            y: 0,
+            stroke: "#F7F6E4",
+            "stroke-width": "5px",
+            fill: "#F7F6E4"
         });
 
-    var rooms = data.floorplan.rooms;
-    for (var i = 0; i < rooms.length; ++i) {
-        svg.append('rect')
+    let rooms = data.floorplan[floor].rooms;
+    rooms = rooms? rooms: [];
+    rooms.forEach((room, key) => {
+        svg.append("rect")
             .attr({
-                'id': "room"+i,
-                'fill': rooms[i].color,
-                'width': Math.abs(rooms[i].start.x-rooms[i].end.x)+gridSize,
-                'height': Math.abs(rooms[i].start.y-rooms[i].end.y)+gridSize,
-                'x': Math.min(rooms[i].start.x, rooms[i].end.x) - 100,
-                'y': Math.min(rooms[i].start.y, rooms[i].end.y),
-                'rx': '5px'
+                id: `room${key}`,
+                fill: room.color,
+                width: Math.abs(room.corner1.x - room.corner2.x) + gridSize,
+                height: Math.abs(room.corner1.y - room.corner2.y) + gridSize,
+                x: Math.min(room.corner1.x, room.corner2.x) - 100,
+                y: Math.min(room.corner1.y, room.corner2.y),
+                rx: "5px"
             });
-        svg.append('text')
+        svg.append("text")
             .attr({
-                'x': Math.min(rooms[i].start.x, rooms[i].end.x) - 100 + 5,
-                'y': Math.min(rooms[i].start.y, rooms[i].end.y) + 25,
-                'fill': 'white',
-                'id': "room"+i+'text',
+                x: Math.min(room.corner1.x, room.corner2.x) - 100 + 5,
+                y: Math.min(room.corner1.y, room.corner2.y) + 25,
+                fill: "white",
+                id: `room${key + room.text}`,
             }).style({
-                'font-size': '25px',
-                'font-family': "GenJyuuGothic-Medium"
-            }).text(rooms[i].text);
-    }
-    // var furnish = data.items;
-    // for (var i = 0; i < furnish.length; ++i) {
-    //     svg.append('image')
-    //         .attr({
-    //             'id': furnish[i].item_name,
-    //             'position': 'absolute',
-    //             'href': furnish[i].model_url,
-    //             'x': furnish[i].xpos + 100,
-    //             'y': furnish[i].ypos,
-    //         });
-    // }
-
+                "font-size": "25px",
+                "font-family": "GenJyuuGothic-Medium"
+            }).text(room.text);
+    });
+        
+    let items = data.floorplan[floor].items;
+    items = items? items: [];
+    items.forEach(item => {
+        svg.append("image")
+            .attr({
+                href: `./img/furnish/item/${item.name}.svg`,
+                width: item.width,
+                height: item.height,
+                x: item.x - 300,
+                y: item.y - 240
+            });
+    });
 
     for (var i = 0; i < rooms.length; i++) {
         var temp = document.getElementById("room"+i);
@@ -132,4 +127,5 @@
 
         })
     }
-})();
+    
+})(0);
