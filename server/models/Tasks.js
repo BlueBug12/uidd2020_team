@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const TaskSchema = mongoose.Schema({
-    content:{ 
+    contnt:{ 
         type: String,
     },
     advise:{
@@ -39,6 +39,9 @@ const TaskSchema = mongoose.Schema({
     },
     state:{
         type:Number
+    },
+    housework:{
+        type:String
     }
 },{collection: 'Tasks'});
 

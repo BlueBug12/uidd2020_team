@@ -99,10 +99,10 @@ $("#fb_btn").click(async function() {
                     );
                 });
             } else {
-                FB.login(async function(response) {
+                FB.login(function(response) {
                     console.log(response);
                     if (response.authResponse) {
-                        await new Promise(resolve => {
+                        new Promise(resolve => {
                             FB.api('/me', { fields: 'id,name,email' }, function(response) {
                                 localStorage.setItem("account", response.id);
                                 account = response.id;

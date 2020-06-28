@@ -248,6 +248,7 @@ $(document).ready(function() {
             rec_task[i]["remain"] = 0;
             rec_task[i]["missionstate"] = false;
             rec_task[i]["members"] = [];
+            index = 0;
             for(var k= 0;k < rec_user.length;++k){
                if(rec_task[i].author != rec_user[k].account){
                     rec_task[i]["members"][index] = rec_user[k];
@@ -375,13 +376,40 @@ $(document).ready(function() {
 
     }
 
+    function houseworktype(content){
+        if(content.includes('洗碗')){
+            return 'https://luffy.ee.ncku.edu.tw:2222/img/housework/bowl.svg'
+        }
+        else if (content.includes('垃圾')){
+            return 'https://luffy.ee.ncku.edu.tw:2222/img/housework/garbage.svg'       
+        }
+        else if (content.includes('衣服')){
+            return 'https://luffy.ee.ncku.edu.tw:2222/img/housework/cloth.svg'       
+        }
+        else if (content.includes('掃地')){
+            return 'https://luffy.ee.ncku.edu.tw:2222/img/housework/sweep.svg'       
+        }
+        else if (content.includes('拖地')){
+            return 'https://luffy.ee.ncku.edu.tw:2222/img/housework/mop.svg'       
+        }
+        else if (content.includes('廁所')){
+            return 'https://luffy.ee.ncku.edu.tw:2222/img/housework/toilet.svg'       
+        }
+        else{
+            return 'https://luffy.ee.ncku.edu.tw:2222/img/housework/share.svg'
+        }
 
+
+    }
 
     $('#task_btn').click((event) => {
         event.preventDefault();
         if (check() == true) {
+            housework = houseworktype($('#addTasks input[name=content]').val())
+            console.log(typeof housework)
+            console.log(housework)
             $.post('./tasks', {
-                content: $('#addTasks input[name=content]').val(),
+                contnt: $('#addTasks input[name=content]').val(),
                 advise: $('#addTasks textarea[name=advise]').val(),
                 date: $('#addTasks input[name=date]').val(),
                 time: $('#addTasks input[name=time]').val(),
@@ -390,6 +418,7 @@ $(document).ready(function() {
                 icon: document.getElementById("UserImg").src,
                 region: $('.border')[0].id,
                 point: $('#inputpoint').val(),
+                housework: housework
             }, (res) => {
                 clear();
                 var j = 0;
