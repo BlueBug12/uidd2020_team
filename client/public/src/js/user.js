@@ -24,18 +24,18 @@ $(document).ready(function() {
     (function () {//upload img file
       var uploader = document.createElement('input'),
         image = document.getElementById('img-result');
-
+        add_button = document.getElementById('upload_img');
       uploader.type = 'file';
       uploader.accept = 'image/*';
 
-      image.onclick = function() {
+      add_button.onclick = function() {
         uploader.click();
       }
 
       uploader.onchange = function() {
         var reader = new FileReader();
         reader.onload = function(evt) {
-          image.classList.remove('no-image');
+          //image.classList.remove('no-image');
           image.style.backgroundImage = 'url(' + evt.target.result + ')';
           var request = {
             itemtype: 'test 1',
@@ -45,8 +45,8 @@ $(document).ready(function() {
             }]
           };
 
-          document.querySelector('.show-button').style.display = 'block';
-          document.querySelector('.upload-result__content').innerHTML = JSON.stringify(request, null, '  ');
+          //document.querySelector('.show-button').style.display = 'block';
+          //document.querySelector('.upload-result__content').innerHTML = JSON.stringify(request, null, '  ');
         }
         reader.readAsDataURL(uploader.files[0]);
       }
@@ -132,7 +132,10 @@ $(document).ready(function() {
 function getUser() {
     var account = localStorage.getItem("account");
     $.get('./users/find/' + account, {}, (res) => {
-        document.getElementById("UserImg").src = res.icon;
-        localStorage.setItem("classcode", res.classcode);
+        console.log(res);
+        document.getElementById('name').placeholder=res.name;
+        document.getElementById('img-result').style.backgroundImage = 'url('+res.icon+')';
+      //  document.getElementById("UserImg").src = res.icon;
+       // localStorage.setItem("classcode", res.classcode);
     });
 }

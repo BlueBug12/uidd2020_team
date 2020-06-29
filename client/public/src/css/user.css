@@ -267,6 +267,7 @@ div#signin div#align div#container {
 
 .form-control:focus {
     color: #495057;
+    font-size:1em;
     background-color: #fff;
     border-color: #80bdff;
     outline: 0;
@@ -336,8 +337,8 @@ form input::placeholder {
     width: 26vw;
     line-height: 4vh;
     font-family: GenJyuuGothic-Medium;
-    font-size: 4vh;
-    letter-spacing: 0.5vw;
+    font-size: 1.4em;
+  
     text-align: start;
 }
 
@@ -388,7 +389,6 @@ div#signin div#align div#container div.button:hover {
 }
 
 div#signin div#logo {
-    position: absolute;
     right: 0;
     bottom: 0;
     margin-right: 3vw;
@@ -519,6 +519,7 @@ div#signin div#logo img {
   font-weight: 500;
   src: local('Source Code Pro Medium'), local('SourceCodePro-Medium'), url(https://fonts.gstatic.com/s/sourcecodepro/v11/HI_XiYsKILxRpg3hIP6sJ7fM7PqtzsjDs-cv.ttf) format('truetype');
 }
+/*
 @-webkit-keyframes roll {
   0% {
     opacity: 0;
@@ -535,7 +536,7 @@ div#signin div#logo img {
             transform: translate(-50%, -50%) rotate(0deg) scale(1);
     box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
   }
-}
+}*/
 
 .wrapper {
 
@@ -563,19 +564,6 @@ div#signin div#logo img {
 
   color: rgba(0, 0, 0, 0);
 
-}
-.wrapper #img-result.no-image:before {
-  font-family: 'FontAwesome';
-  content: "\f030";
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  color: #fff;
-  font-size: 48px;
-  opacity: 0.8;
-  -webkit-transform: translate(-50%, -50%);
-          transform: translate(-50%, -50%);
-  text-shadow: 0 0px 5px rgba(0, 0, 0, 0.4);
 }
 .wrapper button {
   margin-top: 20px;

@@ -65,21 +65,20 @@
                 <form name="signin" class=" form">
                   <div class="form_name">姓名:</div>
                     <div class="formdiv ">
-
-                        <input type="text" placeholder="姓名" name="name" id="name" class="form-control " autocomplete="off" required/>
+                        <input type="text"  name="name" id="name" class="form-control " autocomplete="off" required/>
                         <!-- <div class="invalid-feedback">此為必填欄位</div> -->
                         <!-- <i class="fa fa-times-circle "></i> -->
                         <div id="name-error" class="error"></div>
                     </div>
                     <div class="form_name">Email:</div>
                     <div class="formdiv">
-                        <input type="text" placeholder="Email" name="account" id="account" class="form-control" autocomplete="off" required onchange="CheckAccount()"/>
+                        <input type="text"  name="account" id="account" class="form-control" autocomplete="off" required onchange="CheckAccount()"/>
                         <!-- <div class="invalid-feedback">此為必填欄位</div> -->
                         <div id="account-error" class="error"></div>
                     </div>
                     <div class="form_name">性別:</div>
                     <div class="formdiv">
-                        <input type="password" placeholder="性別" name="password" id="password" class="form-control password" autocomplete="off" required/>
+                        <input type="password"  name="password" id="password" class="form-control password" autocomplete="off" required/>
                         <!-- <div class="invalid-feedback ">此為必填欄位</div> -->
                         <div id="password-error" class="error"></div>
                     </div>
@@ -99,7 +98,7 @@
       </div>
       <div id="img_post">
         <div class="wrapper">
-          <button class="no-image" id="img-result">Upload Image</button>
+          <button id="img-result">Upload Image</button>
         </div>
         <button class="show-button">Show server request</button>
         <div class="upload-result">
