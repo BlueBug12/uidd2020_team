@@ -68,7 +68,7 @@ $(document).ready(function() {
                 })
                 var invite_after = []
                 for (var i = 0; i < invite_before.length; i++) {
-                    invite_after.push(invite_before[i].account)
+                    invite_after.push({id:invite_before[i].account,state:1})
                 }
                 console.log(invite_after);
                 $.get('./tasks/isaccepted' , {id:this.tasks[index]._id}, (resup) => {
@@ -80,7 +80,7 @@ $(document).ready(function() {
                         $.post('./tasks/participate', {
                             id: this.tasks[index]._id,
                             invite: invite_after,
-                            participate: [{id:localStorage.account,state:1}]
+                            participate: [{id:localStorage.account,state:1,icon:document.getElementById("UserImg").src}]
                         }, (res) => {
                             $('.alert-mess').text('任務已接受')
                         });
@@ -259,7 +259,7 @@ $(document).ready(function() {
         }
 
         count = rec_task.length;
-        vueinstance.tasks = rec_task
+        vueinstance.tasks = rec_task;
         $('.solve-btn').attr('data-before', count);
     }
 

@@ -41,42 +41,13 @@
                 </nav>
             </div>
         </div>
-        
-        <div class="mask"></div>
-            <div class="check">
-                <p class="notify">通知</p>
-                <p class="alert-mess">任務已發佈</p>
-                <button class="checkconfirm ">確定</button>
-            </div>
         <div class="container" style="margin: 0;padding: 0" id="app">
-            
             <div class = "row justify-content-end">
-                <div  class = "col-7 message" :class={active:!tasks.length}  >
-                    <div  class="row noitem" >
-                        <figure>
-                            <img class="img-fluid"  src="./img/invite/monster2.png" alt="">
-                            <figcaption class="content-text">沒有邀請......</figcaption>
-                        </figure>
-                    </div>
-                </div>
-                <template v-for="(task,index) in tasks">
                 <div  class = "col-7 message" :class={active:shows[index]}  >
-                    <div class ="row  title">
-                            <i class="fa fa-caret-left" aria-hidden="true" style=" cursor: pointer; font-size:30px;color: #4b515f;" v-on:click="turnleft(index)"></i>
-                            <p class="page" id="page">{{index+1}}/{{tasks.length}}</p>
-                            <i class="fa fa-caret-right" aria-hidden="true" style=" cursor: pointer;font-size:30px;color: #4b515f;" v-on:click="turnright(index)"></i>
-                    </div>
                     <div class="row shadow" >
                     </div>
                     <div class ="row  head">
                         <img class="img-fluid" src="./img/invite/head.png"></img>
-                    </div>
-                    <div class ="row align-self-start dialoge">
-                        <img class="img-fluid" src="./img/invite/dialoge.png" ></img>
-                        <p class="dialogue-text" id="dialogue-text">共有{{tasks.length}}則！</p>
-                    </div>
-                    <div class ="row align-self-start monster">
-                        <img class="img-fluid" src="./img/invite/monster.png" ></img>
                     </div>
                     <div class ="row content">
                         <div class="col-5 content1">

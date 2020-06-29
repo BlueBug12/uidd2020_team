@@ -26,11 +26,13 @@ const TaskSchema = mongoose.Schema({
         type:String
     },
     invite:[{
-        type: String,
+        id: String,
+        state:Number
     }],
     participate:[{
         id: String,
-        state: Number
+        state: Number,
+        icon:String
     }],
     expired:{
         type:Number
@@ -38,9 +40,12 @@ const TaskSchema = mongoose.Schema({
     point:{
         type:Number
     },
-    housework:{
-        type:String
-    }
+    verify:[{
+        id: String,
+        state: Number,
+        icon:String
+    }]
+    
 },{collection: 'Tasks'});
 
 module.exports = mongoose.model('Tasks',TaskSchema);

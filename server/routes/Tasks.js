@@ -154,16 +154,75 @@ router.post('/participate',async(req,res) => {
     res.status(200).send({ isSuccess: true });
 });
 
-
 router.post('/invite',async(req,res) => {
     try {
-        await Tasks.find({"invite":  req.body.account}).exec(async (err, res2) => {
+        temp = [];
+        await Tasks.find({"invite.id":  req.body.account,"expired":0}  ).exec(async (err, res2) => {
             if (err) {
                 console.log('fail to query:', err)
                 return;
             }
             else{
-                res.send(res2);
+                res2.forEach(function(item){
+                    item.invite.forEach(function(person){
+                        if(person.id == req.body.account && person.state === 1){
+                            temp.push(item); 
+                        }
+                     });
+                 });
+                res.send(temp);
+            }
+        });
+    }catch(err){
+        res.json({message:err});
+    }
+});
+
+router.post('/agree',async(req,res) => {
+    try {
+        await Tasks.updateOne({ "_id":req.body.id},{ $addToSet: { participate: req.body.participate }}, function(err) {
+            if (err) {
+                console.log('fail to query:', err)
+                return;
+            }
+            else{
+               Tasks.findOne({"_id":req.body.id} ).exec(async (err, res2) => {
+                    if (err) {
+                        console.log('fail to query:', err)
+                        return;
+                    }
+                    else{
+                        res2.invite.forEach(function(person){
+                            if(person.id === req.body.account){
+                                 person.state = 2; 
+                            }
+                         });
+                         res2.save();
+                        res.status(200).send({ isSuccess: true });
+                    }
+                });
+            }
+        });
+    }catch(err){
+        res.json({message:err});
+    }
+});
+
+router.post('/deny',async(req,res) => {
+    try {
+        await Tasks.findOne({"_id":req.body.id} ).exec(async (err, res2) => {
+            if (err) {
+                console.log('fail to query:', err)
+                return;
+            }
+            else{
+                res2.invite.forEach(function(person){
+                    if(person.id === req.body.account){
+                         person.state = 0; 
+                    }
+                 });
+                 res2.save();
+                res.status(200).send({ isSuccess: true });
             }
         });
     }catch(err){
@@ -202,6 +261,5 @@ router.post('/changestate',async(req,res)=>{
     }catch(err){
         res.json({message:err});
     }
-    
 })
 module.exports = router;
