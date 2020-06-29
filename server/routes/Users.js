@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const mongoose = require('mongoose');
 const Users = require('../models/Users');
 const { db } = require('../models/Users');
 
@@ -32,9 +33,9 @@ router.post('/',async(req,res) => {
 });
 
 //check repeat account
-router.post('/checkaccount',async(req,res) => {
+router.post('/checkaccount',(req,res) => {
     try {
-        await Users.findOne({ "account":req.body.account}).exec(async (err, res2) => {
+        Users.findOne({ "account":req.body.account}).exec(async (err, res2) => {
             if (err) {
                 console.log('fail to query:', err)
                 return;
@@ -60,8 +61,10 @@ router.post('/enroll',async(req,res) => {
         account:req.body.account,
         password:req.body.password,
         name:req.body.name,
-        phone:req.body.phone,
-        icon:req.body.icon
+        icon:req.body.icon,
+        gender:req.body.gender,
+        birthday:req.body.birthday,
+        mail:req.body.mail
     });
     try {
         const savePost = await users.save();
@@ -75,7 +78,7 @@ router.post('/enroll',async(req,res) => {
 //store fb login data
 router.post('/CheckData',async(req,res) => {
     try {
-        console.log(req.body.account);
+        //console.log(req.body.account);
         await Users.findOne({ "account":req.body.account}).exec(async (err, res2) => {
             if (err) {
                 console.log('fail to query:', err);
@@ -172,5 +175,17 @@ router.get('/:id',async(req,res) => {
     }catch(err){
         res.json({message:err});
     }
+});
+router.post('/changedata',(req,res) => {
+    var id = (req.body.id);
+		
+    Users.findOneAndUpdate({ account:id}, { icon:req.body.icon,name:req.body.name}, err => {
+        console.log(err);
+        if (!err) {
+            res.status(200).send({ isSuccess: true });
+        } else {
+            res.status(503).send({ isSuccess: false });
+        }
+    });
 });
 module.exports = router;

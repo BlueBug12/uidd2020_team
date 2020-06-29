@@ -63,7 +63,9 @@
 
         <div class="row justify-content-between ">
 
-            <div id="floorplan" class="left-floorplan">
+            <div class="left-floorplan">
+                <div id="floors"></div>
+                <div id="floorplan"></div>
             </div>
 
             <div class="right-mission" id="app">
@@ -109,8 +111,13 @@
                 <div class="tabContainer solve-mission">
                     <div class="buttonContainer" id="Panelbtns">
                         <button v-for="(show,index) in shows" :class={active:show} v-on:click="showPanel(index)"></button>
+                        <button :class="{active:true,nothing:tasks.length>0?true:false,unable:tasks.length>0?true:false}"></button>
                     </div>
 
+                    <div :class="{tabPanel:tasks.length>0?false:true, active:tasks.length>0?false:true,nothing:tasks.length>0?false:true}">
+                        <div :class="{no_task:tasks.length>0?false:true}"></div>
+
+                    </div>
                     <template v-for="(task,index) in tasks">
                         <div class="tabPanel" :class={active:shows[index]}>
                             <img  alt="" class="exhibit" v-bind:src="task.icon" >

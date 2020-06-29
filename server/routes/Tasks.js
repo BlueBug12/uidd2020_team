@@ -130,6 +130,16 @@ router.post('/expired',(req,res) => {
     });
 });
 
+router.post('/changestate',(req,res) => {
+    Tasks.findOneAndUpdate({ "participate._id":req.body.id}, { "$set": { "participate.$.state" : 2 } }, err => {
+        if (!err) {
+            res.status(200).send({ isSuccess: true });
+        } else {
+            res.status(503).send({ isSuccess: false });
+        }
+    });
+});
+
 router.post('/participate',async(req,res) => {
     try {
         await Tasks.findOne({ "_id":req.body.id}).exec(async (err, res) => {
@@ -163,6 +173,7 @@ router.post('/invite',async(req,res) => {
                 return;
             }
             else{
+<<<<<<< HEAD
                 res2.forEach(function(item){
                     item.invite.forEach(function(person){
                         if(person.id == req.body.account && person.state === 1){
@@ -224,6 +235,10 @@ router.post('/deny',async(req,res) => {
                  res2.save();
                 res.status(200).send({ isSuccess: true });
             }
+=======
+                res.send(res2);
+            }a
+>>>>>>> 13299f45e950f5422d658defec4110f256621e32
         });
     }catch(err){
         res.json({message:err});
@@ -238,6 +253,7 @@ router.post('/progress',async(req,res) => {
                 return;
             }
             else{
+                console.log(req.body.account);
                 res.send(res2);
             }
         });

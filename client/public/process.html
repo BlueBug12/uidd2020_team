@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <title>Document</title>
+    <style>
+        @font-face {
+            font-family: GenJyuuGothic-Medium;
+            src: url("../../font/GenJyuuGothic-Medium.ttf")
+        }
+        
+        @font-face {
+            font-family: GenJyuuGothic-Light;
+            src: url("../../font/GenJyuuGothic-Light.ttf")
+        }
+        
+        div{
+            font-family: GenJyuuGothic-Medium ;
+        }
+
+        * {
+            padding: 0;
+            margin: 0;
+        }
+        
+        #banner {
+            height: 10vh;
+            background-color: #F7F5E4;
+            box-shadow: 0 0 10px gray;
+            position: relative;
+            z-index: 2;
+        }
+        
+        #block {
+            display: flex;
+        }
+        
+        #list {
+            width: 15vw;
+            height: 90vh;
+            background-color: #F7F5E4;
+            position: relative;
+            display: flex;
+            justify-content: start;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        #content {
+            width: 85vw;
+            height: 90vh;
+            background-color: #4B515F;
+            position: relative;
+        }
+        
+        #process {
+            width: 40%;
+            height: 35%;
+            left: 0;
+            top: 0;
+            position: relative;
+            z-index: 2;
+            cursor: point
+        }
+        
+        #monster {
+            height: 70%;
+            width: 50%;
+            position: absolute;
+            left: -8%;
+            bottom: 10%;
+            z-index: 4;
+        }
+        
+        #outmission-block {
+            height: 85%;
+            width: 70%;
+            padding: 10px;
+            position: absolute;
+            top: 11%;
+            left: 25%;
+            background-color: #787C81;
+            border-radius: 12px;
+            padding-top: 9%;
+        }
+        
+        #mission-block {
+            height: 100%;
+            width: 100%;
+            background-color: #787C81;
+            overflow-y: scroll;
+            position: relative;
+        }
+        
+        .nothing{
+            position: relative;
+            margin: 0 auto;
+            top:50%;
+            transform: translate(30%,-70%);
+            width:50%;
+            height: 50%;
+            background-image: url('./img/process/nothing.png');
+            background-size: 50% 80%;
+            background-repeat: no-repeat;
+        }
+
+        .nothing::after{
+            position: absolute;
+            content:'目前沒有任務...';
+            color: #4B515F;
+            top:100%;
+            left:50%;
+            transform: translateX(-100%);
+            font-size:30px;
+        }
+
+        #request-btn {
+            cursor: pointer;
+            margin-top: 40%;
+            width: 80%;
+            height: 7%;
+            position: relative;
+            z-index: 5;
+        }
+        
+        #process-btn {
+            cursor: pointer;
+            margin-top: 10%;
+            width: 80%;
+            height: 7%;
+            position: relative;
+            z-index:5;
+        }
+        
+        .mission {
+            background-color: #F7F5E4;
+            height: 19%;
+            width: 85%;
+            margin-bottom: 4%;
+            position: relative;
+            z-index: 3;
+            border-radius: 10px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .mission>* {
+            display: inline-block;
+        }
+        
+        .icon {
+            position: relative;
+            margin-left: 2%;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .mission-name {
+            font-family: GenJyuuGothic-Medium;
+        }
+        
+        .mission-text {
+            font-family: GenJyuuGothic-Light;
+            display: flex;
+            position: relative;
+            z-index: 0;
+            display: none;
+        }
+        
+        .state1{
+            display: flex;
+        }
+        .state2{
+            display: flex;
+        }
+
+        .name_time {
+            position: relative;
+            left: 2%;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .point {
+            position: absolute;
+            right: 25%;
+            text-align: center;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .status {
+            position: absolute;
+            top: 50%;
+            right: 2%;
+            transform: translateY(-50%);
+        }
+        
+        .stateimage {
+            width: 80%;
+            height: 80%;
+        }
+
+        
+        #dummy {
+            height: 15%;
+        }
+        
+         ::-webkit-scrollbar {
+            background-color: #C7C9BF;
+            border-radius: 6px;
+            position: absolute;
+        }
+        
+         ::-webkit-scrollbar-thumb {
+            background-color: #C7C9BF;
+            border-radius: 6px;
+        }
+        
+         ::-webkit-scrollbar-track {
+            background-color: #999C9B;
+            border-radius: 6px;
+        }
+        
+         ::-webkit-scrollbar-thumb:hover {
+            opacity: 0.8;
+        }
+        
+         ::-webkit-resizer,
+         ::-webkit-scrollbar-button,
+         ::-webkit-scrollbar-corner {
+            display: none;
+        }
+        
+        .remain_img {
+            margin-left: 4px;
+        }
+
+        .canclick{
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="banner">
+    </div>
+    <div id="block">
+        <div id="list">
+            <img src="./img/process/list-request.png" id="request-btn" alt="">
+            <img src="./img/process/list-process.png" id="process-btn" alt=" ">
+        </div>
+
+        <div id="content">
+            <img src="./img/process/process.svg" id="process" alt=" ">
+			<img src="./img/process/monster.svg" id="monster" alt=" ">
+            <div id="outmission-block">
+
+                <div id="mission-block" class="app">
+                    <div :class="{nothing:tasks.length>0?false:true}"></div>
+                <template v-for="(task,index) in tasks">
+                    <div class="mission">
+                        <img :src="task.houseworkicon" class="icon" alt="">
+                        <div class="name_time">
+                            <div class="mission-name">{{task.content}}</div>
+                            <div class="mission-text" :class="{state1:task.state==1}">剩餘時間: {{task.remain}}</div>
+                            <div class="mission-text" :class="{state2:task.state==2}">審核狀況: <img src="./img/process/yes.png" class="remain_img"><img src="./img/process/no.png" class="remain_img"></div>
+                        </div>
+
+                        <div class="point">
+                            <img src="./img/process/point.png" class="point_icon" alt="">
+                            <div>{{task.point}}p</div>
+                        </div>
+
+                        <div class="status">
+                            <img v-bind:src="task.stateimage" class="stateimage" :class="{canclick:task.state==1}"  v-on:click=changeState(index) alt="">
+                        </div>
+
+                    </div>
+                </template>
+
+
+			
+
+                </div>
+
+
+            </div>
+        </div>
+
+    </div>
+</body>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+
+
+$('#process-btn').click(function(e){
+    $.post('./tasks/progress', {
+        account:localStorage.getItem('account')
+    }, (res) => {
+        settasks(res);
+    });
+})
+
+
+
+function settasks(res){
+    resultdate = []
+    res.forEach((item) => {
+        var date = item.date.split('/');
+        var year = date[2];
+        var day = date[1];
+        var month = date[0];
+        var time = item.time.split(' ');
+        var hour = parseInt(time[0].split(':'));
+        var hour = (time[1][0] == 'P') ? hour + 12 : hour;
+        var missiondate = new Date(year, month - 1, day, hour, 00, 00);
+        resultdate.push(missiondate)
+    })
+    var content = localStorage.getItem('account')
+    for (var i = 0; i < res.length; i++) {
+            res[i].date = resultdate[i];
+            res[i]["remain"] = 0;
+            for(var j = 0;j < res[i]["participate"].length;j++){
+                if(content == res[i].participate[j].id ){
+                    res[i]["state"] = res[i].participate[j].state
+                    if(res[i]["state"] == 1){
+                        res[i]["stateimage"] = "https://luffy.ee.ncku.edu.tw:2222/img/process/complete.png"
+                    }
+                    else if (res[i]["state"] == 2){
+                        res[i]["stateimage"] = "https://luffy.ee.ncku.edu.tw:2222/img/process/judge.png"
+                    }
+                }
+            }
+
+
+           housework = res[i].content 
+        if(housework.includes('洗碗')){
+            res[i]["houseworkicon"] =  'https://luffy.ee.ncku.edu.tw:2222/img/housework/bowl.png'
+        }
+        else if (housework.includes('垃圾')){
+            res[i]["houseworkicon"] = 'https://luffy.ee.ncku.edu.tw:2222/img/housework/garbage.png'       
+        }
+        else if (housework.includes('衣服')){
+            res[i]["houseworkicon"] = 'https://luffy.ee.ncku.edu.tw:2222/img/housework/cloth.png'       
+        }
+        else if (housework.includes('掃地')){
+            res[i]["houseworkicon"] = 'https://luffy.ee.ncku.edu.tw:2222/img/housework/sweep.png'       
+        }
+        else if (housework.includes('拖地')){
+            res[i]["houseworkicon"] = 'https://luffy.ee.ncku.edu.tw:2222/img/housework/mop.png'       
+        }
+        else if (housework.includes('廁所')){
+            res[i]["houseworkicon"] = 'https://luffy.ee.ncku.edu.tw:2222/img/housework/toilet.png'       
+        }
+        else{
+            res[i]["houseworkicon"] = 'https://luffy.ee.ncku.edu.tw:2222/img/housework/share.png'
+        }
+
+
+    
+    }
+
+    
+    vueinstance.tasks = res
+}
+
+function find_objid(content,index){
+    console.log(content)
+    for(var i = 0;i <vueinstance.tasks[index].participate.length;i++){
+        if(vueinstance.tasks[index].participate[i].id == content){
+            console.log(i)
+            return vueinstance.tasks[index].participate[i]._id
+        }
+    }
+}
+
+    var tasks = [];
+    var vueinstance = new Vue({
+        el: '.app',
+        data: {
+            tasks:tasks
+        },
+        methods: {
+            changeState: function(index){
+                console.log(index)
+                if(this.tasks[index]["state"] == 1){
+                    $.post('./tasks/changestate', {
+                            id: find_objid(localStorage.getItem('account'),index)
+                    }, (res) => {
+                        console.log(res)
+                        this.tasks[index]["stateimage"] = "./img/process/judge.png"
+                        this.tasks[index]["state"] = 2
+                        this.$forceUpdate()
+                    });
+                }
+            },
+            remaintime: function(index) {
+                var nowTime = new Date();
+                var restSec = this.tasks[index].date.getTime() - nowTime.getTime();
+                var day = parseInt(restSec / (60 * 60 * 24 * 1000));
+                var hour = parseInt(restSec / (60 * 60 * 1000) % 24);
+                var minu = parseInt(restSec / (60 * 1000) % 60);
+                var sec = parseInt(restSec / 1000 % 60);
+                var timestr = day + "天" + hour + "時" + minu + "分" + sec + "秒"
+                if (restSec > 0) {
+                    setTimeout(this.remaintime, 1000, index);
+                    this.$set(this.tasks[index], 'remain', timestr);
+                    this.$forceUpdate()
+                } else {
+                    if(this.tasks[index]["state"] == 1){
+                        $.post('./tasks/expired', {
+                            id: this.tasks[index]._id
+                        }, (res) => {
+                            console.log(res);
+                        });
+                        this.$delete(this.tasks, index)
+                    }
+                }
+            }
+        },
+        watch: {
+            tasks: {
+                handler() {
+                    if (this.tasks.length != 0) {
+                        for (var i = 0; i < this.tasks.length; i++) {
+                            this.remaintime(i);
+                        }
+                    }
+                    else{
+
+                    }
+                },
+            }
+        }
+    })
+</script>
+</html>

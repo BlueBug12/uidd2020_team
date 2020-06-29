@@ -299,6 +299,41 @@ li {
     height: 70vh;
 }
 
+#floors {
+    float: left;
+    height: inherit;
+    width: 100px;
+}
+
+#floorplan {
+    float: left;
+    height: inherit;
+    width: 800px;
+}
+
+.diamond{
+    position: absolute;
+    left: 20px;
+    content: '';
+    height: 40px;  /* -22px is 2 * 10px gap on either side - 2px border on either side */
+    width: 40px;  /* -22px is 2 * 10px gap on either side - 2px border on either side */
+    background: #799FB4;
+    transform: rotateX(49deg) rotateZ(45deg);
+    border:1px solid #799FB4;
+    z-index: 1;
+}
+.diamond > div{
+    position: absolute;
+    top: 3px;
+    left: 8px;
+    font-size: 21px;
+    font-family: GenJyuuGothic-Medium;
+
+    text-decoration: none;
+    color: white;
+    transform:rotateZ(-45deg);
+}
+
 .right-mission {
     width: 35%;
     height: 75vh;
@@ -534,6 +569,36 @@ li {
     border-radius: 10px;
     position: relative;
     box-shadow: 5px 10px #FFCA28;
+}
+
+.nothing{
+    display: none;
+    cursor:auto;
+    background-color: #F7F6E4;
+
+}
+
+
+#dummy{
+    cursor: default;
+}
+
+.no_task{
+    background-image: url('../../img/no_task.png');
+    position: absolute;
+    top:10%;
+    width:100%;
+    height:50%;
+    background-size: 100% 100%;
+}
+
+.no_task::after{
+    position: absolute;
+    top:100%;
+    left:50%;
+    transform: translateX(-50%);
+    content:'沒有任務......\a休息一下吧!';
+    white-space:pre
 }
 
 .tabContainer .tabPanel * {
