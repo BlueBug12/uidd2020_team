@@ -11,6 +11,7 @@ class Panel {
 		this.previewedWall = null;
 		this.steps = [];
 		this.isEditing = false;
+		this.isDeleting = false;
 		(function genPanel(panel) {
 
 			let data = new Array();
@@ -65,7 +66,15 @@ class Panel {
 
 		})(this);
 		document.getElementById("undo_button").addEventListener('click', () => { this.undo(this); });
-		document.getElementById("delete").addEventListener('click', () => { this.delete(this); });
+		document.getElementById("delete").addEventListener('click', () => {
+			this.isDeleting = !this.isDeleting;
+			if (this.isDeleting) {
+				removeHighlight();
+				document.getElementById("delete").style["background-color"] = "#000000";
+			} else {
+				document.getElementById("delete").style["background-color"] = "";
+			}
+		});
 
 	}
 
@@ -138,7 +147,7 @@ class Panel {
 		floor.corners.forEach(corner => {
 			if (corner.x == x && corner.y == y) isDrawPoint = false;
 		});
-		if (isDrawPoint) {
+		if (isDrawPoint && !this.isDeleting) {
 			let newCorner = new Point(x, y, 4);
 			floor.corners.push(newCorner);
 			newStep.push({
@@ -192,6 +201,7 @@ class Panel {
 		});
 
 		if (newStep.length != 0) this.steps.push(newStep);
+		if (this.isDeleting) this.delete();
 		this.removeRoomHighlight();
 		this.previewWall(event, this);
 
@@ -226,6 +236,7 @@ class Panel {
 			}
 			return wall;
 		});
+		if (this.isDeleting) this.delete();
 		this.removeRoomHighlight();
 		this.render();
 	}
@@ -291,6 +302,7 @@ class Panel {
 				room.isSelected = false;
 			}
 		});
+		if (this.isDeleting) this.delete();
 		this.removeWallHighlight();
 		this.render();
 	}
@@ -474,6 +486,9 @@ class Panel {
 				}
 				if (step.object === "room") {
 					this.floor[step.floor].rooms.splice(step.index, 0, step.target);
+				}
+				if (step.object === "item") {
+					this.floor[step.floor].items.splice(step.index, 0, step.target);
 				}
 			}
 			if (step.operation === "edit") {
@@ -680,28 +695,39 @@ class Panel {
 		let onMouseDownItem = () => {
 			let index = parseInt(event.target.id.slice(4));
 			let target = this.floor[this.nowFloor].items[index];
-			let onMouseMove = () => {
-				target.move(event.clientX, event.clientY, 1);
-				removeSelection();
-			};
-			let onMouseUp = () => {
-				document.removeEventListener('mousemove', onMouseMove);
-				document.removeEventListener('mouseup', onMouseUp);
-				target.checkPosition(event.clientX, event.clientY, 1);
+			if (this.isDeleting) {
+				target.delete(index);
+				this.steps.push([{
+					operation: "delete",
+					object: "item",
+					floor: panel.nowFloor,
+					target: target,
+					index: index
+				}]);
+			} else {
+				let onMouseMove = () => {
+					target.move(event.clientX, event.clientY, 1);
+					removeSelection();
+				};
+				let onMouseUp = () => {
+					document.removeEventListener('mousemove', onMouseMove);
+					document.removeEventListener('mouseup', onMouseUp);
+					target.checkPosition(event.clientX, event.clientY, 1);
+				}
+				document.addEventListener('mousemove', onMouseMove);
+				document.addEventListener('mouseup', onMouseUp);
+				this.steps.push([{
+					operation: "edit",
+					object: "item",
+					floor: panel.nowFloor,
+					type: "position",
+					before: {
+						x: target.x,
+						y: target.y
+					},
+					index: index
+				}]);
 			}
-			document.addEventListener('mousemove', onMouseMove);
-			document.addEventListener('mouseup', onMouseUp);
-			this.steps.push([{
-				operation: "edit",
-				object: "item",
-				floor: panel.nowFloor,
-				type: "position",
-				before: {
-					x: target.x,
-					y: target.y
-				},
-				index: index
-			}]);
 		};
 		let items = document.getElementsByClassName("item");
 		for (let iter = 0; iter < items.length; ++iter) {
@@ -1011,6 +1037,11 @@ class Item extends Component {
 				}]);
 			}
 		}
+	}
+
+	delete(index) {
+		panel.floor[panel.nowFloor].items.splice(index, 1);
+		panel.render();
 	}
 
 }
