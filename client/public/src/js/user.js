@@ -1,6 +1,12 @@
+
+var img_url;
+var user_name;
+var user_gender;
+var user_email;
+var user_date;
+
 $(document).ready(function() {
   //console.log("hello");
-  let img_url;
   
 
     let bannerbuttons = document.getElementsByClassName('bannerbutton');
@@ -39,16 +45,6 @@ $(document).ready(function() {
           //image.classList.remove('no-image');
           image.style.backgroundImage = 'url(' + evt.target.result + ')';
           img_url=evt.target.result;
-          var request = {
-            itemtype: 'test 1',
-            brand: 'test 2',
-            images: [{
-              data: evt.target.result
-            }]
-          };
-          console.log(img_url.length);
-          //document.querySelector('.show-button').style.display = 'block';
-          //document.querySelector('.upload-result__content').innerHTML = JSON.stringify(request, null, '  ');
         }
         reader.readAsDataURL(uploader.files[0]);
       }
@@ -110,13 +106,17 @@ $(document).ready(function() {
     
     $(document).on('click','#send_button',function(){
       console.log(localStorage.getItem("account"))
+
+      if($("#name").val())
+          user_name=$("#name").val();
       console.log($("#name").val());
+      console.log("user_name"+user_name);
       $.post('./Users/changedata',{
         id:localStorage.getItem("account"),
         icon:img_url,
-        name:$('#name').val()
+        name:user_name
       },(res)=>{
-        
+       console.log("post success!");
       });
     })
     let tri=0;
@@ -149,6 +149,8 @@ function getUser() {
         console.log(res);
         document.getElementById('name').placeholder=res.name;
         document.getElementById('img-result').style.backgroundImage = 'url('+res.icon+')';
+        img_url=res.icon;
+        user_name=res.name;
       //  document.getElementById("UserImg").src = res.icon;
        // localStorage.setItem("classcode", res.classcode);
     });

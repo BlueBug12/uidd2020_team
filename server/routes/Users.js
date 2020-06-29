@@ -76,7 +76,7 @@ router.post('/enroll',async(req,res) => {
 //store fb login data
 router.post('/CheckData',async(req,res) => {
     try {
-        console.log(req.body.account);
+        //console.log(req.body.account);
         await Users.findOne({ "account":req.body.account}).exec(async (err, res2) => {
             if (err) {
                 console.log('fail to query:', err);
