@@ -11,6 +11,7 @@ class Panel {
 		this.previewedWall = null;
 		this.steps = [];
 		this.isEditing = false;
+		this.isDrawing = false;
 		this.isDeleting = false;
 		(function genPanel(panel) {
 
@@ -65,16 +66,44 @@ class Panel {
 			grid.append("g").attr("id", "corners");
 
 		})(this);
-		document.getElementById("undo_button").addEventListener('click', () => { this.undo(this); });
-		document.getElementById("delete").addEventListener('click', () => {
-			this.isDeleting = !this.isDeleting;
-			if (this.isDeleting) {
-				removeHighlight();
-				document.getElementById("delete").style["background-color"] = "#000000";
-			} else {
-				document.getElementById("delete").style["background-color"] = "";
+		for (let iter = 0; iter < 3; ++iter) {
+			if (iter == 0) {
+				document.getElementsByClassName("pen")[0].addEventListener('click', () => {
+					this.isDrawing = !this.isDrawing;
+					if (this.isDrawing) {
+						document.getElementsByClassName("pen")[0].style["background-color"] = "#000000";
+						document.getElementsByClassName("delete")[iter].style["background-color"] = "";
+						this.isDeleting = false;
+					} else {
+						removeHighlight();
+						document.getElementsByClassName("pen")[0].style["background-color"] = "";
+					}
+				});
 			}
-		});
+			if (iter == 1) {
+				document.getElementsByClassName("paint")[0].addEventListener('click', () => {
+					this.isDrawing = !this.isDrawing;
+					if (!this.isDrawing) {
+						removeHighlight();
+						document.getElementsByClassName("paint")[0].style["background-color"] = "";
+						this.mode = "line";
+					}
+				});
+			}
+			document.getElementsByClassName("undo")[iter].addEventListener('click', () => { this.undo(this); });
+			document.getElementsByClassName("delete")[iter].addEventListener('click', () => {
+				this.isDeleting = !this.isDeleting;
+				if (this.isDeleting) {
+					removeHighlight();
+					document.getElementsByClassName("delete")[iter].style["background-color"] = "#000000";
+					if (iter == 0) document.getElementsByClassName("pen")[0].style["background-color"] = "";
+					if (iter == 1) document.getElementsByClassName("paint")[0].style["background-color"] = "";
+					this.isDrawing = false;
+				} else {
+					document.getElementsByClassName("delete")[iter].style["background-color"] = "";
+				}
+			});
+		}
 
 	}
 
@@ -147,30 +176,32 @@ class Panel {
 		floor.corners.forEach(corner => {
 			if (corner.x == x && corner.y == y) isDrawPoint = false;
 		});
-		if (isDrawPoint && !this.isDeleting) {
-			let newCorner = new Point(x, y, 4);
-			floor.corners.push(newCorner);
-			newStep.push({
-				operation: "new",
-				object: "corner",
-				floor: this.nowFloor
+		if (this.isDrawing || this.isDeleting) {
+			if (isDrawPoint && !this.isDeleting) {
+				let newCorner = new Point(x, y, 4);
+				floor.corners.push(newCorner);
+				newStep.push({
+					operation: "new",
+					object: "corner",
+					floor: this.nowFloor
+				});
+			}
+			floor.corners = floor.corners.map(corner => {
+				if (corner.x == x && corner.y == y) {
+					if (corner.isSelected) {
+						corner.r = 4;
+					} else {
+						corner.r = 6;
+						document.getElementsByTagName("svg")[0].addEventListener('mousemove', () => { this.previewWall(event, this); });
+					}
+					corner.isSelected = !corner.isSelected;
+				} else {
+					corner.r = 4;
+					corner.isSelected = false;
+				}
+				return corner;
 			});
 		}
-		floor.corners = floor.corners.map(corner => {
-			if (corner.x == x && corner.y == y) {
-				if (corner.isSelected) {
-					corner.r = 4;
-				} else {
-					corner.r = 6;
-					document.getElementsByTagName("svg")[0].addEventListener('mousemove', () => { this.previewWall(event, this); });
-				}
-				corner.isSelected = !corner.isSelected;
-			} else {
-				corner.r = 4;
-				corner.isSelected = false;
-			}
-			return corner;
-		});
 
 		// update lines
 		if (this.previewedWall) {
@@ -245,7 +276,7 @@ class Panel {
 		let floor = this.floor[this.nowFloor];
 		let x = Math.floor(event.layerX / this.gridSize) * this.gridSize;
 		let y = Math.floor(event.layerY / this.gridSize) * this.gridSize;
-		let color = document.getElementById("pen").style["background-color"];
+		let color = document.getElementsByClassName("paint")[0].style["background-color"];
 		floor.rooms.push(new Area(color, x, y, x + this.gridSize, y + this.gridSize, 1, nowColorIndex));
 		this.render();
 
@@ -1050,18 +1081,48 @@ const panel = new Panel();
 panel.floor[0].render();
 
 
-document.getElementById("draw_map").addEventListener('click', () => {
+document.getElementById("draw_boundary").addEventListener('click', () => {
+	$("#draw_boundary_mode").css({"visibility": "visible", "height": "100%"});
+	$("#draw_room_mode").css({"visibility": "hidden", "height": 0});
 	$("#place_furnish_mode").css({"visibility": "hidden", "height": 0});
-	$("#draw_map_mode").css({"visibility": "visible", "height": "100%"});
+	$('#draw_boundary').css({"opacity": 1});
+	$('#draw_room').css({"opacity": 0.5});
 	$('#place_furnish').css({"opacity": 0.5});
-	$('#draw_map').css({"opacity": 1});
-
+	$('#editor').css({ "height": "8vh", "margin-top": "20vh" });
+	$('.list-inline-item').css({ "padding-left": "1vw", "margin-top": "1vh" });
+	panel.mode = "line";
+	panel.isDrawing = false;
+	panel.isDeleting = false;
+	document.getElementsByClassName("pen")[0].style["background-color"] = "";
+	document.getElementsByClassName("delete")[0].style["background-color"] = "";
+});
+document.getElementById("draw_room").addEventListener('click', () => {
+	$("#draw_boundary_mode").css({"visibility": "hidden", "height": 0});
+	$("#draw_room_mode").css({"visibility": "visible", "height": "100%"});
+	$("#place_furnish_mode").css({"visibility": "hidden", "height": 0});
+	$('#draw_boundary').css({"opacity": 0.5});
+	$('#draw_room').css({"opacity": 1});
+	$('#place_furnish').css({"opacity": 0.5});
+	$('#editor').css({ "height": "60vh", "margin-top": 0 });
+	$('.list-inline-item').css({ "padding-left": 0, "margin-top": 0 });
+	panel.isDrawing = false;
+	panel.isDeleting = false;
+	document.getElementsByClassName("paint")[0].style["background-color"] = "";
+	document.getElementsByClassName("delete")[1].style["background-color"] = "";
 });
 document.getElementById("place_furnish").addEventListener('click', () => {
-	$("#draw_map_mode").css({"visibility": "hidden", "height": 0});
+	$("#draw_boundary_mode").css({"visibility": "hidden", "height": 0});
+	$("#draw_room_mode").css({"visibility": "hidden", "height": 0});
 	$("#place_furnish_mode").css({"visibility": "visible", "height": "100%"});
+	$('#draw_boundary').css({"opacity": 0.5});
+	$('#draw_room').css({"opacity": 0.5});
 	$('#place_furnish').css({"opacity": 1});
-	$('#draw_map').css({"opacity": 0.5});
+	$('#editor').css({ "height": "60vh", "margin-top": 0 });
+	$('.list-inline-item').css({ "padding-left": "2.5vw", "margin-top": 0 });
+	panel.mode = "line";
+	panel.isDrawing = false;
+	panel.isDeleting = false;
+	document.getElementsByClassName("delete")[2].style["background-color"] = "";
 });
 
 
@@ -1077,7 +1138,7 @@ let isAddingColor = false;
 let isChangingColor = false;
 let nowColorIndex = 0;
 
-document.getElementById("add_button").addEventListener('click', () => {
+document.getElementsByClassName("add")[0].addEventListener('click', () => {
 	removeHighlight();
 	isAddingColor = true;
 	isChangingColor = false;
@@ -1093,7 +1154,7 @@ $(document).on('click', '.color-item', () => {
 
 	let color = event.target.style["background-color"];
 	$('#pickcolor').val(color);
-	$('#pen').css('background-color', color);
+	document.getElementsByClassName("paint")[0].style["background-color"] = color;
 
 	if (isChangingColor) {
 		panel.floor[panel.nowFloor].colors[nowColorIndex] = color;
@@ -1127,13 +1188,6 @@ document.addEventListener('click', () => {
 	isPickerDisplay = false;
 });
 
-document.getElementById("pen_button").addEventListener('click', () => {
-	if(panel.mode === "rect"){
-		panel.mode = "line";
-		document.getElementById("pen").style["background-color"] = "transparent";
-	}
-});
-
 $(document).on('click', '.round', () => {
 	removeHighlight();
 	panel.mode = "rect";
@@ -1150,7 +1204,11 @@ $(document).on('click', '.round', () => {
 	}
 
 	if (event.target.children.length) {
-		$('#pen').css('background-color', event.target.children[1].style["background-color"]);
+		$('.paint').css('background-color', event.target.children[1].style["background-color"]);
+		document.getElementsByClassName("delete")[1].style["background-color"] = "";
+		panel.mode = "rect";
+		panel.isDeleting = false;
+		panel.isDrawing = true;
 	}
 });
 
