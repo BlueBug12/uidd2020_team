@@ -70,7 +70,7 @@ $(document).ready(function() {
                 for (var i = 0; i < invite_before.length; i++) {
                     invite_after.push(invite_before[i].account)
                 }
-                console.log(invite_after)
+                console.log(invite_after);
                 $.get('./tasks/isaccepted' , {id:this.tasks[index]._id}, (resup) => {
                     console.log(resup)
                     if (resup.isaccepted == true) {

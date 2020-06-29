@@ -11,7 +11,7 @@
     <link rel="stylesheet" type="text/css" href="./src/css/lib/font-awesome-4.7.0/css/font-awesome.css">
     <link rel="stylesheet" href="./src/css/lib/jquery-ui-themes-1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="./src/lib/timepicker/jquery.timepicker.css">
-    <link rel="stylesheet" href="./src/css/prototype.css">
+    <link rel="stylesheet" href="./src/css/user.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <title>Project</title>
@@ -20,11 +20,7 @@
 <body onload="getUser()">
     <div class="container-fluid">
         <div class="mask"></div>
-        <div class="check">
-            <p class="notify">通知</p>
-            <p class="alert-mess">任務已發佈</p>
-            <button class="checkconfirm ">確定</button>
-        </div>
+
         <div class="banner">
             <div class="nav-bg">
                 <nav class="navbar " id="navbar">
@@ -43,16 +39,83 @@
                         <li class="list-inline-item">
                             <button class="bannerbutton" href="#">排行與積分</button>
                         </li>
+
+                        <li class="list-inline-item">
+                            <div class="round" href="#"></div>
+                        </li>
+                        <li class="list-inline-item">
+                            <div class="round" id="user" href="#"></div>
+                        </li>
                         <li class="list-inline-item">
                             <!-- <a href="login.html">登入</a> -->
                             <img id="UserImg" alt="" srcset="" style=" border-radius: 50%;width: 50px;height: 50px;">
                         </li>
                     </ul>
+
                 </nav>
+
             </div>
         </div>
     </div>
+    <div id="mydata">
+      <div id="data_bar">我的檔案</div>
+      <div id="left_data">
+        <div id="align">
+            <div id="container">
+                <form name="signin" class=" form">
+                  <div class="form_name">姓名:</div>
+                    <div class="formdiv ">
+                        <input type="text"  name="name" id="name" class="form-control " autocomplete="off" required/>
+                        <!-- <div class="invalid-feedback">此為必填欄位</div> -->
+                        <!-- <i class="fa fa-times-circle "></i> -->
+                        <div id="name-error" class="error"></div>
+                    </div>
+                    <div class="form_name">Email:</div>
+                    <div class="formdiv">
+                        <input type="text"  name="account" id="account" class="form-control" autocomplete="off" required onchange="CheckAccount()"/>
+                        <!-- <div class="invalid-feedback">此為必填欄位</div> -->
+                        <div id="account-error" class="error"></div>
+                    </div>
+                    <div class="form_name">性別:</div>
+                    <div class="formdiv">
+                        <input type="password"  name="password" id="password" class="form-control password" autocomplete="off" required/>
+                        <!-- <div class="invalid-feedback ">此為必填欄位</div> -->
+                        <div id="password-error" class="error"></div>
+                    </div>
+                    <div class="form_name">生日:</div>
+                    <div class="formdiv">
+                      <input type="text" id="datepicker">
 
+                    </div>
+                    <div id="send_button">儲存</div>
+
+                </form>
+            </div>
+      </div>
+      <div id="right_img"></div>
+
+
+      </div>
+      <div id="img_post">
+        <div class="wrapper">
+          <button id="img-result">Upload Image</button>
+        </div>
+        <button class="show-button">Show server request</button>
+        <div class="upload-result">
+          <button class="hide-button">Close</button>
+          <pre class="upload-result__content">
+          </pre>
+        </div>
+      </div>
+      <div id="upload_img">
+        選擇圖片
+      </div>
+      <div class="triangle" id="switch_data"></div>
+
+
+    </div>
+    <div class="menubar" id="bar1">個人資料</div>
+    <div class="menubar" id="bar2">登出</div>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js " integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo " crossorigin="anonymous "></script> -->
@@ -60,8 +123,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js " integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k " crossorigin="anonymous "></script>
     <script src="https://d3js.org/d3.v3.min.js"></script>
     <script src="./src/lib/timepicker/jquery.timepicker.min.js"></script>
-    <script src="./src/js/generator.js"></script>
-    <script src="./src/js/game.js"></script>
+    <script src="./src/js/user.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 
 </body>
