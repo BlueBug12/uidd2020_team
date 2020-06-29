@@ -1,3 +1,6 @@
+$("#datepicker").datepicker();
+$("#datepicker").attr("autocomplete", "off");
+
 function error(type, str) {
     $(type + '-error').text(str);
     $(type).addClass('err');
@@ -8,30 +11,29 @@ function clear() {
     $('#account-error').text("");
     $('#password-error').text("");
     $('#password2-error').text("");
-    $('#phone-error').text("");
+    $('#datepicker-error').text("");
+    $('#mail-error').text("");
     $('#name').removeClass('err');
     $('#account').removeClass('err');
     $('#password').removeClass('err');
     $('#password2').removeClass('err');
-    $('#phone').removeClass('err');
+    $('#datepicker').removeClass('err');
+    $('#mail').removeClass('err');
+
 
 }
 
 function check() {
     clear();
     var english = /^[A-Za-z0-9]+$/;
-    var phonenumber = /^09[0-9]{8}$/
+    const correctmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     const name = $('#name').val().trim();
     const account = $('#account').val().trim();
     const password = $('#password').val().trim();
     const password2 = $('#password2').val().trim();
-    const phone = $('#phone').val().trim();
+    const datepicker = $('#datepicker').val();
+    const mail = $('#mail').val().trim()
     let ans = true;
-
-    if (name == "") {
-        error("#name", '此為必填欄位');
-        ans = false;
-    }
 
     if (account == "") {
         error("#account", '此為必填欄位');
@@ -42,6 +44,18 @@ function check() {
             ans = false;
         }
     }
+
+    if (datepicker==""){
+        error("#datepicker", '此為必填欄位');
+        ans = false;        
+    }
+
+    if (name == "") {
+        error("#name", '此為必填欄位');
+        ans = false;
+    }
+
+
     if (password == "") {
         error("#password", '此為必填欄位');
         ans = false;
@@ -64,49 +78,55 @@ function check() {
         }
     }
 
-
-    if (phone == "") {
-        error("#phone", '此為必填欄位');
+    if (mail == "") {
+        error("#mail", '此為必填欄位');
         ans = false;
     } else {
-        if (phone.length != 10 || !phonenumber.test(phone)) {
-            error("#phone", '手機號碼格式錯誤');
+        if (!correctmail.test(mail)) {
+            error("#mail", '電子郵件無效');
             ans = false;
         }
     }
+
     return ans;
 
 }
 
-function CheckAccount(){
-    $.post('./users/checkaccount', {
-        account: $('#signin input[name=account]').val().trim()
-    }, (res) => {
-        if(res.enroll === false){
-            error("#account", '此帳號已被註冊');
-        }
-        else{
-            clear();
-        }
-    });
-}
+
 
 $('#enroll_btn').click((event) => {
+    var english = /^[A-Za-z0-9]+$/;
     event.preventDefault();
-    if (check() == true) {
-        $.post('./users/enroll', {
-            account: $('#signin input[name=account]').val().trim(),
-            password: $('#signin input[name=password]').val().trim(),
-            name: $('#signin input[name=name]').val().trim(),
-            phone: $('#signin input[name=phone]').val().trim(),
-            icon: "https://luffy.ee.ncku.edu.tw:1113/img/sister.png"
-        }, (res) => {
-            localStorage.setItem("account", res.account);
-            location.href = './join.html';
-        });
-        
-    }
-
+        if ($('#account').val().trim() != "" && english.test($('#account').val().trim())){ 
+            $.post('./users/checkaccount', {
+                account: $('#signin input[name=account]').val().trim()
+            }, (res) => {
+                if(res.enroll === false){
+                    check();
+                    error("#account", '此帳號已被註冊');
+                }
+                else{
+                    if(check()){
+                        $.post('./users/enroll', {
+                            account: $('#signin input[name=account]').val().trim(),
+                            password: $('#signin input[name=password]').val().trim(),
+                            name: $('#signin input[name=name]').val().trim(),
+                            icon: $("option:selected:contains('男')")?"https://luffy.ee.ncku.edu.tw:2222/img/brother.png":"https://luffy.ee.ncku.edu.tw:2222/img/sister.png",
+                            gender: $("option:selected:contains('男')")?'男':'女',
+                            birthday:$('#datepicker').val(),
+                            mail : $('#mail').val().trim(),
+                            point:0
+                        }, (res) => {
+                            localStorage.setItem("account", res.account);
+                            location.href = './join.html';
+                        });
+                    }
+                }
+            });
+        }
+        else{
+            check();
+        }
 });
 /*window.fbAsyncInit = function() {
     FB.init({

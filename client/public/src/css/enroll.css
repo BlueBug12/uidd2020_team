@@ -1,3 +1,13 @@
+
+
+.ui-datepicker-trigger {
+    background-color: #FFCA28;
+    color:rgb(108,117,125);
+    outline: none;
+    border: none;
+    cursor: pointer;
+}
+
 div#signin {
     width: 100vw;
     height: 100vh;
@@ -26,7 +36,7 @@ div#signin div#align div#title {
 div#signin div#align div#container {
     background-color: #f7f6e4;
     width: inherit;
-    height: 71vh;
+    height: 81vh;
     position: absolute;
     margin-top: 5vh;
     border-radius: 28px;
@@ -76,6 +86,13 @@ div#signin div#align div#container {
     background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
 }
 
+.select-dummy.err {
+    padding-right: calc(1.5em + 0.75rem);
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%23dc3545' viewBox='0 0 12 12'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right calc(0.375em + 0.1875rem) center;
+    background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+}
 
 /* .fa-times-circle {
     color: red;
@@ -88,7 +105,15 @@ div#signin div#align div#container {
     margin: auto;
 }
 
-.formdiv {
+.custom-select{
+    background: none;
+    font-family: GenJyuuGothic-Medium;
+    padding: 0;
+    
+}
+
+
+.formdiv,.form-inline{
     position: relative;
     height: 6vh;
 }
@@ -97,7 +122,7 @@ div#signin div#align div#container {
     display: none;
 }
 
-form input::placeholder {
+form input::placeholder{
     display: inline-block;
     width: 26vw;
     line-height: 4vh;
@@ -107,19 +132,52 @@ form input::placeholder {
     text-align: start;
 }
 
-div#signin div#align div#container input {
+.datepicker{
+    margin-top: 2vh;
+}
+
+div#signin div#align div#container input{
     width: 26vw;
     height: 5vh;
     background-color: #f7f6e4;
     font-size: 3vh;
-    padding-top: 1vh;
     padding-left: 3vw;
-    margin-top: 4vh;
+    margin-top: 2vh;
     border: 1px solid #4b515f;
     border-radius: 10px;
 }
 
-div#signin div#align div#container input:focus {
+.select-dummy{
+    width: 26vw;
+    height: 5vh;
+    background-color: #f7f6e4;
+    padding-left: 3vw;
+    margin-top: 2vh;
+    border: 1px solid #4b515f;
+    border-radius: 10px;
+}
+
+.select-dummy{
+    color:rgb(108,117,125)
+}
+
+.custom-select{
+    border:none;
+    font-size: 4vh;
+    color:rgb(108,117,125);
+    height:100%;
+    margin-top: -2%;
+}
+
+select{
+    color:rgb(108,117,125);
+}
+
+.custom-select:focus{
+    box-shadow: 0 0 0 0.0rem rgba(0, 123, 255, 0.25);
+}
+
+div#signin div#align div#container input:focus, div#signin div#align div#container select:focus{
     outline: none;
 }
 

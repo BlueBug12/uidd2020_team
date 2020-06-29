@@ -7,8 +7,13 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <link rel="stylesheet" type="text/css" href="./src/css/lib/font-awesome-4.7.0/css/font-awesome.css">
+    <link rel="stylesheet" href="./src/lib/timepicker/jquery.timepicker.css">
     <title>enroll</title>
     <link href="./src/css/enroll.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="./src/css/lib/jquery-ui-themes-1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="./src/lib/timepicker/jquery.timepicker.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <link rel="stylesheet" href="./src/css/banner.css">
 </head>
 
@@ -44,7 +49,7 @@
                         <div id="name-error" class="error"></div>
                     </div>
                     <div class="formdiv">
-                        <input type="text" placeholder="帳號" name="account" id="account" class="form-control" autocomplete="off" required onchange="CheckAccount()"/>
+                        <input type="text" placeholder="帳號" name="account" id="account" class="form-control" autocomplete="off" required />
                         <!-- <div class="invalid-feedback">此為必填欄位</div> -->
                         <div id="account-error" class="error"></div>
                     </div>
@@ -58,12 +63,25 @@
                         <!-- <div class="invalid-feedback ">此為必填欄位</div> -->
                         <div id="password2-error" class="error"></div>
                         <!-- <div class="passworderror">密碼不相符</div> -->
-
                     </div>
                     <div class="formdiv">
-                        <input type="text" placeholder="手機號碼" name="phone" id="phone" class="form-control" autocomplete="off" required/>
-                        <!-- <div class="invalid-feedback">此為必填欄位</div> -->
-                        <div id="phone-error" class="error"></div>
+                        <div class="select-dummy " id="gender">
+                        <select class="custom-select" >
+                            <option value="1">性別:男</option>
+                            <option value="2">性別:女</option>
+                        </select>
+                        <div id="gender-error" class="error"></div>
+                    </div>
+                    </div>
+                    <div class="formdiv">
+                        <input type="text" id="datepicker" class="form-control" name="date" placeholder="生日" required readonly>
+                        <div id="datepicker-error" class="error"></div>
+                    </div>
+                    <div class="formdiv">
+                        <input type="email" placeholder="信箱" name="mailcheck" id="mail" class="form-control mailcheck" autocomplete="off" required/>
+                        <!-- <div class="invalid-feedback ">此為必填欄位</div> -->
+                        <div id="mail-error" class="error"></div>
+                        <!-- <div class="passworderror">密碼不相符</div> -->
                     </div>
                     <div class="button" id="enroll_btn">註冊</div>
                 </form>
@@ -79,10 +97,12 @@
             <img src="./img/logo.png" />
         </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js " integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut " crossorigin="anonymous "></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js " integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k " crossorigin="anonymous "></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mailcheck/1.1.2/mailcheck.js"></script>
     <script src="./src/js/enroll.js"></script>
+    <script src="./src/lib/timepicker/jquery.timepicker.min.js"></script>
     <script src="./src/js/id.js"></script>
 </body>
 

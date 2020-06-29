@@ -130,6 +130,16 @@ router.post('/expired',(req,res) => {
     });
 });
 
+router.post('/changestate',(req,res) => {
+    Tasks.findOneAndUpdate({ "participate._id":req.body.id}, { "$set": { "participate.$.state" : 2 } }, err => {
+        if (!err) {
+            res.status(200).send({ isSuccess: true });
+        } else {
+            res.status(503).send({ isSuccess: false });
+        }
+    });
+});
+
 router.post('/participate',async(req,res) => {
     try {
         await Tasks.findOne({ "_id":req.body.id}).exec(async (err, res) => {
@@ -138,6 +148,7 @@ router.post('/participate',async(req,res) => {
                 return;
             }
             else{
+
                 res.invite = req.body.invite;
                 res.participate = req.body.participate;
                 res.save(function (err) {
@@ -153,32 +164,16 @@ router.post('/participate',async(req,res) => {
     res.status(200).send({ isSuccess: true });
 });
 
-router.post('/progress',async(req,res) => {
-    try {
-        console.log(req.body.account);
-        await Tasks.find({ "participate.id": req.body.account,"participate.state": 1}).exec(async (err, res2) => {
-            if (err) {
-                console.log('fail to query:', err)
-                return;
-            }
-            else{
-                res.send(res2);
-            }
-        });
-    }catch(err){
-        res.json({message:err});
-    }
-});
 
 router.post('/invite',async(req,res) => {
     try {
-        console.log(req.body.account);
-        await Tasks.find({ "participate.id": req.body.account,"participate.state": 1}).exec(async (err, res2) => {
+        await Tasks.find({"invite":  req.body.account}).exec(async (err, res2) => {
             if (err) {
                 console.log('fail to query:', err)
                 return;
             }
             else{
+                console.log(req.body.account);
                 res.send(res2);
             }
         });
@@ -190,7 +185,7 @@ router.post('/invite',async(req,res) => {
 router.post('/progress',async(req,res) => {
     try {
         console.log(req.body.account);
-        await Tasks.find({ "participate.id": req.body.account,"participate.state": 1}).exec(async (err, res2) => {
+        await Tasks.find({ "participate.id": req.body.account}).exec(async (err, res2) => {
             if (err) {
                 console.log('fail to query:', err)
                 return;

@@ -13,8 +13,8 @@ const UserSchema = mongoose.Schema({
         type:String,
         require:true
     },
-    phone:{
-        type:Number,
+    gender:{
+        type:String,
         require:true
     },
     classcode:{
@@ -27,6 +27,18 @@ const UserSchema = mongoose.Schema({
     },
     icon:{
         type:String,
+        require:true
+    },
+    birthday:{
+        type:String,
+        require:true
+    },
+    mail:{
+        type:String,
+        require:true
+    },
+    point:{
+        type:Number,
         require:true
     }
 },{collection: 'Users'});

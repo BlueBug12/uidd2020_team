@@ -32,9 +32,9 @@ router.post('/',async(req,res) => {
 });
 
 //check repeat account
-router.post('/checkaccount',async(req,res) => {
+router.post('/checkaccount',(req,res) => {
     try {
-        await Users.findOne({ "account":req.body.account}).exec(async (err, res2) => {
+        Users.findOne({ "account":req.body.account}).exec(async (err, res2) => {
             if (err) {
                 console.log('fail to query:', err)
                 return;
@@ -60,8 +60,10 @@ router.post('/enroll',async(req,res) => {
         account:req.body.account,
         password:req.body.password,
         name:req.body.name,
-        phone:req.body.phone,
-        icon:req.body.icon
+        icon:req.body.icon,
+        gender:req.body.gender,
+        birthday:req.body.birthday,
+        mail:req.body.mail
     });
     try {
         const savePost = await users.save();
