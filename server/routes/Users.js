@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const mongoose = require('mongoose');
 const Users = require('../models/Users');
 const { db } = require('../models/Users');
 
@@ -172,5 +173,17 @@ router.get('/:id',async(req,res) => {
     }catch(err){
         res.json({message:err});
     }
+});
+router.post('/changedata',(req,res) => {
+    var id = (req.body.id);
+		
+    Users.findOneAndUpdate({ account:id}, { icon:req.body.icon,name:req.body.name}, err => {
+        console.log(err);
+        if (!err) {
+            res.status(200).send({ isSuccess: true });
+        } else {
+            res.status(503).send({ isSuccess: false });
+        }
+    });
 });
 module.exports = router;

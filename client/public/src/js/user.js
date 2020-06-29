@@ -1,9 +1,10 @@
 $(document).ready(function() {
-  console.log("hello");
-
+  //console.log("hello");
+  let img_url;
+  
 
     let bannerbuttons = document.getElementsByClassName('bannerbutton');
-    console.log(bannerbuttons);
+   // console.log(bannerbuttons);
     bannerbuttons[0].classList.add('active');
 
 
@@ -37,6 +38,7 @@ $(document).ready(function() {
         reader.onload = function(evt) {
           //image.classList.remove('no-image');
           image.style.backgroundImage = 'url(' + evt.target.result + ')';
+          img_url=evt.target.result;
           var request = {
             itemtype: 'test 1',
             brand: 'test 2',
@@ -44,7 +46,7 @@ $(document).ready(function() {
               data: evt.target.result
             }]
           };
-
+          console.log(img_url.length);
           //document.querySelector('.show-button').style.display = 'block';
           //document.querySelector('.upload-result__content').innerHTML = JSON.stringify(request, null, '  ');
         }
@@ -105,6 +107,18 @@ $(document).ready(function() {
     $(document).on('click', '#bar2', function () {
 
     });
+    
+    $(document).on('click','#send_button',function(){
+      console.log(localStorage.getItem("account"))
+      console.log($("#name").val());
+      $.post('./Users/changedata',{
+        id:localStorage.getItem("account"),
+        icon:img_url,
+        name:$('#name').val()
+      },(res)=>{
+        
+      });
+    })
     let tri=0;
     $(document).on('click','#switch_data',function(){
       if(!tri){

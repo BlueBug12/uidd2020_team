@@ -11,6 +11,7 @@ const SERVER_CONFIG = {
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(express.json({limit:'50mb'}));
 app.use(express.static('../client/public'));
 
 const taskRoute= require('./routes/Tasks');
@@ -18,7 +19,7 @@ const userRoute = require('./routes/Users');
 app.use('/tasks',taskRoute);
 app.use('/users',userRoute);
 
-const port = 1113;
+const port = 4444;
 https.createServer(SERVER_CONFIG, app)
      .listen(port,function() { console.log("HTTPS sever started"); }
 );
