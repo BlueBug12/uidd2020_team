@@ -71,7 +71,7 @@ class Panel {
 				document.getElementsByClassName("pen")[0].addEventListener('click', () => {
 					this.isDrawing = !this.isDrawing;
 					if (this.isDrawing) {
-						document.getElementsByClassName("pen")[0].style["background-color"] = "#000000";
+						document.getElementsByClassName("pen")[0].style["background-color"] = "#9E9E9E";
 						document.getElementsByClassName("delete")[iter].style["background-color"] = "";
 						this.isDeleting = false;
 					} else {
@@ -95,9 +95,10 @@ class Panel {
 				this.isDeleting = !this.isDeleting;
 				if (this.isDeleting) {
 					removeHighlight();
-					document.getElementsByClassName("delete")[iter].style["background-color"] = "#000000";
+					document.getElementsByClassName("delete")[iter].style["background-color"] = "#9E9E9E";
 					if (iter == 0) document.getElementsByClassName("pen")[0].style["background-color"] = "";
 					if (iter == 1) document.getElementsByClassName("paint")[0].style["background-color"] = "";
+					this.mode = "line";
 					this.isDrawing = false;
 				} else {
 					document.getElementsByClassName("delete")[iter].style["background-color"] = "";
