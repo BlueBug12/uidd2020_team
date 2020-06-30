@@ -6,9 +6,9 @@ const { db } = require('../models/Users');
 
 
 //Check login
-router.post('/',async(req,res) => {
+router.post('/',(req,res) => {
     try {
-        await Users.findOne({'account':req.body.account,'password': req.body.password }).exec(async (err, res2) => {
+        Users.findOne({'account':req.body.account,'password': req.body.password }).exec(async (err, res2) => {
             if (err) {
                 console.log('fail to query:', err)
                 return;
@@ -76,10 +76,10 @@ router.post('/enroll',async(req,res) => {
 });
 
 //store fb login data
-router.post('/CheckData',async(req,res) => {
+router.post('/CheckData',(req,res) => {
     try {
         //console.log(req.body.account);
-        await Users.findOne({ "account":req.body.account}).exec(async (err, res2) => {
+         Users.findOne({ "account":req.body.account}).exec(async (err, res2) => {
             if (err) {
                 console.log('fail to query:', err);
                 return;
@@ -93,7 +93,7 @@ router.post('/CheckData',async(req,res) => {
                         phone:req.body.phone,
                         icon:req.body.url
                     });
-                    await users.save();
+                   users.save();
                     res.send(JSON.parse(`{
                         "first": "true"
                     }`));

@@ -118,6 +118,8 @@ router.post('/',async(req,res) => {
     }
 
 });
+
+//set task expired
 router.post('/expired',(req,res) => {
     var id = mongoose.Types.ObjectId(req.body.id);
     Tasks.findOneAndUpdate({ _id:id}, { expired: 1 }, err => {
@@ -130,16 +132,7 @@ router.post('/expired',(req,res) => {
     });
 });
 
-router.post('/changestate',(req,res) => {
-    Tasks.findOneAndUpdate({ "participate._id":req.body.id}, { "$set": { "participate.$.state" : 2 } }, err => {
-        if (!err) {
-            res.status(200).send({ isSuccess: true });
-        } else {
-            res.status(503).send({ isSuccess: false });
-        }
-    });
-});
-
+//participate in game page
 router.post('/participate',async(req,res) => {
     try {
         await Tasks.findOne({ "_id":req.body.id}).exec(async (err, res) => {
@@ -164,6 +157,7 @@ router.post('/participate',async(req,res) => {
     res.status(200).send({ isSuccess: true });
 });
 
+//load data to  invite page
 router.post('/invite',async(req,res) => {
     try {
         temp = [];
@@ -188,6 +182,7 @@ router.post('/invite',async(req,res) => {
     }
 });
 
+//change invite state in invite page
 router.post('/agree',async(req,res) => {
     try {
         await Tasks.updateOne({ "_id":req.body.id},{ $addToSet: { participate: req.body.participate }}, function(err) {
@@ -218,9 +213,10 @@ router.post('/agree',async(req,res) => {
     }
 });
 
-router.post('/deny',async(req,res) => {
+//change invite state in invite page
+router.post('/deny',(req,res) => {
     try {
-        await Tasks.findOne({"_id":req.body.id} ).exec(async (err, res2) => {
+        Tasks.findOne({"_id":req.body.id} ).exec(async (err, res2) => {
             if (err) {
                 console.log('fail to query:', err)
                 return;
@@ -240,15 +236,15 @@ router.post('/deny',async(req,res) => {
     }
 });
 
-router.post('/progress',async(req,res) => {
+//load data to process page
+router.post('/progress',(req,res) => {
     try {
-        await Tasks.find({ "participate.id": req.body.account,"participate.state": 1}).exec(async (err, res2) => {
+        Tasks.find({ "participate.id": req.body.account}).exec(async (err, res2) => {
             if (err) {
                 console.log('fail to query:', err)
                 return;
             }
             else{
-                console.log(req.body.account);
                 res.send(res2);
             }
         });
@@ -257,9 +253,10 @@ router.post('/progress',async(req,res) => {
     }
 });
 
-router.post('/changestate',async(req,res)=>{
+//set participate.state in process page 
+router.post('/changestate',(req,res)=>{
     try {
-        await Tasks.updateOne({ "_id":req.body.id,"participate.id":req.body.account},{'$set': {
+         Tasks.updateOne({ "_id":req.body.id,"participate.id":req.body.account},{'$set': {
             'participate.$.state': req.body.state}}, function(err) {
             if (err) {
                 console.log('fail to query:', err)
@@ -267,6 +264,141 @@ router.post('/changestate',async(req,res)=>{
             }
             else{
                 res.status(200).send({ isSuccess: true });
+            }
+        });
+    }catch(err){
+        res.json({message:err});
+    }
+})
+
+//load data to verify page
+router.post('/verify',async(req,res) => {
+    try {
+        temp = [];
+        check = 0;
+        await Tasks.find({"participate.state":2}  ).exec((err, res2) => {
+            if (err) {
+                console.log('fail to query:', err)
+                return;
+            }
+            else{
+                res2.forEach(function(item){
+                    item.participate.forEach(function(person){
+                        if(person.state != 2){
+                            check = 1; 
+                        }
+                     });
+                     item.verify.forEach(function(person2){
+                        if(person2.id == req.body.account){
+                            check = 1; 
+                        }
+                     });
+                     if(check == 0){
+                         temp.push(item);
+                     }
+                     else{
+                         check = 0;
+                     }
+                 });
+                res.send(temp);
+            }
+        });
+    }catch(err){
+        res.json({message:err});
+    }
+});
+
+//set verify state
+router.post('/verifystate',(req,res)=>{
+    try {
+         Tasks.updateOne({ "_id":req.body.id},{'$set': {
+            'verify': req.body.verify}}, function(err) {
+            if (err) {
+                console.log('fail to query:', err)
+                return;
+            }
+            else{
+                res.status(200).send({ isSuccess: true });
+            }
+        });
+    }catch(err){
+        res.json({message:err});
+    }
+})
+
+//check if task is finish or failure
+router.post('/checkstate',(req,res)=>{
+    try {
+        var temp = [];
+        var length = 0;
+        var agree = 0;
+        var deny = 0;
+        Users.find({ "classcode":req.body.classcode}).exec((err, res2) => {
+            if (err) {
+                console.log('fail to query:', err)
+                return;
+            }
+            else{
+                length = res2.length / 2 + 1;
+                Tasks.find({ "participate.id": req.body.account,"participate.state":2}).exec((err, res3) => {
+                    if (err) {
+                        console.log('fail to query:', err)
+                        return;
+                    }
+                    else{
+                        res3.forEach(function(item){
+                            item.verify.forEach(function(person){
+                                if(person.state == 0){
+                                    deny++;
+                                }
+                                else{
+                                    agree++;
+                                }
+                            });
+                            if(agree >= length){
+                                item.participate.forEach(async function(member){
+                                    member.state = 3;
+                                    await Users.findOne({"account":member.id} ).exec((err, res4) => {
+                                        if (err) {
+                                            console.log('fail to query:', err)
+                                            return;
+                                        }
+                                        else{
+                                            res4.point = item.point;
+                                            res4.save();
+                                        }
+                                    });
+                                });
+                            }
+                            else if(deny >= length){
+                                item.participate.forEach(function(member){
+                                    member.state = 4;
+                                });
+                            }
+                            item.save();
+                            agree = 0;
+                            deny = 0;
+                        });
+                        res.status(200).send({ isSuccess: true });
+                    }
+                });
+            }
+        });
+    }catch(err){
+        res.json({message:err});
+    }
+})
+
+//get user finish task
+router.post('/finished',(req,res)=>{
+    try {
+        Tasks.find({ "participate.id": req.body.account,"participate.state":3}).exec(async (err, res2) => {
+            if (err) {
+                console.log('fail to query:', err)
+                return;
+            }
+            else{
+                res.send(res2);
             }
         });
     }catch(err){
