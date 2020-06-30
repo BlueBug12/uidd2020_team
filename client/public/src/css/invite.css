@@ -16,12 +16,7 @@
     height: 100vh;
     background-color: #4b515f;
     text-align: center;
-}
-#block {
-    display: flex;
-}
-.list {
-    background-color: #F7F5E4;
+    padding:0;
 }
 #request-btn {
     cursor: pointer;

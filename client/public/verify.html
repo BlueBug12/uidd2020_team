@@ -8,13 +8,12 @@
     <link rel="stylesheet" type="text/css" href="./src/css/lib/font-awesome-4.7.0/css/font-awesome.css">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title></title>
-    <link href="./src/css/invite.css" rel="stylesheet" type="text/css" />
+    <link href="./src/css/verify.css" rel="stylesheet" type="text/css" />
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 </head>
 
 <body>
     <div class="container-fluid" id = "back">
-        
         <div class="banner">
             <div class="nav-bg">
                 <nav class="navbar " id="navbar">
@@ -41,62 +40,27 @@
                 </nav>
             </div>
         </div>
-        <div class="container" style="margin: 0;padding: 0" id="app">
+        <div class="container" style="margin: 0;padding: 0">
             <div class = "row justify-content-end">
-                <div  class = "col-7 message" :class={active:shows[index]}  >
+                <div  class = "col-6 message">
                     <div class="row shadow" >
                     </div>
                     <div class ="row  head">
-                        <img class="img-fluid" src="./img/invite/head.png"></img>
+                        <img class="img-fluid" src="./img/verify/head.png"></img>
                     </div>
                     <div class ="row content">
-                        <div class="col-5 content1">
-                            <figure>
-                                <img class="img-fluid person"  :src="task.icon" alt="">
-                                <figcaption class="content-text">{{task.author}}</figcaption>
-                              </figure>
+                        <div class ="row  monster">
+                            <img class="img-fluid" src="./img/verify/left-monster.png" ></img>
+                            <img class="img-fluid left-hand" src="./img/verify/left-hand.png" ></img>
+                            <img class="img-fluid right" src="./img/verify/right.png" ></img>
                         </div>
-                        <div class="col-7 content2">
-                            <img class="img-fluid right-content" src="./img/invite/content.png" ></img>
-                            <p class="task-text">{{task.content}}</p>
-                            <div class="row below-content">
-                                <div class="col-6">
-                                    <div class="row">
-                                        <img class="img-fluid icon" src="./img/invite/location.png" ></img>
-                                        <span class="info" style="padding-top: 5%;">{{task.region}}</span>
-                                    </div>
-                                    <div class="row">
-                                        <img class="img-fluid icon" src="./img/invite/time.png" ></img>
-                                        <span class="info" style="padding-top: 2%;">{{task.remain}}</span>
-                                    </div>
-                                    <div class="row">
-                                        <img class="img-fluid icon" src="./img/invite/person.png"></img>
-                                        <div class="info" style="padding-top: 2%;">
-                                            <template v-for="(member,mindex) in task.participate" > 
-                                                <img class="participate-person" :src="member.icon"  alt="">
-                                            </template>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <img class="img-fluid point" src="./img/invite/point.png" ></img>
-                                    <span class="pointval" style="padding-top: 2%;">{{task.point}}P</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class ="row align-self-start buttons ">
-                        <div class = "col-6" >
-                            <img class="img-fluid" src="./img/invite/refuse.png" v-on:click="refuse(index)"></img>
-                        </div>
-                        <div class = "col-6">
-                            <img class="img-fluid" src="./img/invite/agree.png" v-on:click="accept(index)"></img>
+                        <div class ="row  monster2">
+                            <img class="img-fluid " src="./img/verify/right-monster.png" ></img>
+                            <img class="img-fluid right-hand" src="./img/verify/right-hand.png" ></img>
+                            <img class="img-fluid deny" src="./img/verify/deny.png" ></img>
                         </div>
                     </div>
                 </div>
-                
-            </template>
-            
             </div>
         </div>
     </div>
@@ -106,7 +70,7 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js " integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut " crossorigin="anonymous "></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js " integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k " crossorigin="anonymous "></script>
-    <script src="./src/js/invite.js"></script>
+    <script src="./src/js/verify.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 
 </body>
