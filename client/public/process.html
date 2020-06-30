@@ -393,6 +393,8 @@ function find_objid(content,index){
             changeState: function(index){
                 console.log(index)
                 if(this.tasks[index]["state"] == 1){
+                    console.log(find_objid(localStorage.getItem('account'),index))
+                    console.log(localStorage.getItem('account'))
                     $.post('./tasks/changestate', {
                             id: find_objid(localStorage.getItem('account'),index),
                             account:localStorage.getItem('account'),
