@@ -15,8 +15,7 @@ $(document).ready(function() {
                 }
                 temp = document.getElementsByClassName('border');
                 temp[0].classList.remove('border');
-                reg = document.getElementById(this.tasks[panelIndex].region);
-                reg.classList.add('border');
+                showcurrentfloor(this.tasks[panelIndex].region)
                 this.$set(this.shows, panelIndex, true);
 
             },
@@ -77,12 +76,12 @@ $(document).ready(function() {
                         $('.alert-mess').text('任務已被搶走囉!')
                   
                     } else {
+                        $('.alert-mess').text('任務已接受')
                         $.post('./tasks/participate', {
                             id: this.tasks[index]._id,
                             invite: invite_after,
                             participate: [{id:localStorage.account,state:1,icon:document.getElementById("UserImg").src}]
                         }, (res) => {
-                            $('.alert-mess').text('任務已接受')
                         });
                     }
                     document.getElementById(this.tasks[index].region).classList.remove('border')
@@ -110,8 +109,10 @@ $(document).ready(function() {
                         this.shows[0] = true;
                         this.countdown[0] = true;
                         this.remaintime(0);
-                        var reg = document.getElementById(this.tasks[0].region)
-                        reg.classList.add('border')
+                        //var reg = document.getElementById()
+                        //console.log(this.tasks[0].region)
+                        showcurrentfloor(this.tasks[0].region)
+                        //reg.classList.add('border')
                     }
                     else{
                         this.shows = [];
@@ -137,6 +138,26 @@ $(document).ready(function() {
     }
 
 
+    function showcurrentfloor(id){
+        end = parseInt(id.indexOf("room"))
+        current = parseInt(id.substring(0,end))
+        var floors = document.querySelectorAll("#floors > div").length;
+        if(choose_region){
+            if(choose_region[0] == current){
+                $('#'+choose_region).removeClass('border')
+            }
+        }
+        genPanel(current-1,0)
+        $(`#${id}`).addClass('border')
+        for(var i = 0;i < floors;i++){
+            if(i+1 == current){
+                $(`#floor_animate${i}`).css({background: 'rgb(121, 159, 180)' }); 
+            }
+            else{
+                $(`#floor_animate${i}`).css({ background: 'rgb(196, 213, 217)' });
+            }
+        }
+    }
 
     $('.request-btn').css("opacity", "1");
     $('.solve-btn').click(function() {
@@ -149,16 +170,15 @@ $(document).ready(function() {
     })
 
     $('.request-btn').click(function() {
+        document.getElementById("floors").addEventListener('mouseenter', onMouseEnterFloor);
+        document.getElementById("floors").addEventListener('mouseleave', onMouseLeaveFloor);
+        var floor = document.querySelectorAll("#floors > div").length;
         var i = 0;
-        while (temp = document.getElementById("room" + i)) {
-            temp.setAttribute("pointer-events", "auto");
-            if (temp.classList.contains('region_choose')) {
-                temp.classList.remove('region_choose')
-                temp.classList.add('border')
-            } else {
-                temp.classList.remove('border')
-            }
-            i = i + 1
+        if(choose_region == null){
+            genPanel(0,1)         
+        }
+        else{
+            genPanel(choose_region[0]-1,1)          
         }
         $(this).addClass('active');
         $('.solve-btn').removeClass('active');
@@ -389,14 +409,20 @@ $(document).ready(function() {
                 icon: document.getElementById("UserImg").src,
                 region: $('.border')[0].id,
                 point: $('#inputpoint').val(),
+                region_content: $('.head').text()
             }, (res) => {
                 clear();
-                var j = 0;
-                while (temp = document.getElementById("room" + j)) {
-                    if (temp.classList.contains('border')) {
-                        temp.classList.remove('border')
+                var i = 0;
+                var floor = document.querySelectorAll("#floors > div").length;
+                for (j = 0;j < floor;j++){
+                    i = 0;
+                    while (temp = document.getElementById((j+1)+"room" + i)) {
+                        if (temp.classList.contains('border')) {
+                            temp.classList.remove('border')
+                        }
+                        choose_region = null
+                        i = i + 1;
                     }
-                    j = j + 1;
                 }
                 $('.head').html('<i class="fa fa-map-marker" aria-hidden="true"></i>任務地點');
                 buttonunable();
@@ -413,14 +439,21 @@ $(document).ready(function() {
         }
     });
     $('#solve_btn').click((event) => {
+        document.getElementById("floors").removeEventListener('mouseenter', onMouseEnterFloor);
+        document.getElementById("floors").removeEventListener('mouseleave', onMouseLeaveFloor);
+        var floor = document.querySelectorAll("#floors > div").length;
         var i = 0;
-        while (temp = document.getElementById("room" + i)) {
-            temp.setAttribute("pointer-events", "none");
-            if (temp.classList.contains('border')) {
-                temp.classList.remove('border');
-                temp.classList.add('region_choose');
+        for (var j = 0;j < floor;j++){
+            i = 0;
+            $(`#floor_animate${j}`).css({ top: `calc(${30*(floor-1-j)}px + 50vh)` });
+            while (temp = document.getElementById((j+1)+"room" + i)) {
+                temp.setAttribute("pointer-events", "none");
+                if (temp.classList.contains('border')) {
+                    temp.classList.remove('border');
+                    console.log(temp)
+                }
+                i = i + 1
             }
-            i = i + 1
         }
         event.preventDefault()
         var classcode = localStorage.getItem("classcode");
@@ -434,6 +467,7 @@ $(document).ready(function() {
             }
         });
     });
+
 });
 
 function getUser() {

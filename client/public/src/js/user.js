@@ -2,8 +2,92 @@
 var img_url;
 var user_name;
 var user_gender;
-var user_email;
-var user_date;
+var user_mail;
+var user_birthday;
+
+function error(type, str) {
+  $(type + '-error').text(str);
+  $(type).addClass('err');
+}
+
+function clear() {
+  $('#name-error').text("");
+  $('#datepicker-error').text("");
+  $('#mail-error').text("");
+  $('#name').removeClass('err');
+  $('#datepicker').removeClass('err');
+  $('#mail').removeClass('err');
+
+
+}
+function check() {
+  clear();
+  var english = /^[A-Za-z0-9]+$/;
+  const correctmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  const name = user_name;
+  const datepicker = user_birthday;
+  const mail = user_mail;
+  let ans = true;
+
+
+  if (datepicker==""){
+      error("#datepicker", '此為必填欄位');
+      ans = false;        
+  }
+
+  if (name == "") {
+      error("#name", '此為必填欄位');
+      ans = false;
+  }
+
+  if (mail == "") {
+      error("#mail", '此為必填欄位');
+      ans = false;
+  } else {
+      if (!correctmail.test(mail)) {
+          error("#mail", '電子郵件無效');
+          ans = false;
+      }
+  }
+
+  return ans;
+
+}
+
+function buttonenable() {
+  let buttons = document.getElementsByTagName('button');
+  for (let i = 0; i < buttons.length; i++) {
+      buttons[i].disabled = false;
+      buttons[i].style.cursor = "pointer";
+  }
+}
+
+function hrefenable() {
+  let hrefs = document.getElementsByTagName('a');
+  for (let i = 0; i < hrefs.length; i++) {
+      hrefs[i].style.cursor = "pointer";
+      hrefs[i].style.pointerEvents = "auto";
+
+  }
+}
+
+function buttonunable() {
+  let buttons = document.getElementsByTagName('button');
+  for (let i = 0; i < buttons.length; i++) {
+      buttons[i].disabled = true;
+      buttons[i].style.cursor = "default";
+  }
+  $('.checkconfirm').css("cursor", "pointer");
+  $('.checkconfirm').prop("disabled", false);
+}
+
+function hrefunable() {
+  let hrefs = document.getElementsByTagName('a');
+  for (let i = 0; i < hrefs.length; i++) {
+      hrefs[i].style.cursor = "default";
+      hrefs[i].style.pointerEvents = "none";
+  }
+}
 
 $(document).ready(function() {
   //console.log("hello");
@@ -42,7 +126,6 @@ $(document).ready(function() {
       uploader.onchange = function() {
         var reader = new FileReader();
         reader.onload = function(evt) {
-          //image.classList.remove('no-image');
           image.style.backgroundImage = 'url(' + evt.target.result + ')';
           img_url=evt.target.result;
         }
@@ -108,17 +191,42 @@ $(document).ready(function() {
       console.log(localStorage.getItem("account"))
 
       if($("#name").val())
-          user_name=$("#name").val();
-      console.log($("#name").val());
-      console.log("user_name"+user_name);
-      $.post('./Users/changedata',{
-        id:localStorage.getItem("account"),
-        icon:img_url,
-        name:user_name
-      },(res)=>{
-       console.log("post success!");
-      });
+          user_name=$("#name").val().trim();
+      if($("#mail").val())
+        user_mail=$("#mail").val().trim();
+      
+      user_gender=$("#gender").val()==1? '男':'女';
+      if($("#datepicker").val())
+        user_birthday=$("#datepicker").val();
+      console.log("sexial: "+user_gender);
+      if(check()){
+        $.post('./Users/changedata',{
+          id:localStorage.getItem("account"),
+          icon:img_url,
+          name:user_name,
+          mail:user_mail,
+          gender:user_gender,
+          birthday:user_birthday
+        },(res)=>{
+         console.log("post success!");
+         buttonunable();
+         hrefunable();
+
+         $('.alert-mess').text('資料已更新')
+         $('.check').css("visibility", "visible");
+         $('.mask').css("visibility", "visible");
+        });
+      }
+      
     })
+
+    $('.checkconfirm').click(function(e) {
+      buttonenable();
+      hrefenable();
+      $('.check').css("visibility", "hidden");
+      $('.mask').css("visibility", "hidden");
+    });
+
     let tri=0;
     $(document).on('click','#switch_data',function(){
       if(!tri){
@@ -146,12 +254,19 @@ $(document).ready(function() {
 function getUser() {
     var account = localStorage.getItem("account");
     $.get('./users/find/' + account, {}, (res) => {
-        console.log(res);
+        console.log(res.gender);
         document.getElementById('name').placeholder=res.name;
         document.getElementById('img-result').style.backgroundImage = 'url('+res.icon+')';
+        document.getElementById('mail').placeholder = res.mail;
+        document.getElementById('gender').value = (res.gender=='男'? 1:2);
+        document.getElementById('datepicker').placeholder = res.birthday;
+
         img_url=res.icon;
         user_name=res.name;
-      //  document.getElementById("UserImg").src = res.icon;
-       // localStorage.setItem("classcode", res.classcode);
+        user_gender=res.gender;
+        user_mail=res.mail;
+        user_birthday=res.birthday;
+
     });
 }
+

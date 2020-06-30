@@ -2,6 +2,27 @@ const gridSize = 20;
 let floorplan;
 let floor_span = 0;
 let current_floor = 0;
+let choose_region = null;
+prevDiv = null
+let onMouseEnterFloor = () => {
+    for (let iter = 0; iter < floorplan.length; ++iter) {
+        $(`#floor_animate${iter}`).css({ transition: "0.5s" });
+        $(`#floor_animate${iter}`).css({ top: `calc(${30*(floorplan.length-iter-1)}px + 50vh)` });
+    }
+    floor_span = 1;
+};
+let onMouseLeaveFloor = () => {
+    for (let iter = 0; iter < floorplan.length; ++iter) {
+        $(`#floor_animate${iter}`).css({ transition: "0.5s" });
+        $(`#floor_animate${iter}`).css({ top: "50vh" });
+    }
+    if (floor_span) {
+        floor_span = 0;
+        genPanel(current_floor,1);
+    }
+};
+document.getElementById("floors").addEventListener('mouseenter', onMouseEnterFloor);
+document.getElementById("floors").addEventListener('mouseleave', onMouseLeaveFloor);
 (async () => {
 
     await (async function getFloorplan() {
@@ -17,32 +38,13 @@ let current_floor = 0;
         floorplan = data.floorplan;
     })();
     
-    genPanel(current_floor);
+    genPanel(current_floor,1);
     
 })();
 
-let onMouseEnterFloor = () => {
-    for (let iter = 0; iter < floorplan.length; ++iter) {
-        $(`#floor_animate${iter}`).css({ transition: "0.5s" });
-        $(`#floor_animate${iter}`).css({ top: `calc(${30*(floorplan.length-iter-1)}px + 50vh)` });
-    }
-    floor_span = 1;
-};
-let onMouseLeaveFloor = () => {
-    for (let iter = 0; iter < floorplan.length; ++iter) {
-        $(`#floor_animate${iter}`).css({ transition: "0.5s" });
-        $(`#floor_animate${iter}`).css({ top: "50vh" });
-    }
-    if (floor_span) {
-        floor_span = 0;
-        genPanel(current_floor);
-    }
-};
-document.getElementById("floors").addEventListener('mouseenter', onMouseEnterFloor);
-document.getElementById("floors").addEventListener('mouseleave', onMouseLeaveFloor);
 
-function genPanel(floor) {
 
+function genPanel(floor,buttonenable) {
     if (!floor_span) {
         let floors = document.getElementById("floors");
         let content = "";
@@ -66,7 +68,7 @@ function genPanel(floor) {
         for (let iter = 0; iter < floorplan.length; ++iter) {
             $(document).on('mouseenter', `#floor_animate${iter}`, function () {
                 if (floor_span) {
-                    genPanel(iter);
+                    genPanel(iter,1);
                     $(`#floor_animate${iter}`).css({
                         transition: "0s",
                         background: "#799FB4"
@@ -145,20 +147,21 @@ function genPanel(floor) {
     rooms.forEach((room, key) => {
         svg.append("rect")
             .attr({
-                id: `room${key}`,
+                id: `${floor+1}room${key}`,
                 fill: room.color,
                 width: Math.abs(room.corner1.x - room.corner2.x) + gridSize,
                 height: Math.abs(room.corner1.y - room.corner2.y) + gridSize,
                 x: Math.min(room.corner1.x, room.corner2.x) - 100,
                 y: Math.min(room.corner1.y, room.corner2.y),
-                rx: "5px"
+                rx: "5px",
+                class:'floor-item'
             });
         svg.append("text")
             .attr({
                 x: Math.min(room.corner1.x, room.corner2.x) - 100 + 5,
                 y: Math.min(room.corner1.y, room.corner2.y) + 25,
                 fill: "white",
-                id: `room${key + room.text}`,
+                id: `${floor+1}room${key}text`,
             }).style({
                 "font-size": "25px",
                 "font-family": "GenJyuuGothic-Medium"
@@ -178,36 +181,68 @@ function genPanel(floor) {
             });
     });
 
-    for (var i = 0; i < rooms.length; i++) {
-        var temp = document.getElementById("room"+i);
-        temp.classList.add('floor-item');
-        temp.addEventListener('click', function(e) {
-            choose_region = e.target.id;
-            var j = 0;
-            prevDiv = null
-            while(temp = document.getElementById("room"+j)){
-                if(temp.classList.contains('border')){
-                    prevDiv = "room"+j
-                }
-                j = j+1;
+    if(buttonenable){
+        if(choose_region){
+            if(choose_region[0]==(floor+1)){
+                $(`#${choose_region}`).addClass('border')
             }
+        }
+        for (var i = 0; i < rooms.length; i++) {
+            var temp = document.getElementById(floor+1+"room"+i);
+            temp.addEventListener('click', function(e) {
+                choose_region = e.target.id;
+                console.log(choose_region)
+                var j = 0;
 
-            if(choose_region == prevDiv){
-                document.getElementById(choose_region).classList.remove('border')
-                $('.head').html('<i class="fa fa-map-marker" aria-hidden="true"></i>任務地點');
-            }
-            else if(prevDiv == null){
-                document.getElementById(choose_region).classList.add('border')
-                var text = '#'+ choose_region+'text'
-                $('.head').html('<i class="fa fa-map-marker" aria-hidden="true"></i>'+$(text).text())
-            }
-            else{
-                document.getElementById(prevDiv).classList.remove('border')
-                document.getElementById(choose_region).classList.add('border')
-                var text = '#'+ choose_region+'text'
-                $('.head').html('<i class="fa fa-map-marker" aria-hidden="true"></i>'+$(text).text())
-            }
-        })
+                while(temp = document.getElementById(floor+1+"room"+j)){ 
+                    if(temp.classList.contains('border')){
+                        prevDiv = (floor+1)+"room"+j
+                    }
+                    j = j+1;
+                }
+
+                if(prevDiv == null){
+                    document.getElementById(choose_region).classList.add('border')
+                    prevDiv = choose_region    
+                    var text = '#'+ choose_region+'text'
+                    $('.head').html('<i class="fa fa-map-marker" aria-hidden="true"></i>'+(floor+1)+'樓:'+$(text).text())           
+                }
+                else if(choose_region == prevDiv ){
+                    document.getElementById(choose_region).classList.remove('border')
+                    prevDiv = null;
+                    choose_region = null;
+                    $('.head').html('<i class="fa fa-map-marker" aria-hidden="true"></i>任務地點');
+                }
+                else{
+                    if(prevDiv){
+                        if(prevDiv[0]==floor+1){
+                            document.getElementById(prevDiv).classList.remove('border')
+                            document.getElementById(choose_region).classList.add('border') 
+                            prevDiv = choose_region
+                        }
+                        else{
+                            document.getElementById(choose_region).classList.add('border')
+                            prevDiv = choose_region
+                        }
+                    }
+                    else{
+                        document.getElementById(choose_region).classList.add('border')
+                        prevDiv = choose_region  
+                    }
+                    var text = '#'+ choose_region+'text'
+                    $('.head').html('<i class="fa fa-map-marker" aria-hidden="true"></i>'+(floor+1)+'樓:'+$(text).text())     
+                }
+            })
+        }
     }
-    
+    else{
+        for (var i = 0; i < rooms.length; i++) {
+           $('#'+(floor+1)+"room"+i).css({cursor:'default'});
+        }
+        if(choose_region){
+            if(choose_region[0]==(floor+1)){
+                $(`#${choose_region}`).removeClass('border')
+            }
+        }
+    }
 }
