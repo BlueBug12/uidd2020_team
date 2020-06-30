@@ -395,7 +395,8 @@ function find_objid(content,index){
                 if(this.tasks[index]["state"] == 1){
                     $.post('./tasks/changestate', {
                             id: find_objid(localStorage.getItem('account'),index),
-                            account:localStorage.getItem('account')
+                            account:localStorage.getItem('account'),
+                            state:2
                     }, (res) => {
                         console.log(res)
                         this.tasks[index]["stateimage"] = "./img/process/judge.png"
@@ -406,7 +407,8 @@ function find_objid(content,index){
                 else if(this.tasks[index]["state"] == 4){
                     $.post('./tasks/changestate', {
                             id: find_objid(localStorage.getItem('account'),index),
-                            account:localStorage.getItem('account')
+                            account:localStorage.getItem('account'),
+                            state:2
                     }, (res) => {
                         console.log(res)
                         this.tasks[index]["stateimage"] = "./img/process/judge.png"

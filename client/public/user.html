@@ -18,100 +18,107 @@
 </head>
 
 <body onload="getUser()">
-    <div class="container-fluid">
-        <div class="mask"></div>
+    <div id="bg">
+        <div class="container-fluid">
+            <div class="mask"></div>
+            <div class="check">
+                <p class="notify">通知</p>
+                <p class="alert-mess">資料已更新</p>
+                <button class="checkconfirm ">確定</button>
+            </div>
 
-        <div class="banner">
-            <div class="nav-bg">
-                <nav class="navbar " id="navbar">
-                    <a href="index.html" class="navbar-brand">
-                        <span id="logo">
-                            <img src="./img/s_topic.png" class="d-inline-block align-top">
-                        </span>
-                    </a>
-                    <ul class="list-inline">
-                        <li class="list-inline-item">
-                            <button class="bannerbutton" href="#">任務地圖</button>
-                        </li>
-                        <li class="list-inline-item">
-                            <button class="bannerbutton" href="#">任務總覽</button>
-                        </li>
-                        <li class="list-inline-item">
-                            <button class="bannerbutton" href="#">排行與積分</button>
-                        </li>
+            <div class="banner">
+                <div class="nav-bg">
+                    <nav class="navbar " id="navbar">
+                        <a href="index.html" class="navbar-brand">
+                            <span id="logo">
+                                <img src="./img/s_topic.png" class="d-inline-block align-top">
+                            </span>
+                        </a>
+                        <ul class="list-inline">
+                            <li class="list-inline-item">
+                                <button class="bannerbutton" onclick="javascript:location.href='./game.html'">任務地圖</button>
+                            </li>
+                            <li class="list-inline-item">
+                                <button class="bannerbutton" href="#">任務總覽</button>
+                            </li>
+                            <li class="list-inline-item">
+                                <button class="bannerbutton" href="#">排行與積分</button>
+                            </li>
 
-                        <li class="list-inline-item">
-                            <div class="round" href="#"></div>
-                        </li>
-                        <li class="list-inline-item">
-                            <div class="round" id="user" href="#"></div>
-                        </li>
-                        <li class="list-inline-item">
-                            <!-- <a href="login.html">登入</a> -->
-                            <img id="UserImg" alt="" srcset="" style=" border-radius: 50%;width: 50px;height: 50px;">
-                        </li>
-                    </ul>
+                            
+                            <li class="list-inline-item">
+                                <div class="round" id="user" alt="" srcset="" style=" border-radius: 50%;width: 50px;height: 50px;"></div>
+                            </li>
+                            
+                        </ul>
 
-                </nav>
+                    </nav>
 
+                </div>
             </div>
         </div>
-    </div>
-    <div id="mydata">
-      <div id="data_bar">我的檔案</div>
-      <div id="left_data">
-        <div id="align">
-            <div id="container">
-                <form name="signin" class=" form">
-                  <div class="form_name">姓名:</div>
-                    <div class="formdiv ">
-                        <input type="text"  name="name" id="name" class="form-control " autocomplete="off" required/>
-                        <!-- <div class="invalid-feedback">此為必填欄位</div> -->
-                        <!-- <i class="fa fa-times-circle "></i> -->
-                        <div id="name-error" class="error"></div>
-                    </div>
-                    <div class="form_name">Email:</div>
-                    <div class="formdiv">
-                        <input type="text"  name="mail" id="mail" class="form-control" autocomplete="off" required />
-                        <!-- <div class="invalid-feedback">此為必填欄位</div> -->
-                        <div id="mail-error" class="error"></div>
-                    </div>
-                    <div class="form_name">性別:</div>
-                    <div class="formdiv">
-                        <input type="text"  name="gender" id="gender" class="form-control" autocomplete="off" required/>
-                        <!-- <div class="invalid-feedback ">此為必填欄位</div> -->
-                        <div id="gender-error" class="error"></div>
-                    </div>
-                    <div class="form_name">生日:</div>
-                    <div class="formdiv">
-                      <input type="text" id="datepicker">
-                    </div>
-                    <div id="send_button">儲存</div>
+        <div id="mydata">
+        <div id="data_bar">我的檔案</div>
+        <div id="left_data">
+            <div id="align">
+                <div id="container">
+                    <form name="signin" class=" form">
+                    <div class="form_name">姓名:</div>
+                        <div class="formdiv ">
+                            <input type="text"  name="name" id="name" class="form-control " autocomplete="off" required/>
+                            <!-- <div class="invalid-feedback">此為必填欄位</div> -->
+                            <!-- <i class="fa fa-times-circle "></i> -->
+                            <div id="name-error" class="error"></div>
+                        </div>
+                        <div class="form_name">Email:</div>
+                        <div class="formdiv">
+                            <input type="text"  name="mail" id="mail" class="form-control" autocomplete="off" required />
+                            <!-- <div class="invalid-feedback">此為必填欄位</div> -->
+                            <div id="mail-error" class="error"></div>
+                        </div>
+                        <div class="form_name">性別:</div>
+                        
+                        <div class="formdiv">
+                            <div class="select-dummy " >
+                                <select class="custom-select" id="gender">
+                                    <option value="1">男</option>
+                                    <option value="2">女</option>
+                                </select>
+                                <div id="gender-error" class="error"></div>
+                            </div>
+                        </div>
+                        <div class="form_name">生日:</div>
+                            <div class="formdiv">
+                                <input type="text" id="datepicker" class="form-control" >
+                            </div>
+                        <div id="send_button" >儲存</div>
 
-                </form>
+                    </form>
+                </div>
+        </div>
+        <div id="right_img"></div>
+
+
+        </div>
+        <div id="img_post">
+            <div class="wrapper">
+            <button id="img-result">Upload Image</button>
             </div>
-      </div>
-      <div id="right_img"></div>
-
-
-      </div>
-      <div id="img_post">
-        <div class="wrapper">
-          <button id="img-result">Upload Image</button>
+            <button class="show-button">Show server request</button>
+            <div class="upload-result">
+            <button class="hide-button">Close</button>
+            <pre class="upload-result__content">
+            </pre>
+            </div>
         </div>
-        <button class="show-button">Show server request</button>
-        <div class="upload-result">
-          <button class="hide-button">Close</button>
-          <pre class="upload-result__content">
-          </pre>
+        <div id="upload_img">
+            選擇圖片
         </div>
-      </div>
-      <div id="upload_img">
-        選擇圖片
-      </div>
-      <div class="triangle" id="switch_data"></div>
+        <div class="triangle" id="switch_data"></div>
 
 
+        </div>
     </div>
     <div class="menubar" id="bar1">個人資料</div>
     <div class="menubar" id="bar2">登出</div>

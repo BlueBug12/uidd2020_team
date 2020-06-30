@@ -6,9 +6,9 @@ const { db } = require('../models/Users');
 
 
 //Check login
-router.post('/',async(req,res) => {
+router.post('/',(req,res) => {
     try {
-        await Users.findOne({'account':req.body.account,'password': req.body.password }).exec(async (err, res2) => {
+        Users.findOne({'account':req.body.account,'password': req.body.password }).exec(async (err, res2) => {
             if (err) {
                 console.log('fail to query:', err)
                 return;
@@ -77,10 +77,10 @@ router.post('/enroll',async(req,res) => {
 });
 
 //store fb login data
-router.post('/CheckData',async(req,res) => {
+router.post('/CheckData',(req,res) => {
     try {
         //console.log(req.body.account);
-        await Users.findOne({ "account":req.body.account}).exec(async (err, res2) => {
+         Users.findOne({ "account":req.body.account}).exec(async (err, res2) => {
             if (err) {
                 console.log('fail to query:', err);
                 return;
@@ -96,7 +96,7 @@ router.post('/CheckData',async(req,res) => {
                         birthday:req.body.birthday,
                         mail:req.body.mail
                     });
-                    await users.save();
+                   users.save();
                     res.send(JSON.parse(`{
                         "first": "true"
                     }`));
@@ -182,6 +182,7 @@ router.get('/:id',async(req,res) => {
 // for users to edit their personal information
 router.post('/changedata',(req,res) => {
     var id = (req.body.id);
+    console.log(req.body.gender);
     Users.findOneAndUpdate({ account:id}, { 
         icon:req.body.icon,
         name:req.body.name,
