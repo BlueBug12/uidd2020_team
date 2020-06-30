@@ -47,14 +47,14 @@ body {
     height: auto;
 }
 .monster2{
-    margin-top: -1rem;
-    margin-left: 34rem;
     display: block;
     position: absolute;
     text-align: center;
     z-index: 1;
     width: 45%;
     height: auto;
+    left:73%;
+    top:8%
 }
 .left-hand{
     position: absolute;
@@ -69,6 +69,7 @@ body {
     left:68%;
     width: 37%;
     z-index: 2;
+    cursor: pointer;
 }
 .right-hand{
     position: absolute;
@@ -83,6 +84,7 @@ body {
     left:6%;
     width: 37%;
     z-index: 2;
+    cursor: pointer;
 }
 .message{
     background-color: #f7f6e4;
@@ -93,6 +95,35 @@ body {
     position: absolute;
     border-radius: 28px;
     text-align: center;
+}
+.info.active{
+   background-color: #F4DF62;
+    height: 10%;
+    display:block;
+    width: -webkit-fill-available;
+    text-align: -webkit-center;
+    margin-left: 15px;
+    border-radius: 28px;
+    opacity: 1;
+}
+.info{
+    background-color: #F4DF62;
+     height: 10%;
+     display:block;
+     width: -webkit-fill-available;
+     text-align: -webkit-center;
+     margin-left: 15px;
+     border-radius: 28px;
+     opacity:0.5;
+     margin-top: 10px;
+ }
+.infotext{
+    font-family: "GenJyuuGothic-Medium";
+    color:#4b515f;
+    font-size: x-large;
+    width: max-content;
+    margin-top: 1rem;
+    letter-spacing: 6.6px;
 }
 .bannerbutton {
     border-radius: 20px;
@@ -164,4 +195,54 @@ li {
     width: 100%;
     background-color: #F7F6E4;
     position: relative;
+}
+.mask {
+    background-color: darkgray;
+    opacity: 0.9;
+    z-index: 10;
+    position: absolute;
+    height: 100vh;
+    width: 100vw;
+    visibility: hidden;
+}
+
+.check {
+    position: absolute;
+    margin: 0 auto;
+    top: 50vh;
+    left: 50vw;
+    margin-left: -15vw;
+    margin-top: -15vh;
+    width: 30vw;
+    height: 30vh;
+    background-color: #F7F6E4;
+    z-index: 11;
+    box-shadow: 5px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    visibility: hidden;
+    font-family: GenJyuuGothic-Medium;
+}
+
+.notify {
+    font-size: 3vh;
+}
+
+.alert-mess {
+    font-size: 5vh;
+    text-align: center;
+}
+
+.checkconfirm {
+    bottom: 1vh;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #4B515F;
+    color: #F7F6E3;
+    height: 12%;
+    width: 35%;
+    border-radius: 20px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
 }
