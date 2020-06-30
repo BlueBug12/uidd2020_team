@@ -1108,6 +1108,7 @@ document.getElementById("draw_boundary").addEventListener('click', () => {
 	$('#place_furnish').css({"opacity": 0.5});
 	$('#editor').css({ "height": "8vh", "margin-top": "20vh" });
 	$('.list-inline-item').css({ "padding-left": "1vw", "margin-top": "1vh" });
+	$('#submit').css({ display: "none" });
 	panel.mode = "line";
 	panel.isDrawing = false;
 	panel.isDeleting = false;
@@ -1123,6 +1124,7 @@ document.getElementById("draw_room").addEventListener('click', () => {
 	$('#place_furnish').css({"opacity": 0.5});
 	$('#editor').css({ "height": "60vh", "margin-top": 0 });
 	$('.list-inline-item').css({ "padding-left": "1vw", "margin-top": "1vh" });
+	$('#submit').css({ display: "none" });
 	panel.isDrawing = false;
 	panel.isDeleting = false;
 	document.getElementsByClassName("delete")[1].style["background-color"] = "";
@@ -1136,6 +1138,7 @@ document.getElementById("place_furnish").addEventListener('click', () => {
 	$('#place_furnish').css({"opacity": 1});
 	$('#editor').css({ "height": "60vh", "margin-top": 0 });
 	$('.list-inline-item').css({ "padding-left": "2.5vw", "margin-top": 0 });
+	$('#submit').css({ display: "block" });
 	panel.mode = "line";
 	panel.isDrawing = false;
 	panel.isDeleting = false;
