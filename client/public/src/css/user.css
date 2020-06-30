@@ -552,8 +552,8 @@ div#signin div#logo img {
   width: 150px;
   height: 150px;
   border-radius: 50%;
+  border:3px solid #799fb4;
 
-  color: rgba(0, 0, 0, 0);
 
 }
 .wrapper button {
@@ -690,17 +690,126 @@ div#signin div#logo img {
     width:147px;
     height:26px;
     background: #6c6a75;
+    font-size: 0.7em;
+    font-family:GenJyuuGothic-Medium;
+    color:white;
+
+    text-align:center;
 }
 
 #cookie{
-    right:10px;
-}
-#s1{
-    background-image:"./img/user/cookie.png";
-}
-#coin{
     right:180px;
 }
+#cookie span{
+    position: absolute;
+    background-size: contain;
+    background-position: left;
+    display: block;
+    width:55px;
+    height:55px;
+    left:0px;
+    bottom:-10px;
+    margin-left:-10px;
+    background-image:url("../../img/user/cookie.png");
+    
+}
+#coin{
+    right:10px;
+
+}
 #coin>span{
-    background-image:"./img/user/coin.png";
+    position: absolute;
+    background-size: contain;
+    background-position: left;
+    display: block;
+    width:40px;
+    height:40px;
+    left:0px;
+    bottom:-5px;
+    margin-left:-10px;
+    background-image:url("../../img/user/coin.png");
+}
+#coin_score{
+  margin-top:-3px;
+}
+#cookie_score{
+  margin-top:-3px;
+}
+#record{
+    position: absolute;
+    height:80%;
+    width: 60%;
+    padding:15px 20px;
+    overflow-y:scroll;
+    
+
+}
+.record_row{
+  position:relative;
+  height:30%;
+  width:100%;
+}
+.record_img{
+  position:absolute;
+  left:0px;
+}
+.record_type{
+  position:absolute;
+  height:50%;
+  width:15%;
+  left:90px;
+  padding-top:7px;
+  font-size:1.7em;
+  font-family:GenJyuuGothic-Medium;
+}
+.record_date{
+  position:absolute;
+  height:50%;
+  width:15%;
+  bottom:0px;
+  left:90px;
+  font-size:1em;
+  color:gray;
+  font-family:GenJyuuGothic-Medium;
+}
+.record_coin{
+  position:absolute;
+  width:30%;
+  left:30%;
+  height:100%;
+  text-align:center;
+  margin-top:16px;
+  font-size:1.8em;
+  font-family:GenJyuuGothic-Medium;
+}
+.record_cookie{
+  position:absolute;
+  width:30%;
+  left:50%;
+  height:100%;
+  text-align:center;
+  margin-top:16px;
+  font-size:1.8em;
+  font-family:GenJyuuGothic-Medium;
+}
+#record_bar{
+  position:relative;
+  width:100%;
+  height:50px;
+  
+}
+.record_icon{
+  position:absolute;
+  height:50px;
+  left:100px;
+
+  
+}
+#coin_icon{
+  position:absolute;
+  left:40%
+}
+#cookie_icon{
+  position:absolute;
+  left:60%;
 }

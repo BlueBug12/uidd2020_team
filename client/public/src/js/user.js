@@ -239,6 +239,9 @@ $(document).ready(function() {
         $('#upload_img').css('visibility','hidden');
         $('#img_post').css('visibility','hidden');
         $('.points').css('visibility','visible');
+        $('#record').css('visibility','visible');
+        $('#record_bar').css('visibility','visible');
+        
         
 
         document.getElementById('switch_data').classList.remove('triangle');
@@ -250,7 +253,10 @@ $(document).ready(function() {
         $('#left_data').css('visibility','visible');
         $('#upload_img').css('visibility','visible');
         $('#img_post').css('visibility','visible');
+        $('#record').css('visibility','hidden');
         $('.points').css('visibility','hidden');
+        $('#record_bar').css('visibility','hidden');
+
         document.getElementById('switch_data').classList.remove('anti-triangle');
         document.getElementById('switch_data').classList.add('triangle');
         tri=0;
@@ -258,7 +264,29 @@ $(document).ready(function() {
 
     });
   });
-
+function work_type(housework){
+  if(housework.includes('洗碗')){
+    return 'https://luffy.ee.ncku.edu.tw:2222/img/housework/bowl.png';
+  }
+  else if (housework.includes('垃圾')){
+    return 'https://luffy.ee.ncku.edu.tw:2222/img/housework/garbage.png'       
+  }
+  else if (housework.includes('衣服')){
+    return 'https://luffy.ee.ncku.edu.tw:2222/img/housework/cloth.png'       
+  }
+  else if (housework.includes('掃地')){
+    return 'https://luffy.ee.ncku.edu.tw:2222/img/housework/sweep.png'       
+  }
+  else if (housework.includes('拖地')){
+    return 'https://luffy.ee.ncku.edu.tw:2222/img/housework/mop.png'       
+  }
+  else if (housework.includes('廁所')){
+    return 'https://luffy.ee.ncku.edu.tw:2222/img/housework/toilet.png'       
+  }
+  else{
+    return 'https://luffy.ee.ncku.edu.tw:2222/img/housework/share.png'
+  }
+}
 function getUser() {
     var account = localStorage.getItem("account");
     $.get('./users/find/' + account, {}, (res) => {
@@ -280,9 +308,25 @@ function getUser() {
     $.post('./Tasks/finished',{
       account:localStorage.getItem("account")
     },(res)=>{
+      let coin_score=0;
+      console.log(res);
       for(let i=0;i<res.length;++i){
         console.log(res[i].content+' '+res[i].date+' '+res[i].point);
+        coin_score+=res[i].point;
+        $('#record').append(`
+        <div class="record_row">
+          <img src="./img/housework/sweep.png" class="record_img">
+          <div class="record_test">
+            <div class="record_type">${work_type(res[i].content)}</div>
+            <div class="record_date">${res[i].date}</div>
+          </div>
+          <div class="record_coin">${res[i].point}</div>
+          <div class="record_cookie">${res[i].point/10}</div>
+        </div>`
+        )
       }
+      document.getElementById('coin_score').textContent=coin_score+'P';
+      document.getElementById('cookie_score').textContent=coin_score/10+'P';
 
     });
 }
