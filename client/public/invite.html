@@ -9,10 +9,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title></title>
     <link href="./src/css/invite.css" rel="stylesheet" type="text/css" />
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 </head>
 
-<body onload="getUser()">
+<body>
     <div class="container-fluid" id = "back">
+        
         <div class="banner">
             <div class="nav-bg">
                 <nav class="navbar " id="navbar">
@@ -33,53 +35,97 @@
                         </li>
                         <li class="list-inline-item">
                             <!-- <a href="login.html">登入</a> -->
-                            <img id="UserImg" alt="" srcset="" style=" border-radius: 50%;width: 50px;height: 50px;">
+                            <img id="UserImg" alt=""  style=" border-radius: 50%;width: 50px;height: 50px;">
                         </li>
                     </ul>
                 </nav>
             </div>
         </div>
-        <div class="container">
-            <div class = "row justify-content-center">
-                <div class = "col-7 message">
-                    <div class ="row  title">
-                            <i class="fa fa-caret-left" aria-hidden="true" style="font-size:30px;color: #4b515f;"></i>
-                            <p class="page">1/5</p>
-                            <i class="fa fa-caret-right" aria-hidden="true" style="font-size:30px;color: #4b515f;"></i>
+        
+        <div class="mask"></div>
+            <div class="check">
+                <p class="notify">通知</p>
+                <p class="alert-mess">任務已發佈</p>
+                <button class="checkconfirm ">確定</button>
+            </div>
+        <div class="container" style="margin: 0;padding: 0" id="app">
+            
+            <div class = "row justify-content-end">
+                <div  class = "col-7 message" :class={active:!tasks.length}  >
+                    <div  class="row noitem" >
+                        <figure>
+                            <img class="img-fluid"  src="./img/invite/monster2.png" alt="">
+                            <figcaption class="content-text">沒有邀請......</figcaption>
+                        </figure>
                     </div>
-                    <div class="row shadow">
+                </div>
+                <template v-for="(task,index) in tasks">
+                <div  class = "col-7 message" :class={active:shows[index]}  >
+                    <div class ="row  title">
+                            <i class="fa fa-caret-left" aria-hidden="true" style=" cursor: pointer; font-size:30px;color: #4b515f;" v-on:click="turnleft(index)"></i>
+                            <p class="page" id="page">{{index+1}}/{{tasks.length}}</p>
+                            <i class="fa fa-caret-right" aria-hidden="true" style=" cursor: pointer;font-size:30px;color: #4b515f;" v-on:click="turnright(index)"></i>
+                    </div>
+                    <div class="row shadow" >
                     </div>
                     <div class ="row  head">
                         <img class="img-fluid" src="./img/invite/head.png"></img>
                     </div>
                     <div class ="row align-self-start dialoge">
                         <img class="img-fluid" src="./img/invite/dialoge.png" ></img>
-                        <p class="dialogue-text">共有5則！</p>
+                        <p class="dialogue-text" id="dialogue-text">共有{{tasks.length}}則！</p>
                     </div>
                     <div class ="row align-self-start monster">
                         <img class="img-fluid" src="./img/invite/monster.png" ></img>
                     </div>
-                    <div class ="row">
-                        <div class="col-5 content">
+                    <div class ="row content">
+                        <div class="col-5 content1">
                             <figure>
-                                <img class="img-fluid person" src="./img/sister.png" alt="">
-                                <figcaption class="content-text">妹妹</figcaption>
+                                <img class="img-fluid person"  :src="task.icon" alt="">
+                                <figcaption class="content-text">{{task.author}}</figcaption>
                               </figure>
                         </div>
-                        <div class="col-7 content">
+                        <div class="col-7 content2">
                             <img class="img-fluid right-content" src="./img/invite/content.png" ></img>
-                            <p class="task-text">任務內容</p>
+                            <p class="task-text">{{task.content}}</p>
+                            <div class="row below-content">
+                                <div class="col-6">
+                                    <div class="row">
+                                        <img class="img-fluid icon" src="./img/invite/location.png" ></img>
+                                        <span class="info" style="padding-top: 5%;">{{task.region}}</span>
+                                    </div>
+                                    <div class="row">
+                                        <img class="img-fluid icon" src="./img/invite/time.png" ></img>
+                                        <span class="info" style="padding-top: 2%;">{{task.remain}}</span>
+                                    </div>
+                                    <div class="row">
+                                        <img class="img-fluid icon" src="./img/invite/person.png"></img>
+                                        <div class="info" style="padding-top: 2%;">
+                                            <template v-for="(member,mindex) in task.participate" > 
+                                                <img class="participate-person" :src="member.icon"  alt="">
+                                            </template>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <img class="img-fluid point" src="./img/invite/point.png" ></img>
+                                    <span class="pointval" style="padding-top: 2%;">{{task.point}}P</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class ="row align-self-start buttons ">
-                        <div class = "col-6">
-                            <img class="img-fluid" src="./img/invite/refuse.png" ></img>
+                        <div class = "col-6" >
+                            <img class="img-fluid" src="./img/invite/refuse.png" v-on:click="refuse(index)"></img>
                         </div>
                         <div class = "col-6">
-                            <img class="img-fluid" src="./img/invite/agree.png"></img>
+                            <img class="img-fluid" src="./img/invite/agree.png" v-on:click="accept(index)"></img>
                         </div>
                     </div>
                 </div>
+                
+            </template>
+            
             </div>
         </div>
     </div>

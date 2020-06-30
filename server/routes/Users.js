@@ -176,10 +176,16 @@ router.get('/:id',async(req,res) => {
         res.json({message:err});
     }
 });
+// for users to edit their personal information
 router.post('/changedata',(req,res) => {
     var id = (req.body.id);
-		
-    Users.findOneAndUpdate({ account:id}, { icon:req.body.icon,name:req.body.name}, err => {
+    Users.findOneAndUpdate({ account:id}, { 
+        icon:req.body.icon,
+        name:req.body.name,
+        mail:req.body.mail,
+        gender:req.body.gender,
+        birthday:req.body.birthday
+    }, err => {
         console.log(err);
         if (!err) {
             res.status(200).send({ isSuccess: true });

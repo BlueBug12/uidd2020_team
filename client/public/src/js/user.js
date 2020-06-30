@@ -2,8 +2,8 @@
 var img_url;
 var user_name;
 var user_gender;
-var user_email;
-var user_date;
+var user_mail;
+var user_birthday;
 
 $(document).ready(function() {
   //console.log("hello");
@@ -42,7 +42,6 @@ $(document).ready(function() {
       uploader.onchange = function() {
         var reader = new FileReader();
         reader.onload = function(evt) {
-          //image.classList.remove('no-image');
           image.style.backgroundImage = 'url(' + evt.target.result + ')';
           img_url=evt.target.result;
         }
@@ -109,12 +108,20 @@ $(document).ready(function() {
 
       if($("#name").val())
           user_name=$("#name").val();
-      console.log($("#name").val());
-      console.log("user_name"+user_name);
+      if($("#mail").val())
+        user_mail=$("#mail").val();
+      if($("#gender").val())
+        user_gender=$("#gender").val();
+      if($("#datepicker").val())
+        user_birthday=$("#datepicker").val();
+      console.log(user_gender);
       $.post('./Users/changedata',{
         id:localStorage.getItem("account"),
         icon:img_url,
-        name:user_name
+        name:user_name,
+        mail:user_mail,
+        gender:user_gender,
+        birthday:user_birthday
       },(res)=>{
        console.log("post success!");
       });
@@ -149,9 +156,16 @@ function getUser() {
         console.log(res);
         document.getElementById('name').placeholder=res.name;
         document.getElementById('img-result').style.backgroundImage = 'url('+res.icon+')';
+        document.getElementById('mail').placeholder = res.mail;
+        document.getElementById('gender').placeholder = res.gender;
+        document.getElementById('datepicker').placeholder = res.birthday;
+
         img_url=res.icon;
         user_name=res.name;
-      //  document.getElementById("UserImg").src = res.icon;
-       // localStorage.setItem("classcode", res.classcode);
+        user_gender=res.gender;
+        user_mail=res.mail;
+        user_birthday=res.birthday;
+
     });
 }
+

@@ -7,11 +7,35 @@
     font-family: GenJyuuGothic-Light;
     src: url("../../font/GenJyuuGothic-Light.ttf")
 }
+#app{
+    margin:0;
+    padding: 0;
+}
 #back {
     width: 100vw;
     height: 100vh;
     background-color: #4b515f;
     text-align: center;
+    padding:0;
+}
+#request-btn {
+    cursor: pointer;
+    margin-top: 20%;
+    margin-left: 10%;
+    width: 80%;
+    height: 7%;
+    position: relative;
+    z-index: 5;
+}
+
+#process-btn {
+    cursor: pointer;
+    margin-top: 10%;
+    margin-left: 10%;
+    width: 80%;
+    height: 7%;
+    position: relative;
+    z-index:5;
 }
 .head{
     display: block;
@@ -22,6 +46,9 @@
     margin-top:-1rem;
     margin-left:-9rem;
 }
+body {
+    overflow: hidden;  
+  }
 .title{
     float: right;
     margin-top: 1rem;
@@ -45,6 +72,16 @@
     width: max-content;
     letter-spacing: 6.6px;
 }
+.noitem{
+    display: none;
+    width: 60%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
 .dialoge{
     margin-top:6rem;
     margin-left:-9rem;
@@ -66,19 +103,46 @@
     width: max-content;
     letter-spacing: 6.6px;
 }
-
+.message.active{
+    display:block;
+}
 .message{
     background-color: #f7f6e4;
-    height: 60vh;
-    margin-top: 5.5rem;
-    margin-left: 10rem;
-    display: block;
+    height: 65%;
+    margin-top: 4rem;
+    margin-left: 12rem;
+    display:none;
     position: absolute;
     border-radius: 28px;
     text-align: center;
 }
-.content{
+.content1{
     margin-top: 5.5rem;
+}
+.content2{
+    margin-top: 2rem;
+    position: absolute;
+    left:25%;
+}
+.below-content{
+    margin-top: 1rem;
+    margin-left: 3rem;
+}
+.icon{
+    margin-bottom: 1rem;
+}
+.point{
+    margin-top: 2rem;
+}
+.pointval{
+    position: absolute;
+    color:#4b515f;
+    font-family: "GenJyuuGothic-Medium";
+    font-size: xx-large;
+    left: 10rem;
+    top:2.5rem;
+    letter-spacing:  6.6px;
+    
 }
 .right-content{
     margin-right:10rem;
@@ -87,15 +151,25 @@
     width:100px;
     height:auto;
 }
+.info{
+    position: absolute;
+    border-bottom: 3px #4b515f solid;
+    letter-spacing:  6.6px; 
+    width:90%;
+    margin-left: 5%;
+    left: 2rem;
+    color:#4b515f;
+    font-family: "GenJyuuGothic-Medium";
+}
 .content-text{
     font-family: "GenJyuuGothic-Medium";
     color:#4b515f;
     font-size: x-large;
-    letter-spacing: 6.6px;
+    letter-spacing: 5px;
 }
 .task-text{
     position: absolute;
-    top: 25%;
+    top: 18%;
     left: 53%;
     transform: translate(-50%, -50%);
     font-family: "GenJyuuGothic-Medium";
@@ -104,6 +178,11 @@
     width: max-content;
     letter-spacing: 6.6px;
 }
+.participate-person{
+    width: 40px;
+    margin: 1px;
+    border-radius: 50%;;
+}
 .monster{
     margin-top:12rem;
     margin-left:-12rem;
@@ -111,16 +190,17 @@
     position: absolute;
     text-align: center;
     z-index: 1;
-    width: 20vw;
+    width: 40%;
     height: auto;
 }
 .buttons{
-    margin-top: 13rem;
+    margin-top: 15rem;
     position: absolute;
     top: 50%;
     left: 50%;
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
+    cursor: pointer;
 }
 .container-fluid {
     padding: 0;
@@ -203,4 +283,54 @@ li {
     width: 100%;
     background-color: #F7F6E4;
     position: relative;
+}
+.mask {
+    background-color: darkgray;
+    opacity: 0.9;
+    z-index: 10;
+    position: absolute;
+    height: 100vh;
+    width: 100vw;
+    visibility: hidden;
+}
+
+.check {
+    position: absolute;
+    margin: 0 auto;
+    top: 50vh;
+    left: 50vw;
+    margin-left: -15vw;
+    margin-top: -15vh;
+    width: 30vw;
+    height: 30vh;
+    background-color: #F7F6E4;
+    z-index: 11;
+    box-shadow: 5px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    visibility: hidden;
+    font-family: GenJyuuGothic-Medium;
+}
+
+.notify {
+    font-size: 3vh;
+}
+
+.alert-mess {
+    font-size: 5vh;
+    text-align: center;
+}
+
+.checkconfirm {
+    bottom: 1vh;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #4B515F;
+    color: #F7F6E3;
+    height: 12%;
+    width: 35%;
+    border-radius: 20px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
 }
