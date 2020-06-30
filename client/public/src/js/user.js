@@ -172,8 +172,18 @@ $(document).ready(function() {
         $('.menubar').css('visibility','hidden');
         span_menu=0;
       }
-  	});
-
+    });
+    $(document).on('click',"#bar1",function(){
+      localStorage.clear();
+    })
+    //click region except menubar
+    $(document).mouseup(function(e){
+      var _con = $('.menubar'); 
+      if(!_con.is(e.target) && _con.has(e.target).length === 0){ 
+        $('.menubar').css('visibility','hidden');
+        span_menu=0;
+      }
+    });
     $(document).on('mouseenter', '.menubar', function () {
       $(this).css('background','#d6dde4');
   	}).on('mouseleave', '.menubar', function () {

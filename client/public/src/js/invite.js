@@ -27,11 +27,9 @@ $(document).ready(function() {
                     });
                     this.$delete(this.tasks, index)
                     count = this.tasks.length;
-                    //$('.solve-btn').attr('data-before', count);
                 }
             },
             turnright: function(index) {
-                console.log("123");
                if(index < this.tasks.length-1)
                     index = index + 1;
                 console.log(index);
@@ -41,7 +39,6 @@ $(document).ready(function() {
                 this.$set(this.shows, index, true);
             },
             turnleft: function(index) {
-                console.log("456");
                 if(index > 0)
                 index = index - 1;
                 for (var i = 0; i < this.shows.length; i++) {
@@ -58,6 +55,9 @@ $(document).ready(function() {
                 });
                 this.$delete(this.tasks, index);
                 count = this.tasks.length;
+                if(count == 0){
+                    $('#noitem').addClass("active");
+                }
                 buttonunable();
                 $('.check').css("visibility", "visible");
                 $('.mask').css("visibility", "visible");
@@ -72,6 +72,9 @@ $(document).ready(function() {
                 });
                 this.$delete(this.tasks, index);
                 count = this.tasks.length;
+                if(count == 0){
+                    $('#noitem').addClass("active");
+                }
                 buttonunable();
                 $('.check').css("visibility", "visible");
                 $('.mask').css("visibility", "visible");
@@ -91,6 +94,7 @@ $(document).ready(function() {
                     }
                     else{
                         this.shows = [];
+                        $('#noitem').addClass("active");
                     }
                 },
             }
@@ -114,6 +118,9 @@ $(document).ready(function() {
         for (var i = 0; i < rec_task.length; i++) {
             rec_task[i].date = resultdate[i];
             rec_task[i]["remain"] = 0;
+        }
+        if(rec_task.length == 0){
+            $('#noitem').addClass("active");
         }
         count = rec_task.length;
             vueinstance.tasks = rec_task;

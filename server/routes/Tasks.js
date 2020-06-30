@@ -160,19 +160,30 @@ router.post('/participate',async(req,res) => {
 router.post('/invite',async(req,res) => {
     try {
         temp = [];
-        await Tasks.find({"invite.id":  req.body.account,"expired":0}  ).exec(async (err, res2) => {
+        Tasks.find({"invite.id":  req.body.account,"expired":0}  ).exec(async (err, res2) => {
             if (err) {
                 console.log('fail to query:', err)
                 return;
             }
             else{
-                res2.forEach(function(item){
-                    item.invite.forEach(function(person){
+                await res2.forEach(function(item){
+                    item.invite.forEach(async function(person){
                         if(person.id == req.body.account && person.state === 1){
+                            await Users.findOne({"account":person.id} ).exec((err, res4) => {
+                                if (err) {
+                                    console.log('fail to query:', err)
+                                    return;
+                                }
+                                else{
+                                    item.author = res4.nickname;
+                                    console.log(item.author);
+                                }
+                            });
                             temp.push(item); 
                         }
                      });
-                 });
+                });
+                console.log("123");
                 res.send(temp);
             }
         });

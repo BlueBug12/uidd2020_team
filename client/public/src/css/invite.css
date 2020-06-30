@@ -81,6 +81,15 @@ body {
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
 }
+.noitem.active{
+    display: block;
+    width: 60%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
 
 .dialoge{
     margin-top:6rem;
@@ -150,6 +159,7 @@ body {
 .person{
     width:100px;
     height:auto;
+    border-radius: 50%;
 }
 .info{
     position: absolute;
@@ -181,7 +191,7 @@ body {
 .participate-person{
     width: 40px;
     margin: 1px;
-    border-radius: 50%;;
+    border-radius: 50%;
 }
 .monster{
     margin-top:12rem;
