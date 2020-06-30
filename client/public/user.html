@@ -59,7 +59,25 @@
             </div>
         </div>
         <div id="mydata">
-        <div id="data_bar">我的檔案</div>
+        <div id="data_bar">
+            <div id="user_text">我的檔案</div>
+            <div id="coin" class="points" style="visibility:hidden">
+                <span></span>
+                <div id="coin_score"></div>
+            </div>
+            <div id="cookie" class="points" style="visibility:hidden">
+                <span></span>
+                <div id="cookie_score"></div>
+            </div>
+        </div>
+        
+        <div id="record" style="visibility: hidden;">
+            <div id="record_bar"style="visibility: hidden;">
+                <img src="./img/user/coin.png" class="record_icon" id="coin_icon">
+                <img src="./img/user/cookie.png" class="record_icon" id="cookie_icon">
+            </div>
+            
+        </div>
         <div id="left_data">
             <div id="align">
                 <div id="container">
@@ -103,7 +121,7 @@
         </div>
         <div id="img_post">
             <div class="wrapper">
-            <button id="img-result">Upload Image</button>
+            <div id="img-result"></div>
             </div>
             <button class="show-button">Show server request</button>
             <div class="upload-result">

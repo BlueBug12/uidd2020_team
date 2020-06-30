@@ -435,6 +435,7 @@ router.post('/checkstate',(req,res)=>{
 //get user finish task
 router.post('/finished',(req,res)=>{
     try {
+        console.log(req.body.account);
         Tasks.find({ "participate.id": req.body.account,"participate.state":3}).exec(async (err, res2) => {
             if (err) {
                 console.log('fail to query:', err)
