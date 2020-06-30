@@ -16,6 +16,20 @@ router.get('/', async (req,res) => {
 
 });
 
+
+router.get('/memberlength',(req,resup) => {
+    Users.find({ "classcode":req.body.classcode}).exec((err, res2) => {
+        if (err) {
+            console.log('fail to query:', err)
+            return;
+        }
+        else{
+            console.log(res2.length)
+            resup.send({length:res2.length})
+        }
+    }) 
+})
+
 //get whether mission has been accepted
 router.get('/isaccepted',async(req,resup) => {
     var temp;
@@ -280,7 +294,7 @@ router.post('/progress',(req,res) => {
 //set participate.state in process page 
 router.post('/changestate',(req,res)=>{
     try {
-         Tasks.updateOne({ "_id":req.body.id,"participate.id":req.body.account},{'$set': {
+         Tasks.findOneAndUpdate({ "participate._id":req.body.id},{'$set': {
             'participate.$.state': req.body.state}}, function(err) {
             if (err) {
                 console.log('fail to query:', err)
@@ -295,6 +309,10 @@ router.post('/changestate',(req,res)=>{
         res.json({message:err});
     }
 })
+
+
+
+
 
 //load data to verify page
 router.post('/verify',async(req,res) => {

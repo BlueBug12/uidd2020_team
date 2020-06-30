@@ -238,6 +238,11 @@
         
         .remain_img {
             margin-left: 4px;
+            display: none;
+        }
+
+        .show_img{
+            display: inline;
         }
 
         .canclick{
@@ -268,7 +273,12 @@
                         <div class="name_time">
                             <div class="mission-name">{{task.content}}</div>
                             <div class="mission-text" :class="{state1:task.state==1||task.state==4}">剩餘時間: {{task.remain}}</div>
-                            <div class="mission-text" :class="{state2:task.state==2}">審核狀況: <img src="./img/process/yes.png" class="remain_img"><img src="./img/process/no.png" class="remain_img"></div>
+                            <div class="mission-text" :class="{state2:task.state==2}">審核狀況: 
+                                <template v-for="(member,index) in task.verify">
+                                    <img src="./img/process/yes.png" class="remain_img" :class="{show_img:member.state}">
+                                    <img src="./img/process/no.png" class="remain_img" :class="{show_img:!member.state}">
+                                </template>
+                            </div>
                         </div>
 
                         <div class="point">
@@ -303,13 +313,17 @@ $('#process-btn').click(function(e){
     $.post('./tasks/progress', {
         account:localStorage.getItem('account')
     }, (res) => {
-        settasks(res);
+        $.get('./tasks/memberlength',{classcode:localStorage.getItem('classcode')},res2=>{
+            settasks(res,res2.length);
+        })
+
     });
 })
 
 
 
-function settasks(res){
+function settasks(res,member_num){
+    console.log(member_num)
     resultdate = []
     res.forEach((item) => {
         var date = item.date.split('/');
@@ -323,7 +337,12 @@ function settasks(res){
         resultdate.push(missiondate)
     })
     var content = localStorage.getItem('account')
+    var accept = 0;
+    var refuse = 0;
+    var standard = member_num/2 + 1
     for (var i = 0; i < res.length; i++) {
+            accept = 0;
+            refuse = 0;
             res[i].date = resultdate[i];
             res[i]["remain"] = 0;
             for(var j = 0;j < res[i]["participate"].length;j++){
@@ -333,7 +352,27 @@ function settasks(res){
                         res[i]["stateimage"] = "https://luffy.ee.ncku.edu.tw:2222/img/process/complete.png"
                     }
                     else if (res[i]["state"] == 2){
-                        res[i]["stateimage"] = "https://luffy.ee.ncku.edu.tw:2222/img/process/judge.png"
+                        if( res[i].verify.length==0){
+                            res[i]["stateimage"] = "https://luffy.ee.ncku.edu.tw:2222/img/process/judge.png";
+                        }
+                        for(k = 0;k < res[i].verify.length;k++){
+                            if(res[i].verify[k].state == 0){//拒
+                                refuse = refuse+1
+                            }
+                            else{
+                                accept = accept+1;
+                            }
+
+                            if(accept >= standard){
+                                res[i]["state"] = 3;
+                            }
+                            else if(refuse>= standard){
+                                res[i]["state"] = 4;
+                            }
+                            else{
+                                res[i]["stateimage"] = "https://luffy.ee.ncku.edu.tw:2222/img/process/judge.png";
+                            }
+                        }
                     }
                     else if (res[i]["state"] == 4){
                         res[i]["stateimage"] = "https://luffy.ee.ncku.edu.tw:2222/img/process/again.png"
@@ -342,7 +381,7 @@ function settasks(res){
             }
 
 
-           housework = res[i].content 
+        housework = res[i].content 
         if(housework.includes('洗碗')){
             res[i]["houseworkicon"] =  'https://luffy.ee.ncku.edu.tw:2222/img/housework/bowl.png'
         }
@@ -397,7 +436,6 @@ function find_objid(content,index){
                     console.log(localStorage.getItem('account'))
                     $.post('./tasks/changestate', {
                             id: find_objid(localStorage.getItem('account'),index),
-                            account:localStorage.getItem('account'),
                             state:2
                     }, (res) => {
                         console.log(res)
@@ -409,7 +447,6 @@ function find_objid(content,index){
                 else if(this.tasks[index]["state"] == 4){
                     $.post('./tasks/changestate', {
                             id: find_objid(localStorage.getItem('account'),index),
-                            account:localStorage.getItem('account'),
                             state:2
                     }, (res) => {
                         console.log(res)

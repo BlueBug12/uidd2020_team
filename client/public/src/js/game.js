@@ -398,6 +398,7 @@ $(document).ready(function() {
 
     $('#task_btn').click((event) => {
         event.preventDefault();
+        console.log($('#UserImg').css('background-image').replace(/(url\(|\)|")/g, ''))
         if (check() == true) {
             $.post('./tasks', {
                 content: $('#addTasks input[name=content]').val(),
@@ -406,7 +407,7 @@ $(document).ready(function() {
                 time: $('#addTasks input[name=time]').val(),
                 author: localStorage.getItem("account"),
                 classcode: localStorage.getItem("classcode"),
-                icon: document.getElementById("UserImg").src,
+                icon:  $('#UserImg').css('background-image').replace(/(url\(|\)|")/g, ''),
                 region: $('.border')[0].id,
                 point: $('#inputpoint').val(),
                 region_content: $('.head').text()
@@ -505,7 +506,7 @@ function getUser() {
     var account = localStorage.getItem("account");
     $.get('./users/find/' + account, {}, (res) => {
         //document.getElementById("UserImg").src = res.icon;
-        $('#UserImg').css('background-image','url('+res.icon+')').css('background-size','cover');
+        document.getElementById("UserImg").style.backgroundImage= `url(${res.icon})`;
         localStorage.setItem("classcode", res.classcode);
     });
 }
