@@ -44,7 +44,10 @@ const TaskSchema = mongoose.Schema({
         id: String,
         state: Number,
         icon:String
-    }]
+    }],
+    region_content:{
+        type:String
+    }
     
 },{collection: 'Tasks'});
 

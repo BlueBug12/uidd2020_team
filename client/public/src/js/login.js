@@ -41,11 +41,12 @@ $('#login_btn').click((event) => {
             account: $('#signin input[name=account]').val().trim(),
             password: $('#signin input[name=password]').val().trim()
         }, (res) => {
-          localStorage.setItem("account", res.account);
             if (res.text === "登入失敗！") {
                 $('.check').css("visibility", "visible");
                 $('.mask').css("visibility", "visible");
             } else {
+                localStorage.setItem("account", res.account);
+                localStorage.setItem("classcode", res.classcode);
                 location.href = './game.html';
             }
         });
@@ -77,70 +78,79 @@ $("#fb_btn").click(async function() {
     await new Promise((resolve, reject) => {
         FB.getLoginStatus(async function(response) {
             if (response.authResponse) {
-                new Promise(resolve1 => {
-                    FB.api('/me', { fields: 'id,name,email' }, function(response) {
+                await new Promise(resolve1 => {
+                    FB.api('/me?fields=id,name,email', function(response) {
                         localStorage.setItem("account", response.id);
                         account = response.id;
-                        name = response.name
-                    });
-                    FB.api(
-                        "/me/picture", {
-                            "redirect": false,
-                            "height": 50,
-                            "width": 50,
-                            "type": "normal"
-                        },
-                        function(response) {
-                            if (response && !response.error) {
-                                url = response.data.url;
-                                resolve1();
+                        name = response.name;
+                        FB.api(
+                            "/me/picture", {
+                                "redirect": false,
+                                "height": 50,
+                                "width": 50,
+                                "type": "normal"
+                            },
+                            function(response) {
+                                if (response && !response.error) {
+                                    url = response.data.url;
+                                    resolve1();
+                                }
                             }
-                        }
-                    );
+                        );
+                    });
+
                 });
             } else {
-                FB.login(function(response) {
-                    console.log(response);
-                    if (response.authResponse) {
-                        new Promise(resolve => {
-                            FB.api('/me', { fields: 'id,name,email' }, function(response) {
-                                localStorage.setItem("account", response.id);
-                                account = response.id;
-                                name = response.name
-                            });
-                            FB.api(
-                                "/me/picture", {
-                                    "redirect": false,
-                                    "height": 50,
-                                    "width": 50,
-                                    "type": "normal"
-                                },
-                                function(response) {
-                                    if (response && !response.error) {
-                                        url = response.data.url;
-                                        resolve();
-                                    }
-                                }
-                            );
-                        });
-                    }
-                }, { scope: 'email' });
+                await new Promise(resolve2=>{
+                    FB.login(function(response) {
+                        console.log(response);
+                        if (response.authResponse) {
+                            new Promise(resolve => {
+                                FB.api('/me?fields=id,name,email', function(response) {
+                                    localStorage.setItem("account", response.id);
+                                    console.log(response)
+                                    account = response.id;
+                                    name = response.name;
+                                    FB.api(
+                                        "/me/picture", {
+                                            "redirect": false,
+                                            "height": 50,
+                                            "width": 50,
+                                            "type": "normal"
+                                        },
+                                        function(response) {
+                                            if (response && !response.error) {
+                                                url = response.data.url;
+                                                resolve2();
+                                            }
+                                        }
+                                    );
+                                });
+    
+                            }).then();
+                        }
+                    }, { scope: 'email' });
+
+
+                })
             }
             resolve();
         });
     });
-    await $.post('./users/CheckData', {
-        account: account,
-        password: " ",
-        name: name,
-        phone: 0000000000,
-        url: url
-    }, (res) => {
-        if (res.first === "true")
-            location.href = './join.html';
-        else
-            location.href = './game.html';
-    });
+    await new Promise(resolve=>{
+        $.post('./users/CheckData', {
+            account: account,
+            password: " ",
+            name: name,
+            url: url
+        }, (res) => {
+            resolve()
+            if (res.first === "true")
+                location.href = './join.html';
+            else
+                location.href = './game.html';
+        }
+        )});
 });
 function buttonunable() {
     let buttons = document.getElementsByTagName('button');

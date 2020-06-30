@@ -131,15 +131,6 @@ router.post('/expired',(req,res) => {
     });
 });
 
-router.post('/changestate',(req,res) => {
-    Tasks.findOneAndUpdate({ "participate._id":req.body.id}, { "$set": { "participate.$.state" : 2 } }, err => {
-        if (!err) {
-            res.status(200).send({ isSuccess: true });
-        } else {
-            res.status(503).send({ isSuccess: false });
-        }
-    });
-});
 
 router.post('/participate',async(req,res) => {
     try {
@@ -243,13 +234,12 @@ router.post('/deny',async(req,res) => {
 
 router.post('/progress',async(req,res) => {
     try {
-        await Tasks.find({ "participate.id": req.body.account,"participate.state": 1}).exec(async (err, res2) => {
+        await Tasks.find({ "participate.id": req.body.account}).exec(async (err, res2) => {
             if (err) {
                 console.log('fail to query:', err)
                 return;
             }
             else{
-                console.log(req.body.account);
                 res.send(res2);
             }
         });

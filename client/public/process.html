@@ -200,8 +200,9 @@
         }
         
         .stateimage {
-            width: 80%;
-            height: 80%;
+            width: 120px;
+            height: 50px;
+            position: relative;
         }
 
         
@@ -266,7 +267,7 @@
                         <img :src="task.houseworkicon" class="icon" alt="">
                         <div class="name_time">
                             <div class="mission-name">{{task.content}}</div>
-                            <div class="mission-text" :class="{state1:task.state==1}">剩餘時間: {{task.remain}}</div>
+                            <div class="mission-text" :class="{state1:task.state==1||task.state==4}">剩餘時間: {{task.remain}}</div>
                             <div class="mission-text" :class="{state2:task.state==2}">審核狀況: <img src="./img/process/yes.png" class="remain_img"><img src="./img/process/no.png" class="remain_img"></div>
                         </div>
 
@@ -276,7 +277,7 @@
                         </div>
 
                         <div class="status">
-                            <img v-bind:src="task.stateimage" class="stateimage" :class="{canclick:task.state==1}"  v-on:click=changeState(index) alt="">
+                            <img v-bind:src="task.stateimage" class="stateimage" :class="{canclick:task.state==1||task.state==4}"  v-on:click=changeState(index) alt="">
                         </div>
 
                     </div>
@@ -334,6 +335,9 @@ function settasks(res){
                     else if (res[i]["state"] == 2){
                         res[i]["stateimage"] = "https://luffy.ee.ncku.edu.tw:2222/img/process/judge.png"
                     }
+                    else if (res[i]["state"] == 4){
+                        res[i]["stateimage"] = "https://luffy.ee.ncku.edu.tw:2222/img/process/again.png"
+                    }
                 }
             }
 
@@ -390,13 +394,25 @@ function find_objid(content,index){
                 console.log(index)
                 if(this.tasks[index]["state"] == 1){
                     $.post('./tasks/changestate', {
-                            id: find_objid(localStorage.getItem('account'),index)
+                            id: find_objid(localStorage.getItem('account'),index),
+                            account:localStorage.getItem('account')
                     }, (res) => {
                         console.log(res)
                         this.tasks[index]["stateimage"] = "./img/process/judge.png"
                         this.tasks[index]["state"] = 2
                         this.$forceUpdate()
                     });
+                }
+                else if(this.tasks[index]["state"] == 4){
+                    $.post('./tasks/changestate', {
+                            id: find_objid(localStorage.getItem('account'),index),
+                            account:localStorage.getItem('account')
+                    }, (res) => {
+                        console.log(res)
+                        this.tasks[index]["stateimage"] = "./img/process/judge.png"
+                        this.tasks[index]["state"] = 2
+                        this.$forceUpdate()
+                    });                   
                 }
             },
             remaintime: function(index) {
