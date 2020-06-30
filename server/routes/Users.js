@@ -179,6 +179,7 @@ router.get('/:id',async(req,res) => {
 // for users to edit their personal information
 router.post('/changedata',(req,res) => {
     var id = (req.body.id);
+    console.log(req.body.gender);
     Users.findOneAndUpdate({ account:id}, { 
         icon:req.body.icon,
         name:req.body.name,

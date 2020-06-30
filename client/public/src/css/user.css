@@ -341,8 +341,16 @@ form input::placeholder {
   
     text-align: start;
 }
-
-div#signin div#align div#container input {
+form select {
+    display: inline-block;
+    width: 26vw;
+    line-height: 4vh;
+    font-family: GenJyuuGothic-Medium;
+    font-size: 1.4em;
+    
+    text-align: start;
+}
+div#signin div#align div#container input select{
     width: 26vw;
     height: 5vh;
     background-color: #f7f6e4;
@@ -607,4 +615,77 @@ div#signin div#logo img {
   word-break: break-all;
   font-family: 'Source Code Pro';
   overflow-wrap: break-word;
+}
+
+.mask {
+    background-color: darkgray;
+    opacity: 0.9;
+    z-index: 10;
+    position: absolute;
+    height: 100vh;
+    width: 100vw;
+    visibility: hidden;
+}
+
+.check {
+    position: absolute;
+    margin: 0 auto;
+    top: 50vh;
+    left: 50vw;
+    margin-left: -15vw;
+    margin-top: -15vh;
+    width: 30vw;
+    height: 30vh;
+    background-color: #F7F6E4;
+    z-index: 11;
+    box-shadow: 5px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    visibility: hidden;
+    font-family: GenJyuuGothic-Medium;
+}
+
+.notify {
+    font-size: 3vh;
+}
+
+.alert-mess {
+    font-size: 5vh;
+    text-align: center;
+}
+.select-dummy.err {
+    padding-right: calc(1.5em + 0.75rem);
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%23dc3545' viewBox='0 0 12 12'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right calc(0.375em + 0.1875rem) center;
+    background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+}
+.custom-select{
+    position: relative;
+    background: white;
+    font-family: GenJyuuGothic-Medium;
+    font-size:1em;
+    padding-right: calc(1.5em + 0.75rem);
+}
+.custom-select:focus{
+    color: #495057;
+    font-size:1em;
+    background-color: #fff;
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.0rem rgba(0, 123, 255, 0.25);
+}
+
+.checkconfirm {
+    bottom: 1vh;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #4B515F;
+    color: #F7F6E3;
+    height: 12%;
+    width: 35%;
+    border-radius: 20px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
 }
