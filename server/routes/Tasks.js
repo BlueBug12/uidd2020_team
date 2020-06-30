@@ -168,25 +168,37 @@ router.post('/invite',async(req,res) => {
                 return;
             }
             else{
-                await res2.forEach(function(item){
-                    item.invite.forEach(async function(person){
-                        if(person.id == req.body.account && person.state === 1){
-                            await Users.findOne({"account":person.id} ).exec((err, res4) => {
-                                if (err) {
-                                    console.log('fail to query:', err)
-                                    return;
-                                }
-                                else{
-                                    item.author = res4.nickname;
-                                    console.log(item.author);
+                const test = async function () {
+                    return new Promise(async (resolve, reject) => {
+                        res2.forEach(function(item,index){
+                            item.invite.forEach( function(person){
+                                
+                                if(person.id == req.body.account && person.state === 1){
+                                   Users.findOne({"account":item.author} ).exec((err, res4) => {
+                                        if (err) {
+                                            console.log('fail to query:', err)
+                                            return;
+                                        }
+                                        else{
+                                            item.author = res4.nickname;
+                                            if(index == res2.length-1){
+                                                resolve(true);
+                                            }
+                                        }
+                                    });
+
+                                    temp.push(item);
                                 }
                             });
-                            temp.push(item); 
-                        }
-                     });
+                        });
+                        
+                    });
+                };
+                test().then(r => {
+                    if (r === true) {
+                        res.send(temp);
+                    }
                 });
-                console.log("123");
-                res.send(temp);
             }
         });
     }catch(err){

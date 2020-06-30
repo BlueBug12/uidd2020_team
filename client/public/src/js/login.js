@@ -76,7 +76,7 @@ $("#fb_btn").click(async function() {
     var url = " ";
     var name = " ";
     await new Promise((resolve, reject) => {
-        FB.getLoginStatus(function(response) {
+        FB.getLoginStatus(async function(response) {
             if (response.authResponse) {
                 await new Promise(resolve1 => {
                     FB.api('/me?fields=id,name,email', function(response) {
