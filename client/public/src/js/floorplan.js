@@ -80,16 +80,6 @@ class Panel {
 					}
 				});
 			}
-			// if (iter == 1) {
-			// 	document.getElementsByClassName("paint")[0].addEventListener('click', () => {
-			// 		this.isDrawing = !this.isDrawing;
-			// 		if (!this.isDrawing) {
-			// 			removeHighlight();
-			// 			document.getElementsByClassName("paint")[0].style["background-color"] = "";
-			// 			this.mode = "line";
-			// 		}
-			// 	});
-			// }
 			document.getElementsByClassName("undo")[iter].addEventListener('click', () => { this.undo(this); });
 			document.getElementsByClassName("delete")[iter].addEventListener('click', () => {
 				this.isDeleting = !this.isDeleting;
@@ -97,6 +87,12 @@ class Panel {
 					removeHighlight();
 					document.getElementsByClassName("delete")[iter].style["background-color"] = "#9E9E9E";
 					if (iter == 0) document.getElementsByClassName("pen")[0].style["background-color"] = "";
+					if (iter == 1) {
+						if (nowColorIndex != -1) {
+							document.getElementsByClassName("input_container")[nowColorIndex].style["background-color"] = "transparent";
+							document.getElementsByClassName("input_container")[nowColorIndex].style["opacity"] = 1;
+						}
+					}
 					this.mode = "line";
 					this.isDrawing = false;
 				} else {
@@ -828,7 +824,7 @@ class Floor {
 		for (let iter = 1; iter <= this.colors.length; ++iter) {
 			result += `
 				<li class="round" id = "c_${iter}" style="background-color: ${this.colors[iter-1]}">
-					<div class="input_container">
+					<div class="input_container" style="height: 6vh">
 						<input type="text" id="text_in${iter}" class="awsome_input" placeholder="room_${iter}" value="${this.text[iter-1]? this.text[iter-1]: ""}"/>
 						<span class="awsome_input_border" id="b_${iter}" style="background-color: ${this.colors[iter-1]}"/>
 					</div>
@@ -1135,7 +1131,7 @@ let hasPickerDisplay = false;
 let isPickerDisplay = false;
 let isAddingColor = false;
 let isChangingColor = false;
-let nowColorIndex = 0;
+let nowColorIndex = -1;
 let nowColor;
 
 document.getElementsByClassName("add")[0].addEventListener('click', () => {
@@ -1150,7 +1146,6 @@ document.getElementsByClassName("add")[0].addEventListener('click', () => {
 
 $(document).on('click', '.color-item', () => {
 	panel.mode = "rect";
-	isPickerDisplay = false;
 
 	let color = event.target.style["background-color"];
 	$('#pickcolor').val(color);
@@ -1166,9 +1161,12 @@ $(document).on('click', '.color-item', () => {
 		});
 		panel.render();
 	} else {
+		isChangingColor = true;
 		nowColorIndex = document.getElementsByClassName("round").length;
 		panel.floor[panel.nowFloor].addColor(color);
 	}
+	document.getElementsByClassName("input_container")[nowColorIndex].style["background-color"] = color;
+	document.getElementsByClassName("input_container")[nowColorIndex].style["opacity"] = 0.5;
 });
 
 document.getElementById("color-picker").addEventListener('click', () => {
@@ -1189,26 +1187,49 @@ document.addEventListener('click', () => {
 });
 
 $(document).on('click', '.round', () => {
-	removeHighlight();
-	panel.mode = "rect";
-
 	let colorChoices = document.getElementsByClassName("round");
-	for (let iter = 0; iter < colorChoices.length; ++iter) {
-		if (colorChoices[iter].children[0] === event.target) {
-			nowColorIndex = iter;
-			isPickerDisplay = true;
-			isAddingColor = false;
-			isChangingColor = true;
-			break;
-		}
-	}
-
-	if (event.target.children.length) {
-		nowColor = event.target.children[1].style["background-color"];
-		document.getElementsByClassName("delete")[1].style["background-color"] = "";
+	let switchColor = () => {
+		removeHighlight();
 		panel.mode = "rect";
-		panel.isDeleting = false;
-		panel.isDrawing = true;
+		for (let iter = 0; iter < colorChoices.length; ++iter) {
+			if (colorChoices[iter].children[0].children[0] === event.target || colorChoices[iter].children[0] === event.target) {
+				if (nowColorIndex != -1) {
+					document.getElementsByClassName("input_container")[nowColorIndex].style["background-color"] = "transparent";
+					document.getElementsByClassName("input_container")[nowColorIndex].style["opacity"] = 1;
+				}
+				nowColorIndex = iter;
+				isPickerDisplay = true;
+				isAddingColor = false;
+				isChangingColor = true;
+				nowColor = colorChoices[iter].children[0].children[1].style["background-color"];
+				document.getElementsByClassName("input_container")[iter].style["background-color"] = colorChoices[iter].children[0].children[1].style["background-color"];
+				document.getElementsByClassName("input_container")[iter].style["opacity"] = 0.5;
+				document.getElementsByClassName("delete")[1].style["background-color"] = "";
+				panel.isDeleting = false;
+				panel.isDrawing = true;
+				break;
+			}
+		}
+	};
+	let clearColor = () => {
+		panel.mode = "line";
+		document.getElementsByClassName("input_container")[nowColorIndex].style["background-color"] = "transparent";
+		document.getElementsByClassName("input_container")[nowColorIndex].style["opacity"] = 1;
+		nowColorIndex = -1;
+		isPickerDisplay = false;
+		isAddingColor = false;
+		isChangingColor = false;
+		nowColor = null;
+		panel.isDrawing = false;
+	};
+	if (panel.mode === "line") {
+		switchColor();
+	} else {
+		if (colorChoices[nowColorIndex].children[0] === event.target) {
+			clearColor();
+		} else {
+			switchColor();
+		}
 	}
 });
 
