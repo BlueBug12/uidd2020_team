@@ -297,6 +297,13 @@ li {
   z-index:2;
   margin-bottom: 20px;
 }
+.removeColor {
+  position: relative;
+  transform: rotate(45deg);
+  top: -3vh;
+  opacity: 0;
+}
+
 #furnish{
   justify-content: center;
   height:90%;

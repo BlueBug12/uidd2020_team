@@ -806,6 +806,15 @@ class Floor {
 		this.render();
 	}
 
+	removeColor(index) {
+		this.colors.splice(index, 1);
+		if (this.text.length != 0) {
+			this.text.splice(index, 1);
+		}
+		// check rooms
+		this.render();
+	}
+
 	recordText() {
 		let input = document.getElementsByClassName("input_container");
 		for (let iter = 0; iter < input.length; ++iter) {
@@ -827,11 +836,24 @@ class Floor {
 					<div class="input_container" style="height: 6vh">
 						<input type="text" id="text_in${iter}" class="awsome_input" placeholder="room_${iter}" value="${this.text[iter-1]? this.text[iter-1]: ""}"/>
 						<span class="awsome_input_border" id="b_${iter}" style="background-color: ${this.colors[iter-1]}"/>
+						<img class="removeColor" src="./img/editor_icon/plus.png" />
 					</div>
 				</li>
 			`;
 		}
 		document.getElementById("color_list").innerHTML = result;
+		let colorChoices = document.getElementsByClassName("input_container");
+		for (let iter = 0; iter < colorChoices.length; ++iter) {
+			colorChoices[iter].addEventListener('mouseenter', () => {
+				document.getElementsByClassName("removeColor")[iter].style.opacity = 1;
+			});
+			colorChoices[iter].addEventListener('mouseleave', () => {
+				document.getElementsByClassName("removeColor")[iter].style.opacity = 0;
+			});
+			document.getElementsByClassName("removeColor")[iter].addEventListener('click', () => {
+				this.removeColor(iter);
+			});
+		}
 	}
 
 }
