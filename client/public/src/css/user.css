@@ -76,6 +76,7 @@
 
 .container-fluid {
     padding: 0;
+    
 }
 
 
@@ -321,7 +322,7 @@ div#signin div#align div#container {
 
 .formdiv {
     position: relative;
-    left:80px;
+    left:130px;
     height: 6vh;
     width:60%;
     margin-bottom:15px;
@@ -331,7 +332,10 @@ div#signin div#align div#container {
 .passworderror {
     display: none;
 }
-
+input{
+    font-family: GenJyuuGothic-Medium;
+    color:black;
+}
 form input::placeholder {
     display: inline-block;
     width: 26vw;
@@ -420,7 +424,7 @@ div#signin div#logo img {
   border-radius:20px;
   position:absolute;
   width:30%;
-  margin-left:30%;
+  margin-left:35%;
   font-size:1.5em;
   font-family:GenJyuuGothic-Medium;
   background:#799FB4;
@@ -456,6 +460,7 @@ div#signin div#logo img {
   border-color: transparent #789fb3 transparent transparent ;
   cursor: pointer;
 }
+
 .menubar{
 
  height:30px;
@@ -479,11 +484,7 @@ div#signin div#logo img {
 
 
 }
-#bar2{
-  position: absolute;
-  top:105px;
-  right:90px;
-}
+
 
 
 
@@ -526,24 +527,6 @@ div#signin div#logo img {
   font-weight: 500;
   src: local('Source Code Pro Medium'), local('SourceCodePro-Medium'), url(https://fonts.gstatic.com/s/sourcecodepro/v11/HI_XiYsKILxRpg3hIP6sJ7fM7PqtzsjDs-cv.ttf) format('truetype');
 }
-/*
-@-webkit-keyframes roll {
-  0% {
-    opacity: 0;
-  }
-  50% {
-    opacity: 0;
-    -webkit-transform: translate(-150%, -50%) rotate(-90deg) scale(0.3);
-            transform: translate(-150%, -50%) rotate(-90deg) scale(0.3);
-    box-shadow: none;
-  }
-  100% {
-    opacity: 1;
-    -webkit-transform: translate(-50%, -50%) rotate(0deg) scale(1);
-            transform: translate(-50%, -50%) rotate(0deg) scale(1);
-    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
-  }
-}*/
 
 .wrapper {
 
@@ -558,7 +541,7 @@ div#signin div#logo img {
 
 }
 .wrapper #img-result {
-  cursor: pointer;
+  
   margin: 0;
   position: relative;
   background: #799fb4;
@@ -688,4 +671,12 @@ div#signin div#logo img {
     text-decoration: none;
     border: none;
     cursor: pointer;
+}
+
+#bg {
+    width: 100vw;
+    height: 100vh;
+    background-color: #4b515f;
+    text-align: center;
+    
 }

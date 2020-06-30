@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <style>
+        @font-face {
+            font-family: GenJyuuGothic-Medium;
+            src: url("./font/GenJyuuGothic-Medium.ttf")
+        }
+        
+        @font-face {
+            font-family: GenJyuuGothic-Light;
+            src: url("./font/GenJyuuGothic-Light.ttf")
+        }
+        
+        #hope-text {
+            font-family: GenJyuuGothic-Medium;
+        }
+        
+        #banner {
+            height: 10vh;
+            background-color: #F7F5E4;
+            box-shadow: 0 0 10px gray;
+            position: relative;
+            z-index: 2;
+        }
+        
+        #block {
+            display: flex;
+        }
+        
+        #request-btn {
+            cursor: pointer;
+            margin-top: 40%;
+            width: 80%;
+            height: 7%;
+        }
+        
+        #process-btn {
+            cursor: pointer;
+            margin-top: 10%;
+            width: 80%;
+            height: 7%;
+        }
+        
+        #list {
+            width: 15vw;
+            height: 90vh;
+            background-color: #F7F5E4;
+            position: relative;
+            display: flex;
+            justify-content: start;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        #content {
+            width: 85vw;
+            height: 90vh;
+            background-color: #4B515F;
+            position: relative;
+        }
+        
+        #outer-board {
+            width: 50%;
+            height: 50%;
+            position: relative;
+            left: 5%;
+            top: 15%;
+            z-index: 2;
+        }
+        
+        #board {
+            width: 95%;
+            height: 95%;
+            top: 5%;
+            left: 5%;
+            position: relative;
+            background-image: url('./board.png');
+            background-size: 100% 100%;
+        }
+        
+        #monster-list {
+            position: absolute;
+            width: 65%;
+            height: 80%;
+            left: 8%;
+            bottom: 5%;
+            z-index: 1;
+            background-image: url('./list.png');
+            background-size: 100% 100%;
+        }
+        
+        #exchange_banner {
+            width: 60%;
+            height: 25%;
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: 4;
+        }
+        
+        #hope {
+            top: 15%;
+            right: 5%;
+            position: absolute;
+            height: 80%;
+            width: 25%;
+            z-index: 0;
+        }
+        
+        #up {
+            position: absolute;
+            height: 11%;
+            width: 101%;
+            margin-left: -0.5%;
+            background-color: #F4DF62;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            z-index: 4;
+        }
+        
+        #hope-text {
+            position: absolute;
+            right: 5%;
+            font-size: 50px;
+            letter-spacing: 5px;
+        }
+        
+        #outer-down {
+            background-color: #F7F5E4;
+            position: absolute;
+            top: 10%;
+            height: 90%;
+            width: 100%;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            padding-right: 1px;
+        }
+        
+         ::-webkit-scrollbar {
+            background-color: #F7F5E4;
+            border-radius: 6px;
+            position: absolute;
+        }
+        
+         ::-webkit-scrollbar-thumb {
+            /*滑桿*/
+            background-color: #F7F5E4;
+            border-radius: 6px;
+            border: 1.5px solid transparent;
+            background-clip: content-box;
+        }
+        
+         ::-webkit-scrollbar-track {
+            background-color: #787C81;
+            border-radius: 6px;
+        }
+        
+         ::-webkit-scrollbar-thumb:hover {
+            opacity: 0.8;
+        }
+        
+         ::-webkit-resizer,
+         ::-webkit-scrollbar-button,
+         ::-webkit-scrollbar-corner {
+            display: none;
+        }
+        
+        #down {
+            overflow-y: scroll;
+            position: absolute;
+            top: 2%;
+            height: 95%;
+            width: 98%;
+            padding-top: 5%;
+        }
+        
+        .hope-item {
+            display: flex;
+            align-items: center;
+            width: 80%;
+            height: 10%;
+            left: 10%;
+            position: relative;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            margin-bottom: 3%;
+        }
+        
+        input[type=checkbox] {
+            transform: scale(2);
+            position: relative;
+            left: 5%;
+            background-color: #F7F5E4;
+        }
+        
+        .labeltext {
+            left: 10%;
+            position: relative;
+            margin-bottom: 0px;
+        }
+        
+        .box-item {
+            height: 100%;
+            width: 22%;
+            position: relative;
+            display: inline-block;
+            margin-right: 3%;
+            bottom: 0;
+        }
+        
+        .box {
+            margin-top: 6.5%;
+            width: 100%;
+            height: 75%;
+            background-color: #F7F5E4;
+            border-radius: 10px;
+        }
+        
+        .box-point {
+            position: relative;
+            width: 70%;
+            height: 25%;
+            transform: translateY(-50%);
+            margin-left: 15%;
+            background-color: blue;
+            border-radius: 10px;
+            text-align: center;
+            color: #F7F5E4;
+        }
+        
+        #box-container {
+            position: absolute;
+            bottom: 18%;
+            left: 4%;
+            height: 22%;
+            width: 55%;
+            overflow-x: scroll;
+            white-space: nowrap;
+        }
+        
+        #current-point {
+            position: absolute;
+            right: 9%;
+            top: 4.5%;
+            color: #F7F5E4;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="banner">
+    </div>
+    <div id="block">
+        <div id="list">
+            <img src="./list-request.png" id="request-btn" alt="">
+            <img src="./list-process.png" id="process-btn" alt=" ">
+        </div>
+        <div id="content">
+            <div id="outer-board">
+                <img src="./exchange_banner.png" id="exchange_banner" lt="">
+                <div id="board">
+                    <p id="current-point">600p
+                    </p>
+                </div>
+            </div>
+
+            <div id="monster-list">
+                <div id="box-container">
+                    <div class="box-item">
+                        <div class="box"></div>
+                        <div class="box-point">600p</div>
+                    </div>
+                    <div class="box-item">
+                        <div class="box"></div>
+                        <div class="box-point">600p</div>
+                    </div>
+                    <div class="box-item">
+                        <div class="box"></div>
+                        <div class="box-point">600p</div>
+                    </div>
+                    <div class="box-item">
+                        <div class="box"></div>
+                        <div class="box-point">600p</div>
+                    </div>
+                    <div class="box-item">
+                        <div class="box"></div>
+                        <div class="box-point">600p</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="hope">
+
+                <div id="up">
+                    <p id="hope-text">願望清單</p>
+                </div>
+                <div id="outer-down">
+                    <div id="down">
+                        <div class="hope-item">
+                            <input type="checkbox" />
+                            <label for="" class="labeltext">test</label>
+                        </div>
+                        <div class="hope-item">
+                            <input type="checkbox" />
+                            <label for="" class="labeltext">test</label>
+                        </div>
+                        <div class="hope-item">
+                            <input type="checkbox" />
+                            <label for="" class="labeltext">test</label>
+                        </div>
+                        <div class="hope-item">
+                            <input type="checkbox" />
+                            <label for="" class="labeltext">test</label>
+                        </div>
+                        <div class="hope-item">
+                            <input type="checkbox" />
+                            <label for="" class="labeltext">test</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

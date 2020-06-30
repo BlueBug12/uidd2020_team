@@ -275,6 +275,7 @@ router.post('/changestate',(req,res)=>{
                 return;
             }
             else{
+                console.log(res)
                 res.status(200).send({ isSuccess: true });
             }
         });

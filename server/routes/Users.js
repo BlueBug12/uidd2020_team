@@ -23,7 +23,8 @@ router.post('/',(req,res) => {
                 }
                 res.send(JSON.parse(`{
                     "text": "Hello ${res2.name}！",
-                    "account":"${res2.account}"
+                    "account":"${res2.account}",
+                    "classcode": "${res2.classcode}"
                 }`));
             }
         });
@@ -90,8 +91,10 @@ router.post('/CheckData',(req,res) => {
                         account:req.body.account,
                         password:req.body.password,
                         name:req.body.name,
-                        phone:req.body.phone,
-                        icon:req.body.url
+                        icon:req.body.url,
+                        gender:req.body.gender,
+                        birthday:req.body.birthday,
+                        mail:req.body.mail
                     });
                    users.save();
                     res.send(JSON.parse(`{

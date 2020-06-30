@@ -95,7 +95,7 @@ $(document).ready(function() {
 
     let bannerbuttons = document.getElementsByClassName('bannerbutton');
    // console.log(bannerbuttons);
-    bannerbuttons[0].classList.add('active');
+   // bannerbuttons[0].classList.add('active');
 
 
     for (let i = 0; i < bannerbuttons.length; i++) {
@@ -172,20 +172,24 @@ $(document).ready(function() {
         $('.menubar').css('visibility','hidden');
         span_menu=0;
       }
-  	});
-
+    });
+    $(document).on('click',"#bar1",function(){
+      localStorage.clear();
+    })
+    //click region except menubar
+    $(document).mouseup(function(e){
+      var _con = $('.menubar'); 
+      if(!_con.is(e.target) && _con.has(e.target).length === 0){ 
+        $('.menubar').css('visibility','hidden');
+        span_menu=0;
+      }
+    });
     $(document).on('mouseenter', '.menubar', function () {
       $(this).css('background','#d6dde4');
   	}).on('mouseleave', '.menubar', function () {
       $(this).css('background','#b8bec4');
   	});
 
-    $(document).on('click', '#bar1', function () {
-
-  	});
-    $(document).on('click', '#bar2', function () {
-
-    });
     
     $(document).on('click','#send_button',function(){
       console.log(localStorage.getItem("account"))
@@ -257,6 +261,7 @@ function getUser() {
         console.log(res.gender);
         document.getElementById('name').placeholder=res.name;
         document.getElementById('img-result').style.backgroundImage = 'url('+res.icon+')';
+        $('#user').css('background-image','url('+res.icon+')').css('background-size','cover');
         document.getElementById('mail').placeholder = res.mail;
         document.getElementById('gender').value = (res.gender=='男'? 1:2);
         document.getElementById('datepicker').placeholder = res.birthday;
