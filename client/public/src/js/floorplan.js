@@ -80,16 +80,16 @@ class Panel {
 					}
 				});
 			}
-			if (iter == 1) {
-				document.getElementsByClassName("paint")[0].addEventListener('click', () => {
-					this.isDrawing = !this.isDrawing;
-					if (!this.isDrawing) {
-						removeHighlight();
-						document.getElementsByClassName("paint")[0].style["background-color"] = "";
-						this.mode = "line";
-					}
-				});
-			}
+			// if (iter == 1) {
+			// 	document.getElementsByClassName("paint")[0].addEventListener('click', () => {
+			// 		this.isDrawing = !this.isDrawing;
+			// 		if (!this.isDrawing) {
+			// 			removeHighlight();
+			// 			document.getElementsByClassName("paint")[0].style["background-color"] = "";
+			// 			this.mode = "line";
+			// 		}
+			// 	});
+			// }
 			document.getElementsByClassName("undo")[iter].addEventListener('click', () => { this.undo(this); });
 			document.getElementsByClassName("delete")[iter].addEventListener('click', () => {
 				this.isDeleting = !this.isDeleting;
@@ -97,7 +97,6 @@ class Panel {
 					removeHighlight();
 					document.getElementsByClassName("delete")[iter].style["background-color"] = "#9E9E9E";
 					if (iter == 0) document.getElementsByClassName("pen")[0].style["background-color"] = "";
-					if (iter == 1) document.getElementsByClassName("paint")[0].style["background-color"] = "";
 					this.mode = "line";
 					this.isDrawing = false;
 				} else {
@@ -277,7 +276,7 @@ class Panel {
 		let floor = this.floor[this.nowFloor];
 		let x = Math.floor(event.layerX / this.gridSize) * this.gridSize;
 		let y = Math.floor(event.layerY / this.gridSize) * this.gridSize;
-		let color = document.getElementsByClassName("paint")[0].style["background-color"];
+		let color = nowColor;
 		floor.rooms.push(new Area(color, x, y, x + this.gridSize, y + this.gridSize, 1, nowColorIndex));
 		this.render();
 
@@ -1105,10 +1104,9 @@ document.getElementById("draw_room").addEventListener('click', () => {
 	$('#draw_room').css({"opacity": 1});
 	$('#place_furnish').css({"opacity": 0.5});
 	$('#editor').css({ "height": "60vh", "margin-top": 0 });
-	$('.list-inline-item').css({ "padding-left": 0, "margin-top": 0 });
+	$('.list-inline-item').css({ "padding-left": "1vw", "margin-top": "1vh" });
 	panel.isDrawing = false;
 	panel.isDeleting = false;
-	document.getElementsByClassName("paint")[0].style["background-color"] = "";
 	document.getElementsByClassName("delete")[1].style["background-color"] = "";
 });
 document.getElementById("place_furnish").addEventListener('click', () => {
@@ -1138,6 +1136,7 @@ let isPickerDisplay = false;
 let isAddingColor = false;
 let isChangingColor = false;
 let nowColorIndex = 0;
+let nowColor;
 
 document.getElementsByClassName("add")[0].addEventListener('click', () => {
 	removeHighlight();
@@ -1155,7 +1154,7 @@ $(document).on('click', '.color-item', () => {
 
 	let color = event.target.style["background-color"];
 	$('#pickcolor').val(color);
-	document.getElementsByClassName("paint")[0].style["background-color"] = color;
+	nowColor = color;
 
 	if (isChangingColor) {
 		panel.floor[panel.nowFloor].colors[nowColorIndex] = color;
@@ -1205,7 +1204,7 @@ $(document).on('click', '.round', () => {
 	}
 
 	if (event.target.children.length) {
-		$('.paint').css('background-color', event.target.children[1].style["background-color"]);
+		nowColor = event.target.children[1].style["background-color"];
 		document.getElementsByClassName("delete")[1].style["background-color"] = "";
 		panel.mode = "rect";
 		panel.isDeleting = false;
