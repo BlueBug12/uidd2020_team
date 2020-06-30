@@ -108,7 +108,8 @@ router.post('/',async(req,res) => {
         region:req.body.region,
         expired:0,
         point:req.body.point,
-        participate:null
+        participate:null,
+        region_content:req.body.region_content
     });
     try {
         const savePost = await tasks.save();

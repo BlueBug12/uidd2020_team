@@ -40,6 +40,9 @@ const TaskSchema = mongoose.Schema({
     },
     housework:{
         type:String
+    },
+    region_content:{
+        type:String
     }
 },{collection: 'Tasks'});
 
