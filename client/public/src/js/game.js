@@ -498,7 +498,9 @@ $(document).on('mouseenter', '.menubar', function () {
     }).on('mouseleave', '.menubar', function () {
     $(this).css('background','#b8bec4');
     });
-
+$(document).on('click',"#bar2",function(){
+    localStorage.clear();
+})
 function getUser() {
     var account = localStorage.getItem("account");
     $.get('./users/find/' + account, {}, (res) => {

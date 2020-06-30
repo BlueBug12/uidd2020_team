@@ -173,6 +173,9 @@ $(document).ready(function() {
         span_menu=0;
       }
     });
+    $(document).on('click',"#bar1",function(){
+      localStorage.clear();
+    })
     //click region except menubar
     $(document).mouseup(function(e){
       var _con = $('.menubar'); 
