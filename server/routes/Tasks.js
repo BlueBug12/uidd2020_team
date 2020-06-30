@@ -276,4 +276,85 @@ router.post('/changestate',async(req,res)=>{
         res.json({message:err});
     }
 })
+
+//check if task is finish or failure
+router.post('/checkstate',(req,res)=>{
+    try {
+        var temp = [];
+        var length = 0;
+        var agree = 0;
+        var deny = 0;
+        Users.find({ "classcode":req.body.classcode}).exec((err, res2) => {
+            if (err) {
+                console.log('fail to query:', err)
+                return;
+            }
+            else{
+                length = res2.length / 2 + 1;
+                Tasks.find({ "participate.id": req.body.account,"participate.state":2}).exec((err, res3) => {
+                    if (err) {
+                        console.log('fail to query:', err)
+                        return;
+                    }
+                    else{
+                        res3.forEach(function(item){
+                            item.verify.forEach(function(person){
+                                if(person.state == 0){
+                                    deny++;
+                                }
+                                else{
+                                    agree++;
+                                }
+                            });
+                            if(agree >= length){
+                                item.participate.forEach(async function(member){
+                                    member.state = 3;
+                                    await Users.findOne({"account":member.id} ).exec((err, res4) => {
+                                        if (err) {
+                                            console.log('fail to query:', err)
+                                            return;
+                                        }
+                                        else{
+                                            res4.point = item.point;
+                                            res4.save();
+                                        }
+                                    });
+                                });
+                            }
+                            else if(deny >= length){
+                                item.participate.forEach(function(member){
+                                    member.state = 4;
+                                });
+                            }
+                            item.save();
+                            agree = 0;
+                            deny = 0;
+                        });
+                        res.status(200).send({ isSuccess: true });
+                    }
+                });
+            }
+        });
+    }catch(err){
+        res.json({message:err});
+    }
+})
+
+//get user finish task
+router.post('/finished',(req,res)=>{
+    try {
+        console.log(req.body.account);
+        Tasks.find({ "participate.id": req.body.account,"participate.state":3}).exec(async (err, res2) => {
+            if (err) {
+                console.log('fail to query:', err)
+                return;
+            }
+            else{
+                res.send(res2);
+            }
+        });
+    }catch(err){
+        res.json({message:err});
+    }
+})
 module.exports = router;

@@ -217,6 +217,7 @@ li {
   padding-top:3vh;
   border-bottom: #799FB4 solid 3px;
   font-size: 2em;
+  text-align: left;
   font-family:GenJyuuGothic-Medium;
   color:#799FB4;
 }
@@ -679,4 +680,27 @@ div#signin div#logo img {
     background-color: #4b515f;
     text-align: center;
     
+}
+
+.points{
+    top:35%;
+    margin-left: 20px;
+    position: absolute;
+    border-radius: 20px;
+    width:147px;
+    height:26px;
+    background: #6c6a75;
+}
+
+#cookie{
+    right:10px;
+}
+#s1{
+    background-image:"./img/user/cookie.png";
+}
+#coin{
+    right:180px;
+}
+#coin>span{
+    background-image:"./img/user/coin.png";
 }

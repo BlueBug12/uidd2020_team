@@ -234,19 +234,23 @@ $(document).ready(function() {
     let tri=0;
     $(document).on('click','#switch_data',function(){
       if(!tri){
-        document.getElementById('data_bar').textContent='我的足跡';
+        document.getElementById('user_text').textContent='我的足跡';
         $('#left_data').css('visibility','hidden');
         $('#upload_img').css('visibility','hidden');
         $('#img_post').css('visibility','hidden');
+        $('.points').css('visibility','visible');
+        
+
         document.getElementById('switch_data').classList.remove('triangle');
         document.getElementById('switch_data').classList.add('anti-triangle');
         tri=1;
       }
       else{
-        document.getElementById('data_bar').textContent='我的檔案';
+        document.getElementById('user_text').textContent='我的檔案';
         $('#left_data').css('visibility','visible');
         $('#upload_img').css('visibility','visible');
         $('#img_post').css('visibility','visible');
+        $('.points').css('visibility','hidden');
         document.getElementById('switch_data').classList.remove('anti-triangle');
         document.getElementById('switch_data').classList.add('triangle');
         tri=0;
@@ -258,7 +262,6 @@ $(document).ready(function() {
 function getUser() {
     var account = localStorage.getItem("account");
     $.get('./users/find/' + account, {}, (res) => {
-        console.log(res.gender);
         document.getElementById('name').placeholder=res.name;
         document.getElementById('img-result').style.backgroundImage = 'url('+res.icon+')';
         $('#user').css('background-image','url('+res.icon+')').css('background-size','cover');
@@ -271,6 +274,15 @@ function getUser() {
         user_gender=res.gender;
         user_mail=res.mail;
         user_birthday=res.birthday;
+
+    });
+    //console.log(localStorage.getItem("account"));
+    $.post('./Tasks/finished',{
+      account:localStorage.getItem("account")
+    },(res)=>{
+      for(let i=0;i<res.length;++i){
+        console.log(res[i].content+' '+res[i].date+' '+res[i].point);
+      }
 
     });
 }
