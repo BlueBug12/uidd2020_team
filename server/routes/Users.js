@@ -101,7 +101,6 @@ router.post('/CheckData',(req,res) => {
             }
             else{
                 if(res2 == null){
-                    console.log()
                     const users = new Users({
                         account:req.body.account,
                         password:req.body.password,
@@ -114,6 +113,7 @@ router.post('/CheckData',(req,res) => {
                         monster:[1,1,1,1]
                     });
                    users.save();
+                   console.log(users.monster);
                     res.send(JSON.parse(`{
                         "first": "true"
                     }`));

@@ -328,10 +328,15 @@ li {
 
 #floors {
     float: left;
-    height: inherit;
+    height: 80%;
     width: 100px;
 }
-
+.mapbtn{
+position: absolute;
+    top: 80%;
+    height: 15%;
+    left: 10px;
+}
 #floorplan {
     float: left;
     height: inherit;

@@ -37,23 +37,27 @@
                         </a>
                         <ul class="list-inline">
                             <li class="list-inline-item">
-                                <button class="bannerbutton" onclick="javascript:location.href='./game.html'">任務地圖</button>
+                                <button class="bannerbutton" onclick="location.href='game.html'" >任務地圖</button>
                             </li>
                             <li class="list-inline-item">
-                                <button class="bannerbutton" href="#">任務總覽</button>
+                                <button class="bannerbutton " onclick="location.href='invite.html'">任務總覽</button>
                             </li>
                             <li class="list-inline-item">
-                                <button class="bannerbutton" href="#">排行與積分</button>
+                                <button class="bannerbutton active" onclick="location.href='monster.html'"><img src="./img/monster_icon.png" height="20" width="auto" class="monster_icon">家事怪</button>
                             </li>
-                
                             <li class="list-inline-item">
-                                <div class="round" id="UserImg" alt="" srcset="" style=" border-radius: 50%;width: 50px;height: 50px;"></div>
+                                <div class="dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                                        <img id = "UserImg" class="round" alt="" >
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink" style="min-width: auto; padding: 0;">
+                                        <a class="dropdown-item menubar" href="user.html" style="padding: 0;"><i class="fa fa-cog" aria-hidden="true"></i> 個人資料</a>
+                                        <a class="dropdown-item menubar" style="padding: 0;" id = "bar2"><i class="fa fa-sign-out" aria-hidden="true"></i> 登出</a>
+                                    </div>
+                                </div>
                             </li>
-                            
                         </ul>
-
                     </nav>
-
                 </div>
             </div>
         </div>
