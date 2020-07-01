@@ -35,5 +35,7 @@ const conn = mongoose.connect(url,{ useNewUrlParser: true ,useUnifiedTopology: t
 });
 mongoose.Promise = global.Promise
 require('./models/Floorplans');
+require('./models/Hopes');
 require('./routes/Floorplan')(app);
+require('./routes/Hope')(app);
 

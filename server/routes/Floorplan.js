@@ -48,7 +48,7 @@ module.exports = (app) => {
             if (!err) {
                 Floorplan.find({ class: users[0].classcode }, (err, docs) => {
                     if (!err) {
-                        res.status(200).send({ floorplan: docs[0].floorplan });
+                        res.status(200).send({ floorplan: docs[0]? docs[0].floorplan: [] });
                     } else {
                         res.status(503).send({ isSuccess: false });
                     }

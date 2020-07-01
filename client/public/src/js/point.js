@@ -104,7 +104,7 @@ function addRemoveListener() {
 let classNum = 0;
 showItems(classNum);
 
-document.getElementById("buy").addEventListener('click', () => {
+document.getElementById("buy").addEventListener('click', async () => {
     let nowItems = document.getElementsByClassName("box-content");
     let nowTotalPoint = document.getElementById("totalPoint").innerText;
     let nowOwnedPoint = document.getElementById("current-point").innerText;
@@ -113,6 +113,16 @@ document.getElementById("buy").addEventListener('click', () => {
     if (nowTotalPoint > nowOwnedPoint) {
         return;
     } else {
+        let hopes = await fetch('/readHope', {
+			body: JSON.stringify({ classcode: localStorage.getItem("classcode") }),
+			headers: {
+				"Content-Type": "application/json"
+			},
+			method: 'POST'
+        }).then((res) => {
+            return res.json();
+        })
+        console.log(hopes)
         for (let iter = 0; iter < nowItems.length; ++iter) {
             document.getElementById("down").innerHTML += `
                 <div class="hope-item">
@@ -124,7 +134,7 @@ document.getElementById("buy").addEventListener('click', () => {
         document.getElementById("totalPoint").innerText = "0P";
         document.getElementById("box-container").innerHTML = "";
         document.getElementById("current-point").innerText = nowOwnedPoint - nowTotalPoint + "P";
-		let hopes = [];
+		hopes = [];
 		let hopeContent = document.getElementsByClassName("labeltext");
 		for (let iter = 0; iter < hopeContent; ++iter) {
 			let target = {};
@@ -137,8 +147,8 @@ document.getElementById("buy").addEventListener('click', () => {
             point:nowTotalPoint
         }, (res) => {
         });
-		fetch('/users/updateHope', {
-			body: JSON.stringify({ account: localStorage.getItem("account"), data: hopes }),
+		fetch('/saveHope', {
+			body: JSON.stringify({ classcode: localStorage.getItem("classcode"), data: hopes }),
 			headers: {
 				"Content-Type": "application/json"
 			},

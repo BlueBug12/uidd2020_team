@@ -253,20 +253,4 @@ router.post('/updatepoint',(req,res) => {
         res.json({message:err});
     }
 });
-router.post('/updateHope',(req,res) => {
-    try {
-        Users.findOne({ "account":req.body.account}).exec(async (err, res2) => {
-            if (err) {
-                console.log('fail to query:', err)
-                return;
-            }
-            else{
-                res2.hope = req.body.data;;
-                res2.save();
-            }
-        });
-    }catch(err){
-        res.json({message:err});
-    }
-});
 module.exports = router;

@@ -64,6 +64,13 @@ $('#group_btn2').click((event) => {
 });
 
 function postData(event) {
+    fetch('/saveHope', {
+        body: JSON.stringify({ classcode: $('#signin input[name=classcode]').val().trim(), data: [] }),
+        headers: {
+            "Content-Type": "application/json"
+        },
+        method: 'POST'
+    });
     $.post('./users/createclass', {
         account: localStorage.getItem("account"),
         classcode: $('#signin input[name=classcode]').val().trim(),
@@ -97,4 +104,4 @@ $(document).on('click',"#bar1",function(){
             location.href='./index.html'
         }
     });
-})
+});
