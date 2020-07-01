@@ -65,3 +65,19 @@ async function getUser() {
         document.getElementById("UserImg").src = res.icon;
     });
 }
+$(document).on('click',"#bar1",function(){
+    FB.getLoginStatus(function(response) {
+        if (response.status === 'connected') {
+            FB.logout(function(response) {
+                // this part just clears the $_SESSION var
+                // replace with your own code
+                console.log(response)
+                location.href='./index.html'
+            });
+        }
+        else{
+            localStorage.clear();
+            location.href='./index.html'
+        }
+    });
+})

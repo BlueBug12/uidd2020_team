@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="./src/css/lib/font-awesome-4.7.0/css/font-awesome.css">
     <title>Document</title>
     <style>
         @font-face {
@@ -342,7 +343,6 @@ li {
 }
 .round{
     position:relative;
-    top:15px;
     width:50px;height:50px;
     border-radius:999em;
     background-color:#799FB4;
@@ -351,33 +351,23 @@ li {
     border-width:2px;
     cursor: pointer;
   }
-  .menubar{
+  .nav-link {
+    padding: 0;
+}
+.menubar{
     height:30px;
-    width:80px;
-    border-width: 1px;
-    border-color:white;
-    border-style:solid;
-    background:#b8bec4;
-    font-size:1em;
-    font-family:GenJyuuGothic-Medium;
-    color:white;
-    z-index:10;
-    text-align:center;
-    visibility:hidden;
-    cursor: pointer;
-   }
-   #bar1{
-    position: absolute;
-    top:75px;
-    right:90px;
-  
-  
-  }
-  #bar2{
-    position: absolute;
-    top:105px;
-    right:90px;
-  }
+  width:100px;
+  background:#b8bec4;
+  font-size:1em;
+  font-family:GenJyuuGothic-Medium;
+  color:white !important;
+  z-index:10;
+  text-align:center;
+  cursor: pointer;
+}
+.dropdown-toggle::after {
+    display: none;
+}
   .monster_icon{
     margin-right: 5px;
 }
@@ -404,13 +394,19 @@ li {
                         <button class="bannerbutton" href="#"><img src="./img/monster_icon.png" height="20" width="auto" class="monster_icon">家事怪</button>
                     </li>
                     <li class="list-inline-item">
-                        <div class="round" id="UserImg" alt=""  style=" border-radius: 50%;width: 50px;height: 50px;"></div>
+                        <div class="dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                                <img id = "UserImg" class="round" alt="" >
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink" style="min-width: auto; padding: 0;">
+                                <a class="dropdown-item menubar" href="user.html" style="padding: 0;"><i class="fa fa-cog" aria-hidden="true"></i> 個人資料</a>
+                                <a class="dropdown-item menubar" style="padding: 0;" id = "bar2"><i class="fa fa-sign-out" aria-hidden="true"></i> 登出</a>
+                            </div>
+                        </div>
                     </li>
                 </ul>
             </nav>
         </div>
-        <div class="menubar" id="bar1" onclick="javascript:location.href='./user.html'">個人資料</div>
-        <div class="menubar" id="bar2" onclick="javascript:location.href='./login.html'">登出</div>
     </div>
     <div id="block">
         <div id="list">
@@ -466,6 +462,7 @@ li {
 </body>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js " integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k " crossorigin="anonymous "></script>
 <script>
 
 
@@ -587,35 +584,7 @@ function find_objid(content,index){
         }
     }
 }
-$(document).on('mouseenter', '#UserImg', function () {
-    $(this).css('border-color','#D0D9DC');
-    }).on('mouseleave', '#UserImg', function () {
-    $(this).css('border-color','#789FB3');
-    });
-  let span_menu=0;
-$(document).on('click', '#UserImg', function () {
-    if(!span_menu){
-        $('.menubar').css('visibility','visible');
-        span_menu=1;
-    }
-    else{
-        $('.menubar').css('visibility','hidden');
-        span_menu=0;
-    }
-});
-//click region except menubar
-$(document).mouseup(function(e){
-    var _con = $('.menubar'); 
-    if(!_con.is(e.target) && _con.has(e.target).length === 0){ 
-      $('.menubar').css('visibility','hidden');
-      span_menu=0;
-    }
-  });
-$(document).on('mouseenter', '.menubar', function () {
-    $(this).css('background','#d6dde4');
-    }).on('mouseleave', '.menubar', function () {
-    $(this).css('background','#b8bec4');
-    });
+
 $(document).on('click',"#bar2",function(){
     localStorage.clear();
 })
