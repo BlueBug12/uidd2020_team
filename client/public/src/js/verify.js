@@ -5,6 +5,10 @@ $(document).ready(function() {
         data: {
             shows: [],
             tasks: tasks,
+            change1: 0,
+            change2: 0,
+            back:0,
+            hides:[],
         },
         methods: {
             refuse:function(index){
@@ -32,7 +36,42 @@ $(document).ready(function() {
                 buttonunable();
                 $('.check').css("visibility", "visible");
                 $('.mask').css("visibility", "visible");
+            },
+            getPos: function(index){
+                if(index == 0){
+                    x=event.clientX;
+                    y=event.clientY;
+                    if(x < 870){
+                        this.change1 = 1;
+                        document.getElementsByClassName("info")[0].classList.add("move1");
+                        if(this.change2 == 1){
+                            document.getElementsByClassName("info")[0].classList.remove("move2");
+                            this.change2 = 0;
+                        }
+                    }
+                    else{
+                        this.change2 = 1;
+                        document.getElementsByClassName("info")[0].classList.add("move2");
+                        if(this.change1 == 1){
+                            document.getElementsByClassName("info")[0].classList.remove("move1");
+                            this.change1 = 0;
+                        }
+                    }
+                }
+                
+            },
+            stopTracking: function(index){
+                if(index == 0){
+                    this.change1 = 0;
+                    this.change2 = 0;
+                    if(this.change1 == 1 || this.change2 == 1){
+                        document.getElementsByClassName("info")[0].classList.add("origin");
+                    }
+                    document.getElementsByClassName("info")[0].classList.remove("move1");
+                    document.getElementsByClassName("info")[0].classList.remove("move2");
+                }
             }
+
         },
         watch: {
             tasks: {
@@ -43,6 +82,15 @@ $(document).ready(function() {
                             this.shows.push(false);
                         }
                         this.shows[0] = true;
+                        if(this.tasks.length > 5){
+                            this.hides = [];
+                            for (var i = 0; i < 4; i++) {
+                                this.hides.push(false);
+                            }
+                            for (var i = 4; i < this.tasks.length; i++) {
+                                this.hides.push(true);
+                            }
+                        }
                     }
                     else{
                         this.shows = [];

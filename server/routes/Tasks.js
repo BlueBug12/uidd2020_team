@@ -280,14 +280,13 @@ router.post('/progress',(req,res) => {
 //set participate.state in process page 
 router.post('/changestate',(req,res)=>{
     try {
-         Tasks.updateOne({ "_id":req.body.id,"participate.id":req.body.account},{'$set': {
+         Tasks.findOneAndUpdate({ "participate._id":req.body.id},{'$set': {
             'participate.$.state': req.body.state}}, function(err) {
             if (err) {
                 console.log('fail to query:', err)
                 return;
             }
             else{
-                console.log(res)
                 res.status(200).send({ isSuccess: true });
             }
         });

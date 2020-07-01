@@ -58,15 +58,15 @@
                         <div class ="row  monster">
                             <img class="img-fluid" src="./img/verify/left-monster.png" ></img>
                             <img class="img-fluid left-hand" src="./img/verify/left-hand.png" ></img>
-                            <img class="img-fluid right" src="./img/verify/right.png" v-on:click="accept(0)"></img>
+                            <img class="img-fluid right" :class={animate:change1} src="./img/verify/right.png" v-on:click="accept(0)"></img>
                         </div>
                         <div class ="row  monster2">
                             <img class="img-fluid " src="./img/verify/right-monster.png" ></img>
                             <img class="img-fluid right-hand" src="./img/verify/right-hand.png" ></img>
-                            <img class="img-fluid deny" src="./img/verify/deny.png" v-on:click="refuse(0)"></img>
+                            <img class="img-fluid deny" :class={animate:change2} src="./img/verify/deny.png" v-on:click="refuse(0)"></img>
                         </div>
                         <template v-for="(task,index) in tasks">
-                            <div class = "row info" :class={active:shows[index]}>
+                            <div class = "row info" :class={active:shows[index],hide:hides[index]}  @mouseout="stopTracking(index)" v-on:mousemove="getPos(index)">
                                     <p class="infotext" >{{task.region}}：{{task.content}}</p>
                             </div>
                         </template>
