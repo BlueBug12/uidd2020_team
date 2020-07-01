@@ -299,6 +299,8 @@ function getUser() {
         document.getElementById('gender').value = (res.gender=='未填'? 0:res.gender=='男'?1:2);
         document.getElementById('datepicker').placeholder = res.birthday;
 
+        document.getElementById('coin_score').textContent=res.point+'P';
+        document.getElementById('cookie_score').textContent=Math.round(res.point/10)+'P';
         if(document.getElementById('gender').value != 0){
           document.getElementById('gender').options[0].classList.add('hide')
         }
@@ -314,11 +316,9 @@ function getUser() {
     $.post('./Tasks/finished',{
       account:localStorage.getItem("account")
     },(res)=>{
-      let coin_score=0;
       //console.log(res);
       for(let i=0;i<res.length;++i){
         //console.log(res[i].content+' '+res[i].date+' '+res[i].point);
-        coin_score+=res[i].point;
         $('#record').append(`
         <div class="record_row container">
           <div class="img_containter item">
@@ -333,8 +333,7 @@ function getUser() {
         </div>`
         )
       }
-      document.getElementById('coin_score').textContent=coin_score+'P';
-      document.getElementById('cookie_score').textContent=Math.round(coin_score/10)+'P';
+      
       });
 }
 

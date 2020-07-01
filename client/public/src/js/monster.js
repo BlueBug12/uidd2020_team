@@ -72,6 +72,7 @@ function set_lh(v){
         $('#left_hand').css('right','373px').css('top',"282px").css('width','40px').css('height','40px');
         document.getElementById('lh').src='./img/monster/lefthand2.svg';
         document.getElementById("lh_level").innerHTML="Lv.2";
+        document.getElementById("lh_name").innerHTML="芒草掃把手";
     }else if(v==11){
         $('#left_hand').css('right','368px').css('top',"277px").css('width','46px').css('height','46px');
     }else if(v==12){
@@ -132,6 +133,7 @@ function set_rh(v){
         $('#right_hand').css('right','558px').css('top',"289px").css('width','40px').css('height','40px');
         document.getElementById('rh').src='./img/monster/righthand2.svg';
         document.getElementById("rh_level").innerHTML="Lv.2";
+        document.getElementById("rh_name").innerHTML="木製鍋鏟手";
     }else if(v==11){
         $('#right_hand').css('right','558px').css('top',"284px").css('width','46px').css('height','46px');
     }else if(v==12){
@@ -185,6 +187,7 @@ function set_ll(v){
         $('#left_leg').css('right','400px').css('top',"430px").css('width','40px').css('height','40px');
         document.getElementById('ll').src='./img/monster/leftleg2.svg';
         document.getElementById("ll_level").innerHTML="Lv.2";
+        document.getElementById("ll_name").innerHTML="油漆滾筒腳";
     }else if(v==11){
         $('#left_leg').css('right','396px').css('top',"428px").css('width','46px').css('height','46px');
     }else if(v==12){
@@ -237,6 +240,7 @@ function set_rl(v){
         $('#right_leg').css('right','528px').css('top',"425px").css('width','40px').css('height','40px');
         document.getElementById('rl').src='./img/monster/rightleg2.svg';
         document.getElementById("rl_level").innerHTML="Lv.2";
+        document.getElementById("ll_name").innerHTML="好神拖腳";
     }else if(v==11){
         $('#right_leg').css('right','528px').css('top',"425px").css('width','46px').css('height','46px');
     }else if(v==12){
@@ -303,7 +307,6 @@ $(document).on('click',"#right_leg_button",function(){
     function getUser() {
         var account = localStorage.getItem("account");
         $.get('./users/find/' + account, {}, (res) => {
-            //document.getElementById("UserImg").src = res.icon;
             document.getElementById("UserImg").style.backgroundImage= `url(${res.icon})`;
             cookie = res.point / 10;
             console.log(cookie);
@@ -318,32 +321,46 @@ $(document).on('click',"#right_leg_button",function(){
         set_lh(lh);
         if(lh<10){
             document.getElementById('lh').src='./img/monster/lefthand1.svg';
+            document.getElementById("lh_level").innerHTML="Lv.1";
         }
         else{
             document.getElementById('lh').src='./img/monster/lefthand2.svg';
+            document.getElementById("lh_level").innerHTML="Lv.2";
+            document.getElementById("lh_name").innerHTML="芒草掃把手";
+            
         }
         rh = res.monster[1];
         set_rh(rh);
         if(rh<10){
             document.getElementById('rh').src='./img/monster/righthand1.svg';
+            document.getElementById("rh_level").innerHTML="Lv.1";
         }
         else{
             document.getElementById('rh').src='./img/monster/righthand2.svg';
+            document.getElementById("rh_level").innerHTML="Lv.2";
+            document.getElementById("rh_name").innerHTML="木製鍋鏟手";
         }
         ll = res.monster[2];
         set_ll(ll);
         if(ll<10){
             document.getElementById('ll').src='./img/monster/leftleg1.svg';
+            document.getElementById("ll_level").innerHTML="Lv.1";
         }
         else{
             document.getElementById('ll').src='./img/monster/leftleg2.svg';
+            document.getElementById("ll_level").innerHTML="Lv.2";
+            document.getElementById("ll_name").innerHTML="油漆滾筒腳";
+
         }
         rl = res.monster[3];    
         set_rl(rl);
         if(rl<10){
             document.getElementById('rl').src='./img/monster/rightleg1.svg';
+            document.getElementById("rl_level").innerHTML="Lv.1";
         }
         else{
             document.getElementById('rl').src='./img/monster/rightleg2.svg';
+            document.getElementById("rl_level").innerHTML="Lv.2";
+            document.getElementById("ll_name").innerHTML="好神拖腳";
         }
     }

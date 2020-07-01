@@ -314,6 +314,9 @@ div#signin div#align div#container {
 .passworderror {
     display: none;
 }
+body{
+    overflow: hidden;
+}
 input{
     font-family: GenJyuuGothic-Medium;
     color:black;
@@ -490,7 +493,7 @@ div#signin div#logo img {
     position: absolute;
     border-radius: 20px;
     top:30vh;
-    left:10vw;
+    left:16vw;
     height:55vh;
     width:30vw;
     background:#f7f6e4;
@@ -567,9 +570,10 @@ div#signin div#logo img {
     position: absolute;
     left:12%;
     top:40%;
-    text-align:center;
+    text-align:right;
+    margin-left:-20px;
     font-size:1.5em;
-    letter-spacing:0.2em;
+    letter-spacing:0em;
     font-family:GenJyuuGothic-Medium;
 }
 .circle{
