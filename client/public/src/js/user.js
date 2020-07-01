@@ -152,9 +152,9 @@ $(document).ready(function() {
       $(this).css('background','#799FB4').css('color','#F7F6E4');
     });
     $(document).on('mouseenter', '#switch_data', function () {
-      $(this).css('opacity',0.75);
-  	}).on('mouseleave', '#switch_data', function () {
       $(this).css('opacity',1);
+  	}).on('mouseleave', '#switch_data', function () {
+      $(this).css('opacity',0.5);
   	});
 
     $(document).on('mouseenter', '#user', function () {

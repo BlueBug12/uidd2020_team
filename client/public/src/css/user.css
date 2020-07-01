@@ -441,13 +441,14 @@ div#signin div#logo img {
 }
 .triangle{
   position:absolute;
+  margin-right:-40px;
   right:10px;
   top:50%;
   width: 5;
   height: 5;
   border-style: solid;
-  border-width: 17.5px 0 17.5px 20px;
-  border-color: transparent transparent transparent #789fb3;
+  border-width: 14px 0 14px 14px;
+  border-color: transparent transparent transparent white;
   cursor: pointer;
 }
 .anti-triangle{
@@ -456,9 +457,10 @@ div#signin div#logo img {
   top:50%;
   width: 5;
   height: 5;
+  margin-right:-40px;
   border-style: solid;
-  border-width: 17.5px 20px 17.5px 0;
-  border-color: transparent #789fb3 transparent transparent ;
+  border-width: 14px 14px 14px 0;
+  border-color: transparent white transparent transparent ;
   cursor: pointer;
 }
 
@@ -738,8 +740,8 @@ div#signin div#logo img {
 #record{
     position: absolute;
     height:75%;
-    width: 45%;
-    padding:15px 20px;
+    width: 97%;
+    padding:15px 100px;
     overflow-y:scroll;
     margin-bottom:100px;
 
@@ -755,6 +757,7 @@ div#signin div#logo img {
 
  .img_containter{
      width:20%;
+     margin-left:-30px
  }
 .record_type{
   
@@ -773,7 +776,7 @@ div#signin div#logo img {
 }
 .record_text{
   padding-top:5px;
-  padding-left:20px;
+  margin-left:80px;
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
@@ -783,30 +786,41 @@ div#signin div#logo img {
 .record_points{
   position:relative;
   width:30%;
-  margin-left:7%;
+  margin-left:20%;
   text-align:center;
   margin-top:16px;
   font-size:1.8em;
   font-family:GenJyuuGothic-Medium;
 }
 #record_bar{
-  position:relative;
+  display:flex;
   width:100%;
   height:50px;
   
 }
 .record_icon{
-  position:absolute;
-  height:50px;
+  
+  height:10%;
+  width:40%;
+  left:10px;
+}
+#record_name{
+  position:relative;
   left:100px;
+  top:6px;
+  font-size:1.6em;
+  font-family:GenJyuuGothic-Medium;
+  text-align:left;
+  width:40%;
+  height:100%;
 }
 #coin_icon{
-  position:absolute;
-  left:54%
+  height:50px;
+  padding-left:55px;
 }
 #cookie_icon{
-  position:absolute;
-  left:80%;
+  height:60px;
+  padding-left:50px;
 }
 .container{
   display: flex;
