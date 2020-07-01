@@ -1,9 +1,8 @@
-//const { set } = require("mongoose");
-
 var rh=0;
 var lh=0;
 var rl=0;
 var ll=0;
+var cookie=0;
 $(document).on('mouseenter', '#UserImg', function () {
     $(this).css('border-color','#D0D9DC');
     }).on('mouseleave', '#UserImg', function () {
@@ -49,7 +48,9 @@ function set_lh(v){
     else
         $("#left_hand_value").css('width',`284px`);
 
-    if(v==1){
+    if(v==0){
+        $('#left_hand').css('right','380px').css('top',"312px").css('width','46px').css('height','46px');
+    }else if(v==1){
         $('#left_hand').css('right','376px').css('top',"312px").css('width','46px').css('height','46px');
     }else if(v==2){
         $('#left_hand').css('right','371px').css('top',"311px").css('width','52px').css('height','52px');
@@ -106,7 +107,10 @@ function set_rh(v){
         $("#right_hand_value").css('width',`${42+25*(v%10)}px`);
     else
         $("#right_hand_value").css('width',`284px`);
-    if(v==1){
+    
+    if(v==0){
+        $('#right_hand').css('right','545px').css('top',"312px").css('width','46px').css('height','46px');
+    }else if(v==1){
         $('#right_hand').css('right','541px').css('top',"312px").css('width','46px').css('height','46px');
     }else if(v==2){
         $('#right_hand').css('right','537px').css('top',"312px").css('width','52px').css('height','52px');
@@ -157,7 +161,9 @@ function set_ll(v){
         $("#left_leg_value").css('width',`${42+25*(v%10)}px`);
     else
         $("#left_leg_value").css('width',`284px`);
-    if(v==1){
+    if(v==0){
+        $('#left_leg').css('right','410px').css('top',"427px").css('width','46px').css('height','46px');
+    }else if(v==1){
         $('#left_leg').css('right','406px').css('top',"427px").css('width','46px').css('height','46px');
     }else if(v==2){
         $('#left_leg').css('right','403px').css('top',"427px").css('width','52px').css('height','52px');
@@ -207,7 +213,9 @@ function set_rl(v){
         $("#right_leg_value").css('width',`${42+25*(v%10)}px`);
     else
         $("#right_leg_value").css('width',`284px`);
-    if(v==1){
+    if(v==0){
+        $('#right_leg').css('right','528px').css('top',"426px").css('width','46px').css('height','46px');
+    }else if(v==1){
         $('#right_leg').css('right','524px').css('top',"426px").css('width','46px').css('height','46px');
     }else if(v==2){
         $('#right_leg').css('right','523px').css('top',"425px").css('width','52px').css('height','52px');
@@ -252,33 +260,42 @@ function set_rl(v){
     }
 }
 $(document).on('click',"#left_hand_button",function(){
-    if(lh<20){
+    
+    if(lh<20&&cookie>0){
         lh+=1;
         set_lh(lh);
-        document.getElementById("points").innerHTML="test";
         store();
+        cookie-=1;
+        document.getElementById("points").innerHTML=`${cookie}P`;
     }
     
 })
 $(document).on('click',"#right_hand_button",function(){
-    if(rh<20){
+    if(rh<20&&cookie>=1){
         rh+=1;
         set_rh(rh);
         store();
+        cookie-=1;
+        document.getElementById("points").innerHTML=`${cookie}P`;
     }
 })
 $(document).on('click',"#left_leg_button",function(){
-    if(ll<20){
+    console.log(cookie);
+    if(ll<20&&cookie>=1){
         ll+=1;
         set_ll(ll);
         store();
+        cookie-=1;
+        document.getElementById("points").innerHTML=`${cookie}P`;
     }
 })
 $(document).on('click',"#right_leg_button",function(){
-    if(rl<20){
+    if(rl<20&&cookie>=1){
         rl+=1;
         set_rl(rl);
         store();
+        cookie-=1;
+        document.getElementById("points").innerHTML=`${cookie}P`;
     }
 })
 
@@ -288,15 +305,45 @@ $(document).on('click',"#right_leg_button",function(){
         $.get('./users/find/' + account, {}, (res) => {
             //document.getElementById("UserImg").src = res.icon;
             document.getElementById("UserImg").style.backgroundImage= `url(${res.icon})`;
-            var cookie = res.point / 10;
-            document.getElementById("current-point").innerText = `${cookie}P`;
+            cookie = res.point / 10;
+            console.log(cookie);
+            document.getElementById("points").innerText = `${cookie}P`;
             localStorage.setItem("classcode", res.classcode);
             setMonster(res);
+            
         });
     }
     function setMonster(res) {
         lh = res.monster[0];
+        set_lh(lh);
+        if(lh<10){
+            document.getElementById('lh').src='./img/monster/lefthand1.svg';
+        }
+        else{
+            document.getElementById('lh').src='./img/monster/lefthand2.svg';
+        }
         rh = res.monster[1];
+        set_rh(rh);
+        if(rh<10){
+            document.getElementById('rh').src='./img/monster/righthand1.svg';
+        }
+        else{
+            document.getElementById('rh').src='./img/monster/righthand2.svg';
+        }
         ll = res.monster[2];
+        set_ll(ll);
+        if(ll<10){
+            document.getElementById('ll').src='./img/monster/leftleg1.svg';
+        }
+        else{
+            document.getElementById('ll').src='./img/monster/leftleg2.svg';
+        }
         rl = res.monster[3];    
+        set_rl(rl);
+        if(rl<10){
+            document.getElementById('rl').src='./img/monster/rightleg1.svg';
+        }
+        else{
+            document.getElementById('rl').src='./img/monster/rightleg2.svg';
+        }
     }
