@@ -266,25 +266,25 @@ $(document).ready(function() {
   });
 function work_type(housework){
   if(housework.includes('洗碗')){
-    return 'https://luffy.ee.ncku.edu.tw:2222/img/housework/bowl.png';
+    return '../../img/housework/bowl.png';
   }
   else if (housework.includes('垃圾')){
-    return 'https://luffy.ee.ncku.edu.tw:2222/img/housework/garbage.png'       
+    return '../../img/housework/garbage.png'       
   }
   else if (housework.includes('衣服')){
-    return 'https://luffy.ee.ncku.edu.tw:2222/img/housework/cloth.png'       
+    return '../../img/housework/cloth.png'       
   }
   else if (housework.includes('掃地')){
-    return 'https://luffy.ee.ncku.edu.tw:2222/img/housework/sweep.png'       
+    return '../../img/housework/sweep.png'       
   }
   else if (housework.includes('拖地')){
-    return 'https://luffy.ee.ncku.edu.tw:2222/img/housework/mop.png'       
+    return '../../img/housework/mop.png'       
   }
   else if (housework.includes('廁所')){
-    return 'https://luffy.ee.ncku.edu.tw:2222/img/housework/toilet.png'       
+    return '../../img/housework/toilet.png'       
   }
   else{
-    return 'https://luffy.ee.ncku.edu.tw:2222/img/housework/share.png'
+    return '../../img/housework/share.png'
   }
 }
 function getUser() {
@@ -304,24 +304,26 @@ function getUser() {
         user_birthday=res.birthday;
 
     });
-    //console.log(localStorage.getItem("account"));
+    
     $.post('./Tasks/finished',{
       account:localStorage.getItem("account")
     },(res)=>{
       let coin_score=0;
-      console.log(res);
+      //console.log(res);
       for(let i=0;i<res.length;++i){
-        console.log(res[i].content+' '+res[i].date+' '+res[i].point);
+        //console.log(res[i].content+' '+res[i].date+' '+res[i].point);
         coin_score+=res[i].point;
         $('#record').append(`
-        <div class="record_row">
-          <img src="./img/housework/sweep.png" class="record_img">
-          <div class="record_test">
-            <div class="record_type">${work_type(res[i].content)}</div>
+        <div class="record_row container">
+          <div class="img_containter item">
+            <img src="${work_type(res[i].content)}">
+          </div>
+          <div class="record_text item">
+            <div class="record_type">${res[i].content}</div>
             <div class="record_date">${res[i].date}</div>
           </div>
-          <div class="record_coin">${res[i].point}</div>
-          <div class="record_cookie">${res[i].point/10}</div>
+          <div class="record_points item">${res[i].point+'P'}</div>
+          <div class="record_points item">${res[i].point/10+'P'}</div>
         </div>`
         )
       }

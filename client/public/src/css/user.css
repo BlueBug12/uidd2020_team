@@ -737,56 +737,53 @@ div#signin div#logo img {
 }
 #record{
     position: absolute;
-    height:80%;
-    width: 60%;
+    height:75%;
+    width: 45%;
     padding:15px 20px;
     overflow-y:scroll;
-    
+    margin-bottom:100px;
 
 }
 .record_row{
   position:relative;
-  height:30%;
-  width:100%;
+  height:28%;
+  
+  margin-left:-5%;
+  margin-right:-10%;
+  margin-bottom:5px;
 }
-.record_img{
-  position:absolute;
-  left:0px;
-}
+
+ .img_containter{
+     width:20%;
+ }
 .record_type{
-  position:absolute;
+  
   height:50%;
-  width:15%;
-  left:90px;
-  padding-top:7px;
+  width:100%;
   font-size:1.7em;
   font-family:GenJyuuGothic-Medium;
 }
 .record_date{
-  position:absolute;
+  display: inherit;
   height:50%;
-  width:15%;
-  bottom:0px;
-  left:90px;
+  width:100%;
   font-size:1em;
   color:gray;
   font-family:GenJyuuGothic-Medium;
 }
-.record_coin{
-  position:absolute;
-  width:30%;
-  left:30%;
-  height:100%;
-  text-align:center;
-  margin-top:16px;
-  font-size:1.8em;
-  font-family:GenJyuuGothic-Medium;
+.record_text{
+  padding-top:5px;
+  padding-left:20px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: flex-start；
 }
-.record_cookie{
-  position:absolute;
+
+.record_points{
+  position:relative;
   width:30%;
-  left:50%;
-  height:100%;
+  margin-left:7%;
   text-align:center;
   margin-top:16px;
   font-size:1.8em;
@@ -802,14 +799,18 @@ div#signin div#logo img {
   position:absolute;
   height:50px;
   left:100px;
-
-  
 }
 #coin_icon{
   position:absolute;
-  left:40%
+  left:54%
 }
 #cookie_icon{
   position:absolute;
-  left:60%;
+  left:80%;
+}
+.container{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start；
 }
