@@ -84,7 +84,7 @@ $("#fb_btn").click(async function() {
                         localStorage.setItem("account", response.id);
                         account = response.id;
                         name = response.name;
-                        mail = response.mail;
+                        mail = response.email;
                         FB.api(
                             "/me/picture", {
                                 "redirect": false,
@@ -112,7 +112,7 @@ $("#fb_btn").click(async function() {
                                     console.log(response)
                                     account = response.id;
                                     name = response.name;
-                                    mail = response.mail;
+                                    mail = response.email;
                                     FB.api(
                                         "/me/picture", {
                                             "redirect": false,

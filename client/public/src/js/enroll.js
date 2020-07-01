@@ -111,7 +111,7 @@ $('#enroll_btn').click((event) => {
                             account: $('#signin input[name=account]').val().trim(),
                             password: $('#signin input[name=password]').val().trim(),
                             name: $('#signin input[name=name]').val().trim(),
-                            icon: $("option:selected").text().includes('男')?"https://luffy.ee.ncku.edu.tw:2222/img/brother.png":"https://luffy.ee.ncku.edu.tw:2222/img/sister.png",
+                            icon: $("option:selected").text().includes('男')?"./img/brother.png":"./img/sister.png",
                             gender: $("option:selected").text().includes('男')?'男':'女',
                             birthday:$('#datepicker').val(),
                             mail : $('#mail').val().trim(),

@@ -828,3 +828,7 @@ div#signin div#logo img {
   flex-wrap: nowrap;
   justify-content: flex-start；
 }
+
+.hide{
+    display: none;
+}

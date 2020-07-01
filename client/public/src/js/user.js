@@ -290,12 +290,17 @@ function work_type(housework){
 function getUser() {
     var account = localStorage.getItem("account");
     $.get('./users/find/' + account, {}, (res) => {
+        console.log(res)
         document.getElementById('name').placeholder=res.name;
         document.getElementById('img-result').style.backgroundImage = 'url('+res.icon+')';
         $('#user').css('background-image','url('+res.icon+')').css('background-size','cover');
         document.getElementById('mail').placeholder = res.mail;
-        document.getElementById('gender').value = (res.gender=='男'? 1:2);
+        document.getElementById('gender').value = (res.gender=='未填'? 0:res.gender=='男'?1:2);
         document.getElementById('datepicker').placeholder = res.birthday;
+
+        if(document.getElementById('gender').value != 0){
+          document.getElementById('gender').options[0].classList.add('hide')
+        }
 
         img_url=res.icon;
         user_name=res.name;
