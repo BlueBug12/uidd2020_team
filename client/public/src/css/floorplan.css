@@ -185,21 +185,28 @@ li {
   top:3vh;
   z-index: 1;
 }
-#draw_map{
+#draw_boundary{
   color:#4b515f;
   opacity: 1;
   position: absolute;
   width: 10vw;
-  right: 64vw;
+  right: 67vw;
+}
+#draw_room{
+  color:#4b515f;
+  opacity: 0.5;
+  position: absolute;
+  width: 10vw;
+  right: 50vw;
 }
 #place_furnish{
   color:#4b515f;
   opacity: 0.5;
   position: absolute;
   width: 10vw;
-  left: 50vw;
+  left: 58vw;
 }
-#draw_map:hover, #place_furnish:hover {
+#draw_boundary:hover, #draw_room:hover, #place_furnish:hover {
   cursor: pointer;
 }
 .button_text{
@@ -239,14 +246,19 @@ li {
 #editor{
   position:absolute;
   width:14vw;
-  height:60vh;
-  bottom:12vh;
+  height:8vh;
+  top:15vh;
   right:3vw;
   display:inline;
   border-radius:30px;
   background-color: #FCFFE3 ;
+  margin-top: 20vh;
   padding-top: 10px;
   z-index: 100;
+}
+.list-inline-item {
+  padding-left: 1vw;
+  margin-top: 1vh;
 }
 
 
@@ -285,6 +297,13 @@ li {
   z-index:2;
   margin-bottom: 20px;
 }
+.removeColor {
+  position: relative;
+  transform: rotate(45deg);
+  top: -3vh;
+  opacity: 0;
+}
+
 #furnish{
   justify-content: center;
   height:90%;
@@ -317,12 +336,15 @@ li {
   padding: 0;
   margin: 0;
 }
-#draw_map_mode{
+#draw_boundary_mode{
   visibility: visible;
-  user-select: none;
+  height: 10%;
+}
+#draw_room_mode{
+  visibility: hidden;
+  height: 0;
 }
 #place_furnish_mode{
-
   visibility: hidden;
   height: 0;
 }
@@ -469,6 +491,7 @@ input.call-picker {
   text-align: center;
   font-family: GenJyuuGothic-Medium;
   font-size: 2.5vh;
+  display: none
 }
 
 .diamond{

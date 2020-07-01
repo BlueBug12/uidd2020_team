@@ -45,8 +45,11 @@
       <div id="items"></div>
       <div id="background">
         <div id="mode_bar">
-          <div id="draw_map">
-            <h1 class="button_text">畫平面圖</h1>
+          <div id="draw_boundary">
+            <h1 class="button_text">畫外框</h1>
+          </div>
+          <div id="draw_room">
+            <h1 class="button_text">畫房間格局</h1>
           </div>
           <div id="place_furnish">
             <h1 class="button_text">放置家具</h1>
@@ -73,26 +76,40 @@
           <div class="color-picker" id="color-picker" style="display: none"></div>
         </div>
         <div id="editor">
-          <div id="draw_map_mode">
-            <ul class="list-inline ">
+          <div id="draw_boundary_mode">
+            <ul class="list-inline">
               <li class="list-inline-item">
-                  <div class="circle">
-                    <img src="./img/editor_icon/plus.png" class="center" id="add_button" >
-                  </div>
-              </li>
-              <li class="list-inline-item">
-                <div class="circle">
-                  <img src="./img/editor_icon/arrow.png" class="center" id="undo_button">
-                </div>
-              </li>
-              <li class="list-inline-item">
-                <div class="circle" id="pen">
+                <div class="circle pen">
                   <img src="./img/editor_icon/pen.png" class="center" id="pen_button">
                 </div>
               </li>
               <li class="list-inline-item">
-                <div class="circle" id="delete">
+                <div class="circle delete">
                   <img src="./img/editor_icon/eraser.png" class="center" id="eraser_button">
+                </div>
+              </li>
+              <li class="list-inline-item">
+                <div class="circle undo">
+                  <img src="./img/editor_icon/arrow.png" class="center" id="undo_button">
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div id="draw_room_mode">
+            <ul class="list-inline">
+              <li class="list-inline-item">
+                  <div class="circle add">
+                    <img src="./img/editor_icon/plus.png" class="center" id="add_button" >
+                  </div>
+              </li>
+              <li class="list-inline-item">
+                <div class="circle delete">
+                  <img src="./img/editor_icon/eraser.png" class="center" id="eraser_button">
+                </div>
+              </li>
+              <li class="list-inline-item">
+                <div class="circle undo">
+                  <img src="./img/editor_icon/arrow.png" class="center" id="undo_button">
                 </div>
               </li>
             </ul>
@@ -101,6 +118,18 @@
             </div>
           </div>
           <div id="place_furnish_mode">
+            <ul class="list-inline">
+              <li class="list-inline-item">
+                <div class="circle delete">
+                  <img src="./img/editor_icon/eraser.png" class="center" id="eraser_button">
+                </div>
+              </li>
+              <li class="list-inline-item">
+                <div class="circle undo">
+                  <img src="./img/editor_icon/arrow.png" class="center" id="undo_button">
+                </div>
+              </li>
+            </ul>
             <div id="furnish">
               <ul class="column_2"></ul>
             </div>
