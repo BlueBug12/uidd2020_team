@@ -41,6 +41,10 @@ const UserSchema = mongoose.Schema({
         type:Number,
         require:true
     },
+	hope: [{
+		name: String,
+		hope: String
+	}],
     monster:{
         type:[Number],
         require:true

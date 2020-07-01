@@ -117,18 +117,33 @@ document.getElementById("buy").addEventListener('click', () => {
             document.getElementById("down").innerHTML += `
                 <div class="hope-item">
                     <input type="checkbox" />
-                    <label for="" class="labeltext">${nowItems[iter].innerText}</label>
+                    <label for="" class="labeltext">${localStorage.getItem("nickname")}: ${nowItems[iter].innerText}</label>
                 </div>
             `;
         }
         document.getElementById("totalPoint").innerText = "0P";
         document.getElementById("box-container").innerHTML = "";
         document.getElementById("current-point").innerText = nowOwnedPoint - nowTotalPoint + "P";
+		let hopes = [];
+		let hopeContent = document.getElementsByClassName("labeltext");
+		for (let iter = 0; iter < hopeContent; ++iter) {
+			let target = {};
+			target.name = hopeContent.slice(0, hopeContent.indexOf(":"));
+			target.hope = hopeContent.slice(hopeContent.indexOf(":")+2, hopeContent.length);
+			hopes.push(target);
+		}
         $.post('./users/updatepoint', {
             account: localStorage.account,
             point:nowTotalPoint
         }, (res) => {
         });
+		fetch('/users/updateHope', {
+			body: JSON.stringify({ account: localStorage.getItem("account"), data: hopes }),
+			headers: {
+				"Content-Type": "application/json"
+			},
+			method: 'POST'
+		});
     }
 });
 $('#process-btn').click(function(e){
@@ -150,6 +165,7 @@ function getUser() {
         document.getElementById("UserImg").style.backgroundImage= `url(${res.icon})`;
         document.getElementById("current-point").innerText = `${res.point}P`;
         localStorage.setItem("classcode", res.classcode);
+        localStorage.setItem("nickname", res.nickname);
     });
 }
 
