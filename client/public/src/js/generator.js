@@ -7,7 +7,7 @@ prevDiv = null;
 let room_position;
 var timer
 var monster = document.createElement("img");
-monster.src = "./img/monster_jump.gif";
+monster.src = "./img/gif/exercise.gif";
 monster.style.width = "150px";
 monster.style.height = "250px";
 monster.display = "inline";
@@ -196,8 +196,8 @@ function genPanel(floor,buttonenable) {
         room_attr = {}
     });
     room_position={floor:floor,attr:room_attr_arr}
-    document.getElementById('monster').src = "./img/monster_jump.gif";
-    timer = setInterval(jump, 2000,room_position);
+    document.getElementById('monster').src = "./img/gif/exercise.gif";
+    timer = setInterval(jump, 10000, room_position);
     let items = floorplan[floor].items;
     items = items? items: [];
     items.forEach(item => {
@@ -279,11 +279,42 @@ function genPanel(floor,buttonenable) {
 
 
 
-function jump(room_position){
-    document.getElementById('monster').style.display = "inline"
-    index = Math.floor(Math.random() * room_position.attr.length)
-    var monster = document.getElementById('monster')
-    monster.style.position = "absolute"
-    monster.style.left = room_position.attr[index].pos_x+'px'
-    monster.style.top = room_position.attr[index].pos_y+'px';
+async function jump(room_position){
+    await new Promise(resolve => {
+        setTimeout(() => {
+            document.getElementById('monster').style.display = "inline"
+            index = Math.floor(Math.random() * room_position.attr.length)
+            var monster = document.getElementById('monster');
+            monster.style.position = "absolute"
+            monster.style.left = room_position.attr[index].pos_x+'px'
+            monster.style.top = room_position.attr[index].pos_y+'px';
+            console.log()
+            resolve("exer");
+        }, 1000);
+    });
+    await new Promise(resolve => {
+        setTimeout(() => {
+            document.getElementById('monster').src = "./img/gif/drop.gif";
+            resolve();
+        }, 2000);
+    });
+    let gif = new SuperGif({
+        gif: document.getElementById("monster"),
+        draw_while_loading: false,
+        show_progress_bar: false
+    });
+    
+    gif.load(async function(){
+        gif.move_to(gif.get_length()-1);
+        for (let iter = 0; iter < gif.get_length(); ++iter) {
+            await new Promise(resolve => {
+                setTimeout(() => {
+                    gif.move_to(gif.get_length()-1-iter);
+                    resolve();
+                }, 30);
+            });
+        }
+    });
 }
+
+
