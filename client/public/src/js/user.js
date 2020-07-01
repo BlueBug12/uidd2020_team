@@ -328,12 +328,12 @@ function getUser() {
             <div class="record_date">${res[i].date}</div>
           </div>
           <div class="record_points item">${res[i].point+'P'}</div>
-          <div class="record_points item">${res[i].point/10+'P'}</div>
+          <div class="record_points item">${Math.round(res[i].point/10)+'P'}</div>
         </div>`
         )
       }
       document.getElementById('coin_score').textContent=coin_score+'P';
-      document.getElementById('cookie_score').textContent=coin_score/10+'P';
+      document.getElementById('cookie_score').textContent=Math.round(coin_score/10)+'P';
 
     });
 }
