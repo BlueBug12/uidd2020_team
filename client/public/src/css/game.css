@@ -342,9 +342,9 @@ position: absolute;
     left: 10px;
 }
 #floorplan {
-    float: left;
+    position: absolute;
     height: inherit;
-    width: 800px;
+    width: 1000px;
 }
 
 .diamond{

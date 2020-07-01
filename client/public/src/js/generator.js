@@ -202,8 +202,8 @@ function genPanel(floor,buttonenable) {
                 href: `./img/furnish/item/${item.name}.svg`,
                 width: item.width,
                 height: item.height,
-                x: item.x - 300,
-                y: item.y - 240
+                x: item.x - 360,
+                y: item.y - 200
             });
     });
 
@@ -287,8 +287,8 @@ async function jump(room_position, isFirst = 0){
         document.getElementsByClassName("jsgif")[0].remove();
     monster.src = "./img/gif/exercise.gif";
     monster.style.position = "absolute"
-    monster.style.left = room_position.attr[index].pos_x+'px';
-    monster.style.top = room_position.attr[index].pos_y+'px';
+    monster.style.top = room_position.attr[index].pos_y-30+'px';
+    monster.style.left = room_position.attr[index].pos_x-70+'px';
     container[0].append(monster);
     if (isFirst) {
         monster.src = "./img/gif/drop.gif";
@@ -303,8 +303,8 @@ async function jump(room_position, isFirst = 0){
             document.getElementsByTagName("canvas")[0].style.position = "absolute";
             document.getElementsByTagName("canvas")[0].style.width = "150px";
             document.getElementsByTagName("canvas")[0].style.height = "250px";
-            document.getElementsByTagName("canvas")[0].style.top = room_position.attr[index].pos_y-4+'px';
-            document.getElementsByTagName("canvas")[0].style.left = room_position.attr[index].pos_x+'px';
+            document.getElementsByTagName("canvas")[0].style.top = room_position.attr[index].pos_y-30-4+'px';
+            document.getElementsByTagName("canvas")[0].style.left = room_position.attr[index].pos_x-70+'px';
             gif.pause();
             gif.move_to(gif.get_length()-1);
             for (let iter = 0; iter < gif.get_length(); ++iter) {
@@ -318,8 +318,8 @@ async function jump(room_position, isFirst = 0){
             document.getElementsByClassName("jsgif")[0].remove();
             monster.src = "./img/gif/exercise.gif";
             monster.style.position = "absolute"
-            monster.style.left = room_position.attr[index].pos_x+'px';
-            monster.style.top = room_position.attr[index].pos_y+'px';
+            monster.style.top = room_position.attr[index].pos_y-30+'px';
+            monster.style.left = room_position.attr[index].pos_x-70+'px';
             container[0].append(monster);
         });
         return;
@@ -342,8 +342,8 @@ async function jump(room_position, isFirst = 0){
             document.getElementsByTagName("canvas")[0].style.position = "absolute";
             document.getElementsByTagName("canvas")[0].style.width = "150px";
             document.getElementsByTagName("canvas")[0].style.height = "250px";
-            document.getElementsByTagName("canvas")[0].style.top = room_position.attr[index].pos_y-4+'px';
-            document.getElementsByTagName("canvas")[0].style.left = room_position.attr[index].pos_x+'px';
+            document.getElementsByTagName("canvas")[0].style.top = room_position.attr[index].pos_y-30-4+'px';
+            document.getElementsByTagName("canvas")[0].style.left = room_position.attr[index].pos_x-70+'px';
             gif.pause();
             gif.move_to(gif.get_length()-1);
             for (let iter = 0; iter < gif.get_length(); ++iter) {
