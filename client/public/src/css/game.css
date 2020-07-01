@@ -73,6 +73,10 @@
     src: url("../../font/GenJyuuGothic-Light.ttf")
 }
 
+body {
+    overflow: hidden;
+}
+
 .container-fluid {
     padding: 0;
 }

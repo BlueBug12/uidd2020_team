@@ -6,15 +6,7 @@ let choose_region = null;
 prevDiv = null;
 let room_position;
 var timer
-var monster = document.createElement("img");
-monster.src = "./img/gif/exercise.gif";
-monster.style.width = "150px";
-monster.style.height = "250px";
-monster.display = "inline";
-monster.id = 'monster'
 var container = document.getElementsByClassName('container-fluid');
-console.log(container)
-container[0].appendChild(monster)
 
 let onMouseEnterFloor = () => {
     for (let iter = 0; iter < floorplan.length; ++iter) {
@@ -57,8 +49,11 @@ document.getElementById("floors").addEventListener('mouseleave', onMouseLeaveFlo
 
 
 function genPanel(floor,buttonenable) {
-    clearInterval(timer)
-    document.getElementById('monster').style.display = "none";
+    clearInterval(timer);
+    if (document.getElementById('monster'))
+        document.getElementById('monster').remove();
+    if (document.getElementsByClassName("jsgif")[0])
+        document.getElementsByClassName("jsgif")[0].remove();
     if (!floor_span) {
         let floors = document.getElementById("floors");
         let content = "";
@@ -196,8 +191,9 @@ function genPanel(floor,buttonenable) {
         room_attr = {}
     });
     room_position={floor:floor,attr:room_attr_arr}
-    document.getElementById('monster').src = "./img/gif/exercise.gif";
-    timer = setInterval(jump, 10000, room_position);
+    index = 0;
+    jump(room_position, 1);
+    timer = setInterval(jump, 11600, room_position);
     let items = floorplan[floor].items;
     items = items? items: [];
     items.forEach(item => {
@@ -278,43 +274,88 @@ function genPanel(floor,buttonenable) {
 }
 
 
+var monster = document.createElement("img");
+monster.style.width = "150px";
+monster.style.height = "250px";
+monster.id = 'monster';
+var index = 0;
 
-async function jump(room_position){
-    await new Promise(resolve => {
-        setTimeout(() => {
-            document.getElementById('monster').style.display = "inline"
+async function jump(room_position, isFirst = 0){
+    if (document.getElementById('monster'))
+        document.getElementById('monster').remove();
+    if (document.getElementsByClassName("jsgif")[0])
+        document.getElementsByClassName("jsgif")[0].remove();
+    monster.src = "./img/gif/exercise.gif";
+    monster.style.position = "absolute"
+    monster.style.left = room_position.attr[index].pos_x+'px';
+    monster.style.top = room_position.attr[index].pos_y+'px';
+    container[0].append(monster);
+    if (isFirst) {
+        monster.src = "./img/gif/drop.gif";
+        let gif = new SuperGif({
+            gif: document.getElementById("monster"),
+            draw_while_loading: false,
+            show_progress_bar: false,
+        });
+        
+        gif.load(async function(){
             index = Math.floor(Math.random() * room_position.attr.length)
-            var monster = document.getElementById('monster');
+            document.getElementsByTagName("canvas")[0].style.position = "absolute";
+            document.getElementsByTagName("canvas")[0].style.width = "150px";
+            document.getElementsByTagName("canvas")[0].style.height = "250px";
+            document.getElementsByTagName("canvas")[0].style.top = room_position.attr[index].pos_y-4+'px';
+            document.getElementsByTagName("canvas")[0].style.left = room_position.attr[index].pos_x+'px';
+            gif.pause();
+            gif.move_to(gif.get_length()-1);
+            for (let iter = 0; iter < gif.get_length(); ++iter) {
+                await new Promise(resolve => {
+                    setTimeout(() => {
+                        gif.move_to(gif.get_length()-1-iter);
+                        resolve();
+                    }, 25);
+                });
+            }
+            document.getElementsByClassName("jsgif")[0].remove();
+            monster.src = "./img/gif/exercise.gif";
             monster.style.position = "absolute"
-            monster.style.left = room_position.attr[index].pos_x+'px'
+            monster.style.left = room_position.attr[index].pos_x+'px';
             monster.style.top = room_position.attr[index].pos_y+'px';
-            console.log()
-            resolve("exer");
-        }, 1000);
-    });
+            container[0].append(monster);
+        });
+        return;
+    }
     await new Promise(resolve => {
         setTimeout(() => {
             document.getElementById('monster').src = "./img/gif/drop.gif";
             resolve();
-        }, 2000);
+        }, 6000);
     });
-    let gif = new SuperGif({
-        gif: document.getElementById("monster"),
-        draw_while_loading: false,
-        show_progress_bar: false
-    });
-    
-    gif.load(async function(){
-        gif.move_to(gif.get_length()-1);
-        for (let iter = 0; iter < gif.get_length(); ++iter) {
-            await new Promise(resolve => {
-                setTimeout(() => {
-                    gif.move_to(gif.get_length()-1-iter);
-                    resolve();
-                }, 30);
-            });
-        }
-    });
+    setTimeout(() => {
+        let gif = new SuperGif({
+            gif: document.getElementById("monster"),
+            draw_while_loading: false,
+            show_progress_bar: false,
+        });
+        
+        gif.load(async function(){
+            index = Math.floor(Math.random() * room_position.attr.length)
+            document.getElementsByTagName("canvas")[0].style.position = "absolute";
+            document.getElementsByTagName("canvas")[0].style.width = "150px";
+            document.getElementsByTagName("canvas")[0].style.height = "250px";
+            document.getElementsByTagName("canvas")[0].style.top = room_position.attr[index].pos_y-4+'px';
+            document.getElementsByTagName("canvas")[0].style.left = room_position.attr[index].pos_x+'px';
+            gif.pause();
+            gif.move_to(gif.get_length()-1);
+            for (let iter = 0; iter < gif.get_length(); ++iter) {
+                await new Promise(resolve => {
+                    setTimeout(() => {
+                        gif.move_to(gif.get_length()-1-iter);
+                        resolve();
+                    }, 25);
+                });
+            }
+        });
+    }, 1800);
 }
 
 
