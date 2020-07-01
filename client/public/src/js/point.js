@@ -107,6 +107,11 @@ document.getElementById("buy").addEventListener('click', () => {
         document.getElementById("totalPoint").innerText = "0P";
         document.getElementById("box-container").innerHTML = "";
         document.getElementById("current-point").innerText = nowOwnedPoint - nowTotalPoint + "P";
+        $.post('./users/updatepoint', {
+            account: localStorage.account,
+            point:nowTotalPoint
+        }, (res) => {
+        });
     }
 });
 $('#process-btn').click(function(e){
@@ -126,6 +131,7 @@ function getUser() {
     $.get('./users/find/' + account, {}, (res) => {
         //document.getElementById("UserImg").src = res.icon;
         document.getElementById("UserImg").style.backgroundImage= `url(${res.icon})`;
+        document.getElementById("current-point").innerText = `${res.point}P`;
         localStorage.setItem("classcode", res.classcode);
     });
 }

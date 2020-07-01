@@ -652,3 +652,11 @@ div#signin div#logo img {
   right:410px;
   top:426px;
 }
+#current-point{
+    position: absolute;
+    color: #F7F5E4;
+    right:8%;
+    padding-right: 0.5vw;
+    text-align: right;
+    line-height: 2.5vh;
+}

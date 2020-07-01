@@ -1,7 +1,7 @@
-var rh=1;
-var lh=1;
-var rl=1;
-var ll=1;
+var rh;
+var lh;
+var rl;
+var ll;
 $(document).on('mouseenter', '#UserImg', function () {
     $(this).css('border-color','#D0D9DC');
     }).on('mouseleave', '#UserImg', function () {
@@ -73,6 +73,11 @@ $(document).on('click',"#left_hand_button",function(){
         
     }
     lh+=1;
+    $.post('./users/updatemonsterstate', {
+        account: localStorage.account,
+        monster:[lh,rh,ll,rl]
+    }, (res) => {
+    });
     
 })
 $(document).on('click',"#right_hand_button",function(){
@@ -111,6 +116,11 @@ $(document).on('click',"#right_hand_button",function(){
         }
     }
     rh+=1;
+    $.post('./users/updatemonsterstate', {
+        account: localStorage.account,
+        monster:[lh,rh,ll,rl]
+    }, (res) => {
+    });
 })
 $(document).on('click',"#left_leg_button",function(){
     let v = ll%10;
@@ -149,6 +159,11 @@ $(document).on('click',"#left_leg_button",function(){
         
     }
     ll+=1;
+    $.post('./users/updatemonsterstate', {
+        account: localStorage.account,
+        monster:[lh,rh,ll,rl]
+    }, (res) => {
+    });
 })
 $(document).on('click',"#right_leg_button",function(){
     let v = rl%10;
@@ -187,6 +202,11 @@ $(document).on('click',"#right_leg_button",function(){
        
     }
     rl+=1;
+    $.post('./users/updatemonsterstate', {
+        account: localStorage.account,
+        monster:[lh,rh,ll,rl]
+    }, (res) => {
+    });
 })
 
 let bannerbuttons = document.getElementsByClassName('bannerbutton');
@@ -198,4 +218,22 @@ let bannerbuttons = document.getElementsByClassName('bannerbutton');
             }
             e.target.classList.add('active');
         });
+    }
+
+    function getUser() {
+        var account = localStorage.getItem("account");
+        $.get('./users/find/' + account, {}, (res) => {
+            //document.getElementById("UserImg").src = res.icon;
+            document.getElementById("UserImg").style.backgroundImage= `url(${res.icon})`;
+            var cookie = res.point / 10;
+            document.getElementById("current-point").innerText = `${cookie}P`;
+            localStorage.setItem("classcode", res.classcode);
+            setMonster(res);
+        });
+    }
+    function setMonster(res) {
+        lh = res.monster[0];
+        rh = res.monster[1];
+        ll = res.monster[2];
+        rl = res.monster[3];    
     }

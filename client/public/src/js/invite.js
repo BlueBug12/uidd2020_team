@@ -164,9 +164,7 @@ $(document).ready(function() {
         $.post('./tasks/invite', {
             account: localStorage.account,
         }, (res) => {
-            console.log(res);
             setTask(res);
-            console.log(res.length);
         });
         var account = localStorage.getItem("account");
         $.get('./users/find/' + account, {}, (res) => {

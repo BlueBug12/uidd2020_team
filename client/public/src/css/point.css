@@ -278,7 +278,7 @@ input[type=checkbox] {
     position: absolute;
     color: #F7F5E4;
     top: 2vh;
-    left: 35vw;
+    right:8%;
     padding-right: 0.5vw;
     text-align: right;
     line-height: 2.5vh;

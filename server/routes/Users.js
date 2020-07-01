@@ -225,7 +225,6 @@ router.post('/changedata',(req,res) => {
 
 
 router.post('/updatemonsterstate',(req,res)=>{
-    console.log('wwww')
     Users.findOneAndUpdate({account:req.body.account},{monster:req.body.monster},(err,res2)=>{
         if (!err) {
             res.status(200).send(res2);
@@ -234,4 +233,22 @@ router.post('/updatemonsterstate',(req,res)=>{
         }
     })
 })
+
+//update user point
+router.post('/updatepoint',(req,res) => {
+    try {
+        Users.findOne({ "account":req.body.account}).exec(async (err, res2) => {
+            if (err) {
+                console.log('fail to query:', err)
+                return;
+            }
+            else{
+                res2.point = res2.point - req.body.point;;
+                res2.save();
+            }
+        });
+    }catch(err){
+        res.json({message:err});
+    }
+});
 module.exports = router;
