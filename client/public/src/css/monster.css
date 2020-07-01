@@ -532,8 +532,8 @@ div#signin div#logo img {
 }
 #cookie{
     position: absolute;
-    margin-top:-30px;
-    right:5vw;
+    margin-top:-15px;
+    right:7vw;
     
 }
 #top_bar{
@@ -629,7 +629,7 @@ div#signin div#logo img {
   
 }
 #right_hand{
-  right:550px;
+  right:545px;
   top:312px;
 }
 #left_hand{
