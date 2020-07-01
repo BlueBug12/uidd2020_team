@@ -287,6 +287,7 @@ function work_type(housework){
     return '../../img/housework/share.png'
   }
 }
+});
 function getUser() {
     var account = localStorage.getItem("account");
     $.get('./users/find/' + account, {}, (res) => {
@@ -334,7 +335,6 @@ function getUser() {
       }
       document.getElementById('coin_score').textContent=coin_score+'P';
       document.getElementById('cookie_score').textContent=Math.round(coin_score/10)+'P';
-
-    });
+      });
 }
 

@@ -227,7 +227,9 @@ router.post('/changedata',(req,res) => {
 router.post('/updatemonsterstate',(req,res)=>{
     Users.findOneAndUpdate({account:req.body.account},{monster:req.body.monster},(err,res2)=>{
         if (!err) {
-            res.status(200).send(res2);
+            res2.point = res2.point -1 ;
+            res2.save();
+            res.status(200).send({isSuccess: true});
         } else {
             res.status(503).send({ isSuccess: false });
         }
