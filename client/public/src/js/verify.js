@@ -15,13 +15,12 @@ $(document).ready(function() {
                 console.log($('#UserImg').attr('src'))
                 $.post('./tasks/verifystate', {
                     id: this.tasks[index]._id,
-                    verify: [{id:localStorage.account,state:0,icon:$('#UserImg').attr('src')}]
+                    verify: [{id:localStorage.account,state:0,icon:$('#UserImg').css('background-image').replace(/(url\(|\)|")/g, '')}]
                 }, (res) => {
                     $('.alert-mess').text('任務已審核')
                 });
                 $.post('./tasks/checkstate', {
                     classcode: localStorage.classcode,
-                    account:localStorage.account,
                 }, (res) => {
                     console.log(res);
                 });
@@ -40,7 +39,6 @@ $(document).ready(function() {
                 });
                 $.post('./tasks/checkstate', {
                     classcode: localStorage.classcode,
-                    account:localStorage.account,
                 }, (res) => {
                     console.log(res);
                 });

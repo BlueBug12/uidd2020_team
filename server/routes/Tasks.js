@@ -417,7 +417,7 @@ router.post('/checkstate',(req,res)=>{
             }
             else{
                 length = res2.length / 2 + 1;
-                Tasks.find({ "participate.id": req.body.account,"participate.state":2}).exec((err, res3) => {
+                Tasks.find({"participate.state":2}).exec((err, res3) => {
                     if (err) {
                         console.log('fail to query:', err)
                         return;

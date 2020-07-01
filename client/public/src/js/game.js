@@ -415,7 +415,6 @@ $(document).ready(function() {
 
     $('#task_btn').click((event) => {
         event.preventDefault();
-        console.log($('#UserImg').css('background-image').replace(/(url\(|\)|")/g, ''))
         if (check() == true) {
             $.post('./tasks', {
                 content: $('#addTasks input[name=content]').val(),
