@@ -788,3 +788,6 @@ select {
     text-overflow: '';
     cursor: text;
 }
+.monster_icon{
+    margin-right: 5px;
+}

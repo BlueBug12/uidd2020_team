@@ -828,3 +828,6 @@ div#signin div#logo img {
   flex-wrap: nowrap;
   justify-content: flex-start；
 }
+.monster_icon{
+    margin-right: 5px;
+}

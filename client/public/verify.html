@@ -24,13 +24,13 @@
                     </a>
                     <ul class="list-inline">
                         <li class="list-inline-item">
-                            <button class="bannerbutton" href="#">任務地圖</button>
+                            <button class="bannerbutton" onclick="location.href='game.html'" >任務地圖</button>
                         </li>
                         <li class="list-inline-item">
-                            <button class="bannerbutton" href="#">任務總覽</button>
+                            <button class="bannerbutton active" onclick="location.href='invite.html'">任務總覽</button>
                         </li>
                         <li class="list-inline-item">
-                            <button class="bannerbutton" href="#">排行與積分</button>
+                            <button class="bannerbutton" href="#"><img src="./img/monster_icon.png" height="20" width="auto" class="monster_icon">家事怪</button>
                         </li>
                         <li class="list-inline-item">
                             <div class="round" id="UserImg" alt=""  style=" border-radius: 50%;width: 50px;height: 50px;"></div>
@@ -54,7 +54,19 @@
                 <img src="./img/process/list-verify.png" id="verify-btn" alt=" ">
             </div>
             <div class = "row ">
+                <div  class = "col-6 message" >
+                    <div  class="row noitem" id="noitem">
+                        <figure>
+                            <img class="img-fluid"  src="./img/verify/monster.png" alt="">
+                            <figcaption class="content-text">沒有要審核的任務......</figcaption>
+                        </figure>
+                    </div>
+                </div>
                 <div  class = "col-6 message" id="app">
+                    <div class ="row dialoge">
+                        <img class="img-fluid" src="./img/verify/dialogue.png" ></img>
+                        <p class="dialogue-text" id="dialogue-text">共有{{tasks.length}}則！</p>
+                    </div>
                     <div class="row shadow" >
                     </div>
                     <div class ="row  head">

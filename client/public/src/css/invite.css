@@ -315,6 +315,9 @@ li {
     top:105px;
     right:90px;
   }
+  .monster_icon{
+    margin-right: 5px;
+}
   #list {
     width: 15vw;
     height: 90vh;
