@@ -188,7 +188,7 @@ $(document).ready(function() {
             location.href='./index.html'
         }
     });
-    
+  });
 
     
     $(document).on('click','#send_button',function(){
@@ -287,7 +287,7 @@ function work_type(housework){
     return '../../img/housework/share.png'
   }
 }
-});
+
 function getUser() {
     var account = localStorage.getItem("account");
     $.get('./users/find/' + account, {}, (res) => {
