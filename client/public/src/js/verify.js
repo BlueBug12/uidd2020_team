@@ -65,41 +65,6 @@ $(document).ready(function() {
                 $('.check').css("visibility", "visible");
                 $('.mask').css("visibility", "visible");
             },
-            getPos: function(index){
-                if(index == 0){
-                    x=event.clientX;
-                    y=event.clientY;
-                    if(x < 870){
-                        this.change1 = 1;
-                        document.getElementsByClassName("info")[0].classList.add("move1");
-                        if(this.change2 == 1){
-                            document.getElementsByClassName("info")[0].classList.remove("move2");
-                            this.change2 = 0;
-                        }
-                    }
-                    else{
-                        this.change2 = 1;
-                        document.getElementsByClassName("info")[0].classList.add("move2");
-                        if(this.change1 == 1){
-                            document.getElementsByClassName("info")[0].classList.remove("move1");
-                            this.change1 = 0;
-                        }
-                    }
-                }
-                
-            },
-            stopTracking: function(index){
-                if(index == 0){
-                    this.change1 = 0;
-                    this.change2 = 0;
-                    if(this.change1 == 1 || this.change2 == 1){
-                        document.getElementsByClassName("info")[0].classList.add("origin");
-                    }
-                    document.getElementsByClassName("info")[0].classList.remove("move1");
-                    document.getElementsByClassName("info")[0].classList.remove("move2");
-                }
-            }
-
         },
         watch: {
             tasks: {
@@ -129,6 +94,39 @@ $(document).ready(function() {
             }
         }
     });
+    $(document).mousemove(function(e){
+        console.log(e.pageX + ", " + e.pageY);
+        if(e.pageX < 920){
+            this.change1 = 1;
+            document.getElementsByClassName("info")[0].classList.add("move1");
+            document.getElementsByClassName("right")[0].classList.add("animate");
+            document.getElementsByClassName("deny")[0].classList.remove("animate");
+            if(this.change2 == 1){
+                document.getElementsByClassName("info")[0].classList.remove("move2");
+                this.change2 = 0;
+            }
+        }else{
+            this.change2 = 1;
+            document.getElementsByClassName("right")[0].classList.remove("animate");
+            document.getElementsByClassName("info")[0].classList.add("move2");
+            document.getElementsByClassName("deny")[0].classList.add("animate");
+            if(this.change1 == 1){
+                document.getElementsByClassName("info")[0].classList.remove("move1");
+                this.change1 = 0;
+            }
+        }
+      });
+      $(document).mouseout(function(e){
+            this.change1 = 0;
+            this.change2 = 0;
+            document.getElementsByClassName("right")[0].classList.remove("animate");
+            document.getElementsByClassName("deny")[0].classList.remove("animate");
+            if(this.change1 == 1 ){
+                document.getElementsByClassName("info")[0].classList.add("origin");
+            }
+            document.getElementsByClassName("info")[0].classList.remove("move1");
+            document.getElementsByClassName("info")[0].classList.remove("move2");
+      });
     function setTask(res){
         rec_task=[];
         rec_task=res;
