@@ -173,22 +173,6 @@ $(document).ready(function() {
       $(this).css('opacity',0.5);
   	});
 
-    $(document).on('mouseenter', '#user', function () {
-      $(this).css('border-color','#D0D9DC');
-  	}).on('mouseleave', '#user', function () {
-      $(this).css('border-color','#789FB3');
-  	});
-    let span_menu=0;
-    $(document).on('click', '#user', function () {
-      if(!span_menu){
-        $('.menubar').css('visibility','visible');
-        span_menu=1;
-      }
-      else{
-        $('.menubar').css('visibility','hidden');
-        span_menu=0;
-      }
-    });
     $(document).on('click',"#bar1",function(){
       FB.getLoginStatus(function(response) {
         if (response.status === 'connected') {
@@ -204,20 +188,7 @@ $(document).ready(function() {
             location.href='./index.html'
         }
     });
-    })
-    //click region except menubar
-    $(document).mouseup(function(e){
-      var _con = $('.menubar'); 
-      if(!_con.is(e.target) && _con.has(e.target).length === 0){ 
-        $('.menubar').css('visibility','hidden');
-        span_menu=0;
-      }
-    });
-    $(document).on('mouseenter', '.menubar', function () {
-      $(this).css('background','#d6dde4');
-  	}).on('mouseleave', '.menubar', function () {
-      $(this).css('background','#b8bec4');
-  	});
+    
 
     
     $(document).on('click','#send_button',function(){

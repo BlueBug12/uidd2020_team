@@ -186,17 +186,19 @@ li {
     width: 100vw;
     visibility: hidden;
 }
-.round{
-  position:relative;
-  top:15px;
-  width:50px;height:50px;
-  border-radius:999em;
-  background-color:#799FB4;
-  border-color:#799FB4;
-  border-style:solid;
-  border-width:2px;
-  cursor: pointer;
+.nav-link {
+    padding: 0;
 }
+.round{
+    position:relative;
+    width:50px;height:50px;
+    border-radius:999em;
+    background-color:#799FB4;
+    border-color:#799FB4;
+    border-style:solid;
+    border-width:2px;
+    cursor: pointer;
+  }
 
 #mydata{
   position: absolute;
@@ -466,29 +468,23 @@ div#signin div#logo img {
 
 .menubar{
 
- height:30px;
- width:80px;
- border-width: 1px;
- border-color:white;
- border-style:solid;
- background:#b8bec4;
- font-size:1em;
- font-family:GenJyuuGothic-Medium;
- color:white;
- z-index:10;
- text-align:center;
- visibility:hidden;
- cursor: pointer;
+    height:30px;
+    width:100px;
+    background:#b8bec4;
+    font-size:1em;
+    font-family:GenJyuuGothic-Medium;
+    color:white !important;
+    z-index:10;
+    text-align:center;
+    cursor: pointer;
 }
-#bar1{
-  position: absolute;
-  top:75px;
-  right:90px;
-
-
+.dropdown-toggle::after {
+    display: none;
 }
 
-
+body{
+    overflow: hidden;
+}
 
 
 #upload_img{
@@ -711,7 +707,7 @@ div#signin div#logo img {
     height:55px;
     left:0px;
     bottom:-10px;
-    margin-left:-10px;
+    margin-left:-20px;
     background-image:url("../../img/user/cookie.png");
     
 }

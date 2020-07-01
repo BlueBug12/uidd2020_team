@@ -1,3 +1,21 @@
+
+window.fbAsyncInit = function() {
+    FB.init({
+        appId: myAppId,
+        xfbml: true,
+        version: 'v7.0'
+    });
+    FB.AppEvents.logPageView();
+};
+// Load the SDK asynchronously
+(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) { return; }
+    js = d.createElement(s);
+    js.id = id;
+    js.src = "https://connect.facebook.net/en_US/sdk.js";
+    fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
 class Panel {
 
 	constructor() {
@@ -11,6 +29,8 @@ class Panel {
 		this.previewedWall = null;
 		this.steps = [];
 		this.isEditing = false;
+		this.isDrawing = false;
+		this.isDeleting = false;
 		(function genPanel(panel) {
 
 			let data = new Array();
@@ -64,8 +84,40 @@ class Panel {
 			grid.append("g").attr("id", "corners");
 
 		})(this);
-		document.getElementById("undo_button").addEventListener('click', () => { this.undo(this); });
-		document.getElementById("delete").addEventListener('click', () => { this.delete(this); });
+		for (let iter = 0; iter < 3; ++iter) {
+			if (iter == 0) {
+				document.getElementsByClassName("pen")[0].addEventListener('click', () => {
+					this.isDrawing = !this.isDrawing;
+					if (this.isDrawing) {
+						document.getElementsByClassName("pen")[0].style["background-color"] = "#9E9E9E";
+						document.getElementsByClassName("delete")[iter].style["background-color"] = "";
+						this.isDeleting = false;
+					} else {
+						removeHighlight();
+						document.getElementsByClassName("pen")[0].style["background-color"] = "";
+					}
+				});
+			}
+			document.getElementsByClassName("undo")[iter].addEventListener('click', () => { this.undo(this); });
+			document.getElementsByClassName("delete")[iter].addEventListener('click', () => {
+				this.isDeleting = !this.isDeleting;
+				if (this.isDeleting) {
+					removeHighlight();
+					document.getElementsByClassName("delete")[iter].style["background-color"] = "#9E9E9E";
+					if (iter == 0) document.getElementsByClassName("pen")[0].style["background-color"] = "";
+					if (iter == 1) {
+						if (nowColorIndex != -1) {
+							document.getElementsByClassName("input_container")[nowColorIndex].style["background-color"] = "transparent";
+							document.getElementsByClassName("input_container")[nowColorIndex].style["opacity"] = 1;
+						}
+					}
+					this.mode = "line";
+					this.isDrawing = false;
+				} else {
+					document.getElementsByClassName("delete")[iter].style["background-color"] = "";
+				}
+			});
+		}
 
 	}
 
@@ -102,7 +154,7 @@ class Panel {
 		this.steps.push([{
 			operation: "new",
 			object: "floor",
-			floor: this.nowFloor
+			floor: this.floor.length-2
 		}]);
 	}
 
@@ -138,30 +190,32 @@ class Panel {
 		floor.corners.forEach(corner => {
 			if (corner.x == x && corner.y == y) isDrawPoint = false;
 		});
-		if (isDrawPoint) {
-			let newCorner = new Point(x, y, 4);
-			floor.corners.push(newCorner);
-			newStep.push({
-				operation: "new",
-				object: "corner",
-				floor: this.nowFloor
+		if (this.isDrawing || this.isDeleting) {
+			if (isDrawPoint && !this.isDeleting) {
+				let newCorner = new Point(x, y, 4);
+				floor.corners.push(newCorner);
+				newStep.push({
+					operation: "new",
+					object: "corner",
+					floor: this.nowFloor
+				});
+			}
+			floor.corners = floor.corners.map(corner => {
+				if (corner.x == x && corner.y == y) {
+					if (corner.isSelected) {
+						corner.r = 4;
+					} else {
+						corner.r = 6;
+						document.getElementsByTagName("svg")[0].addEventListener('mousemove', () => { this.previewWall(event, this); });
+					}
+					corner.isSelected = !corner.isSelected;
+				} else {
+					corner.r = 4;
+					corner.isSelected = false;
+				}
+				return corner;
 			});
 		}
-		floor.corners = floor.corners.map(corner => {
-			if (corner.x == x && corner.y == y) {
-				if (corner.isSelected) {
-					corner.r = 4;
-				} else {
-					corner.r = 6;
-					document.getElementsByTagName("svg")[0].addEventListener('mousemove', () => { this.previewWall(event, this); });
-				}
-				corner.isSelected = !corner.isSelected;
-			} else {
-				corner.r = 4;
-				corner.isSelected = false;
-			}
-			return corner;
-		});
 
 		// update lines
 		if (this.previewedWall) {
@@ -192,6 +246,7 @@ class Panel {
 		});
 
 		if (newStep.length != 0) this.steps.push(newStep);
+		if (this.isDeleting) this.delete();
 		this.removeRoomHighlight();
 		this.previewWall(event, this);
 
@@ -226,6 +281,7 @@ class Panel {
 			}
 			return wall;
 		});
+		if (this.isDeleting) this.delete();
 		this.removeRoomHighlight();
 		this.render();
 	}
@@ -234,7 +290,7 @@ class Panel {
 		let floor = this.floor[this.nowFloor];
 		let x = Math.floor(event.layerX / this.gridSize) * this.gridSize;
 		let y = Math.floor(event.layerY / this.gridSize) * this.gridSize;
-		let color = document.getElementById("pen").style["background-color"];
+		let color = nowColor;
 		floor.rooms.push(new Area(color, x, y, x + this.gridSize, y + this.gridSize, 1, nowColorIndex));
 		this.render();
 
@@ -291,6 +347,7 @@ class Panel {
 				room.isSelected = false;
 			}
 		});
+		if (this.isDeleting) this.delete();
 		this.removeWallHighlight();
 		this.render();
 	}
@@ -444,7 +501,9 @@ class Panel {
 		let lastStep = this.steps.pop();
 		if (!lastStep) return;
 		lastStep.forEach(step => {
-			this.nowFloor = step.floor;
+			if (this.nowFloor != step.floor) {
+				this.switchFloor(step.floor);
+			}
 			if (step.operation === "new") {
 				if (step.object === "wall") {
 					this.floor[step.floor].walls.pop();
@@ -460,7 +519,6 @@ class Panel {
 				}
 				if (step.object === "floor") {
 					this.floor.pop();
-					this.nowFloor--;
 					document.getElementsByClassName("diamond")[document.getElementsByClassName("diamond").length-1].remove();
 				}
 			}
@@ -473,6 +531,9 @@ class Panel {
 				}
 				if (step.object === "room") {
 					this.floor[step.floor].rooms.splice(step.index, 0, step.target);
+				}
+				if (step.object === "item") {
+					this.floor[step.floor].items.splice(step.index, 0, step.target);
 				}
 			}
 			if (step.operation === "edit") {
@@ -679,28 +740,39 @@ class Panel {
 		let onMouseDownItem = () => {
 			let index = parseInt(event.target.id.slice(4));
 			let target = this.floor[this.nowFloor].items[index];
-			let onMouseMove = () => {
-				target.move(event.clientX, event.clientY, 1);
-				removeSelection();
-			};
-			let onMouseUp = () => {
-				document.removeEventListener('mousemove', onMouseMove);
-				document.removeEventListener('mouseup', onMouseUp);
-				target.checkPosition(event.clientX, event.clientY, 1);
+			if (this.isDeleting) {
+				target.delete(index);
+				this.steps.push([{
+					operation: "delete",
+					object: "item",
+					floor: panel.nowFloor,
+					target: target,
+					index: index
+				}]);
+			} else {
+				let onMouseMove = () => {
+					target.move(event.clientX, event.clientY, 1);
+					removeSelection();
+				};
+				let onMouseUp = () => {
+					document.removeEventListener('mousemove', onMouseMove);
+					document.removeEventListener('mouseup', onMouseUp);
+					target.checkPosition(event.clientX, event.clientY, 1);
+				}
+				document.addEventListener('mousemove', onMouseMove);
+				document.addEventListener('mouseup', onMouseUp);
+				this.steps.push([{
+					operation: "edit",
+					object: "item",
+					floor: panel.nowFloor,
+					type: "position",
+					before: {
+						x: target.x,
+						y: target.y
+					},
+					index: index
+				}]);
 			}
-			document.addEventListener('mousemove', onMouseMove);
-			document.addEventListener('mouseup', onMouseUp);
-			this.steps.push([{
-				operation: "edit",
-				object: "item",
-				floor: panel.nowFloor,
-				type: "position",
-				before: {
-					x: target.x,
-					y: target.y
-				},
-				index: index
-			}]);
 		};
 		let items = document.getElementsByClassName("item");
 		for (let iter = 0; iter < items.length; ++iter) {
@@ -752,6 +824,15 @@ class Floor {
 		this.render();
 	}
 
+	removeColor(index) {
+		this.colors.splice(index, 1);
+		if (this.text.length != 0) {
+			this.text.splice(index, 1);
+		}
+		// check rooms
+		this.render();
+	}
+
 	recordText() {
 		let input = document.getElementsByClassName("input_container");
 		for (let iter = 0; iter < input.length; ++iter) {
@@ -770,14 +851,27 @@ class Floor {
 		for (let iter = 1; iter <= this.colors.length; ++iter) {
 			result += `
 				<li class="round" id = "c_${iter}" style="background-color: ${this.colors[iter-1]}">
-					<div class="input_container">
+					<div class="input_container" style="height: 6vh">
 						<input type="text" id="text_in${iter}" class="awsome_input" placeholder="room_${iter}" value="${this.text[iter-1]? this.text[iter-1]: ""}"/>
 						<span class="awsome_input_border" id="b_${iter}" style="background-color: ${this.colors[iter-1]}"/>
+						<img class="removeColor" src="./img/editor_icon/plus.png" />
 					</div>
 				</li>
 			`;
 		}
 		document.getElementById("color_list").innerHTML = result;
+		let colorChoices = document.getElementsByClassName("input_container");
+		for (let iter = 0; iter < colorChoices.length; ++iter) {
+			colorChoices[iter].addEventListener('mouseenter', () => {
+				document.getElementsByClassName("removeColor")[iter].style.opacity = 1;
+			});
+			colorChoices[iter].addEventListener('mouseleave', () => {
+				document.getElementsByClassName("removeColor")[iter].style.opacity = 0;
+			});
+			document.getElementsByClassName("removeColor")[iter].addEventListener('click', () => {
+				this.removeColor(iter);
+			});
+		}
 	}
 
 }
@@ -1012,24 +1106,61 @@ class Item extends Component {
 		}
 	}
 
+	delete(index) {
+		panel.floor[panel.nowFloor].items.splice(index, 1);
+		panel.render();
+	}
+
 }
 
 const panel = new Panel();
 panel.floor[0].render();
 
 
-document.getElementById("draw_map").addEventListener('click', () => {
+document.getElementById("draw_boundary").addEventListener('click', () => {
+	$("#draw_boundary_mode").css({"visibility": "visible", "height": "100%"});
+	$("#draw_room_mode").css({"visibility": "hidden", "height": 0});
 	$("#place_furnish_mode").css({"visibility": "hidden", "height": 0});
-	$("#draw_map_mode").css({"visibility": "visible", "height": "100%"});
+	$('#draw_boundary').css({"opacity": 1});
+	$('#draw_room').css({"opacity": 0.5});
 	$('#place_furnish').css({"opacity": 0.5});
-	$('#draw_map').css({"opacity": 1});
-
+	$('#editor').css({ "height": "8vh", "margin-top": "20vh" });
+	$('.list-inline-item').css({ "padding-left": "1vw", "margin-top": "1vh" });
+	$('#submit').css({ display: "none" });
+	panel.mode = "line";
+	panel.isDrawing = false;
+	panel.isDeleting = false;
+	document.getElementsByClassName("pen")[0].style["background-color"] = "";
+	document.getElementsByClassName("delete")[0].style["background-color"] = "";
+});
+document.getElementById("draw_room").addEventListener('click', () => {
+	$("#draw_boundary_mode").css({"visibility": "hidden", "height": 0});
+	$("#draw_room_mode").css({"visibility": "visible", "height": "100%"});
+	$("#place_furnish_mode").css({"visibility": "hidden", "height": 0});
+	$('#draw_boundary').css({"opacity": 0.5});
+	$('#draw_room').css({"opacity": 1});
+	$('#place_furnish').css({"opacity": 0.5});
+	$('#editor').css({ "height": "60vh", "margin-top": 0 });
+	$('.list-inline-item').css({ "padding-left": "1vw", "margin-top": "1vh" });
+	$('#submit').css({ display: "none" });
+	panel.isDrawing = false;
+	panel.isDeleting = false;
+	document.getElementsByClassName("delete")[1].style["background-color"] = "";
 });
 document.getElementById("place_furnish").addEventListener('click', () => {
-	$("#draw_map_mode").css({"visibility": "hidden", "height": 0});
+	$("#draw_boundary_mode").css({"visibility": "hidden", "height": 0});
+	$("#draw_room_mode").css({"visibility": "hidden", "height": 0});
 	$("#place_furnish_mode").css({"visibility": "visible", "height": "100%"});
+	$('#draw_boundary').css({"opacity": 0.5});
+	$('#draw_room').css({"opacity": 0.5});
 	$('#place_furnish').css({"opacity": 1});
-	$('#draw_map').css({"opacity": 0.5});
+	$('#editor').css({ "height": "60vh", "margin-top": 0 });
+	$('.list-inline-item').css({ "padding-left": "2.5vw", "margin-top": 0 });
+	$('#submit').css({ display: "block" });
+	panel.mode = "line";
+	panel.isDrawing = false;
+	panel.isDeleting = false;
+	document.getElementsByClassName("delete")[2].style["background-color"] = "";
 });
 
 
@@ -1043,9 +1174,10 @@ let hasPickerDisplay = false;
 let isPickerDisplay = false;
 let isAddingColor = false;
 let isChangingColor = false;
-let nowColorIndex = 0;
+let nowColorIndex = -1;
+let nowColor;
 
-document.getElementById("add_button").addEventListener('click', () => {
+document.getElementsByClassName("add")[0].addEventListener('click', () => {
 	removeHighlight();
 	isAddingColor = true;
 	isChangingColor = false;
@@ -1057,11 +1189,10 @@ document.getElementById("add_button").addEventListener('click', () => {
 
 $(document).on('click', '.color-item', () => {
 	panel.mode = "rect";
-	isPickerDisplay = false;
 
 	let color = event.target.style["background-color"];
 	$('#pickcolor').val(color);
-	$('#pen').css('background-color', color);
+	nowColor = color;
 
 	if (isChangingColor) {
 		panel.floor[panel.nowFloor].colors[nowColorIndex] = color;
@@ -1073,9 +1204,12 @@ $(document).on('click', '.color-item', () => {
 		});
 		panel.render();
 	} else {
+		isChangingColor = true;
 		nowColorIndex = document.getElementsByClassName("round").length;
 		panel.floor[panel.nowFloor].addColor(color);
 	}
+	document.getElementsByClassName("input_container")[nowColorIndex].style["background-color"] = color;
+	document.getElementsByClassName("input_container")[nowColorIndex].style["opacity"] = 0.5;
 });
 
 document.getElementById("color-picker").addEventListener('click', () => {
@@ -1095,30 +1229,50 @@ document.addEventListener('click', () => {
 	isPickerDisplay = false;
 });
 
-document.getElementById("pen_button").addEventListener('click', () => {
-	if(panel.mode === "rect"){
-		panel.mode = "line";
-		document.getElementById("pen").style["background-color"] = "transparent";
-	}
-});
-
 $(document).on('click', '.round', () => {
-	removeHighlight();
-	panel.mode = "rect";
-
 	let colorChoices = document.getElementsByClassName("round");
-	for (let iter = 0; iter < colorChoices.length; ++iter) {
-		if (colorChoices[iter].children[0] === event.target) {
-			nowColorIndex = iter;
-			isPickerDisplay = true;
-			isAddingColor = false;
-			isChangingColor = true;
-			break;
+	let switchColor = () => {
+		removeHighlight();
+		panel.mode = "rect";
+		for (let iter = 0; iter < colorChoices.length; ++iter) {
+			if (colorChoices[iter].children[0].children[0] === event.target || colorChoices[iter].children[0] === event.target) {
+				if (nowColorIndex != -1) {
+					document.getElementsByClassName("input_container")[nowColorIndex].style["background-color"] = "transparent";
+					document.getElementsByClassName("input_container")[nowColorIndex].style["opacity"] = 1;
+				}
+				nowColorIndex = iter;
+				isPickerDisplay = true;
+				isAddingColor = false;
+				isChangingColor = true;
+				nowColor = colorChoices[iter].children[0].children[1].style["background-color"];
+				document.getElementsByClassName("input_container")[iter].style["background-color"] = colorChoices[iter].children[0].children[1].style["background-color"];
+				document.getElementsByClassName("input_container")[iter].style["opacity"] = 0.5;
+				document.getElementsByClassName("delete")[1].style["background-color"] = "";
+				panel.isDeleting = false;
+				panel.isDrawing = true;
+				break;
+			}
 		}
-	}
-
-	if (event.target.children.length) {
-		$('#pen').css('background-color', event.target.children[1].style["background-color"]);
+	};
+	let clearColor = () => {
+		panel.mode = "line";
+		document.getElementsByClassName("input_container")[nowColorIndex].style["background-color"] = "transparent";
+		document.getElementsByClassName("input_container")[nowColorIndex].style["opacity"] = 1;
+		nowColorIndex = -1;
+		isPickerDisplay = false;
+		isAddingColor = false;
+		isChangingColor = false;
+		nowColor = null;
+		panel.isDrawing = false;
+	};
+	if (panel.mode === "line") {
+		switchColor();
+	} else {
+		if (colorChoices[nowColorIndex].children[0] === event.target) {
+			clearColor();
+		} else {
+			switchColor();
+		}
 	}
 });
 
@@ -1312,35 +1466,19 @@ async function getUser() {
         document.getElementById("UserImg").src = res.icon;
     });
 }
-$(document).on('mouseenter', '#UserImg', function () {
-    $(this).css('border-color','#D0D9DC');
-    }).on('mouseleave', '#UserImg', function () {
-    $(this).css('border-color','#789FB3');
+$(document).on('click',"#bar1",function(){
+    FB.getLoginStatus(function(response) {
+        if (response.status === 'connected') {
+            FB.logout(function(response) {
+                // this part just clears the $_SESSION var
+                // replace with your own code
+                console.log(response)
+                location.href='./index.html'
+            });
+        }
+        else{
+            localStorage.clear();
+            location.href='./index.html'
+        }
     });
-  let span_menu=0;
-$(document).on('click', '#UserImg', function () {
-    if(!span_menu){
-        $('.menubar').css('visibility','visible');
-        span_menu=1;
-    }
-    else{
-        $('.menubar').css('visibility','hidden');
-        span_menu=0;
-    }
-});
-//click region except menubar
-$(document).mouseup(function(e){
-    var _con = $('.menubar'); 
-    if(!_con.is(e.target) && _con.has(e.target).length === 0){ 
-      $('.menubar').css('visibility','hidden');
-      span_menu=0;
-    }
-  });
-$(document).on('mouseenter', '.menubar', function () {
-    $(this).css('background','#d6dde4');
-    }).on('mouseleave', '.menubar', function () {
-    $(this).css('background','#b8bec4');
-    });
-$(document).on('click',"#bar2",function(){
-    localStorage.clear();
 })
