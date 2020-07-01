@@ -8,9 +8,10 @@ $(document).ready(function() {
         },
         methods: {
             refuse:function(index){
+                console.log($('#UserImg').attr('src'))
                 $.post('./tasks/verifystate', {
                     id: this.tasks[index]._id,
-                    verify: [{id:localStorage.account,state:0,icon:$('#UserImg').src}]
+                    verify: [{id:localStorage.account,state:0,icon:$('#UserImg').attr('src')}]
                 }, (res) => {
                     $('.alert-mess').text('任務已審核')
                 });
@@ -23,7 +24,7 @@ $(document).ready(function() {
             accept: function(index){
                 $.post('./tasks/verifystate', {
                     id: this.tasks[index]._id,
-                    verify: [{id:localStorage.account,state:1,icon:$('#UserImg').src}]
+                    verify: [{id:localStorage.account,state:1,icon:$('#UserImg').attr('src')}]
                 }, (res) => {
                     $('.alert-mess').text('任務已審核')
                 });

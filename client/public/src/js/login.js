@@ -75,15 +75,16 @@ $("#fb_btn").click(async function() {
     var account = "";
     var url = " ";
     var name = " ";
+    var mail = " ";
     await new Promise((resolve, reject) => {
         FB.getLoginStatus(async function(response) {
             if (response.authResponse) {
                 await new Promise(resolve1 => {
                     FB.api('/me?fields=id,name,email', function(response) {
                         localStorage.setItem("account", response.id);
-                        console.log(response.id);
                         account = response.id;
                         name = response.name;
+                        mail = response.mail;
                         FB.api(
                             "/me/picture", {
                                 "redirect": false,
@@ -104,7 +105,6 @@ $("#fb_btn").click(async function() {
             } else {
                 await new Promise(resolve2=>{
                     FB.login(function(response) {
-                        console.log(response);
                         if (response.authResponse) {
                             new Promise(resolve => {
                                 FB.api('/me?fields=id,name,email', function(response) {
@@ -112,6 +112,7 @@ $("#fb_btn").click(async function() {
                                     console.log(response)
                                     account = response.id;
                                     name = response.name;
+                                    mail = response.mail;
                                     FB.api(
                                         "/me/picture", {
                                             "redirect": false,
@@ -143,7 +144,8 @@ $("#fb_btn").click(async function() {
             account: account,
             password: " ",
             name: name,
-            url: url
+            url: url,
+            mail:mail
         }, (res) => {
             resolve()
             if (res.first === "true")

@@ -65,7 +65,8 @@ router.post('/enroll',async(req,res) => {
         icon:req.body.icon,
         gender:req.body.gender,
         birthday:req.body.birthday,
-        mail:req.body.mail
+        mail:req.body.mail,
+        point:0
     });
     try {
         const savePost = await users.save();
@@ -73,7 +74,7 @@ router.post('/enroll',async(req,res) => {
     }catch(err){
         res.json({message:err});
     }
-    res.send({ account: req.body.account });
+    // res.send({ account: req.body.account });
 });
 
 //store fb login data
@@ -92,9 +93,10 @@ router.post('/CheckData',(req,res) => {
                         password:req.body.password,
                         name:req.body.name,
                         icon:req.body.url,
-                        gender:req.body.gender,
-                        birthday:req.body.birthday,
-                        mail:req.body.mail
+                        gender:'未填',
+                        birthday:'未填',
+                        mail:req.body.mail,
+                        point:0
                     });
                    users.save();
                     res.send(JSON.parse(`{

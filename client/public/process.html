@@ -242,11 +242,22 @@
         }
 
         .show_img{
-            display: inline;
+            display: inline-block;
+            width:30px;
+            height:30px;
         }
 
         .canclick{
             cursor: pointer;
+        }
+        .mission_show{
+            display: none;
+        }
+        .shift{
+            position: relative;
+            left:-30px;
+            opacity: 0.5;
+            margin-right: -30px;
         }
     </style>
 </head>
@@ -266,17 +277,18 @@
             <div id="outmission-block">
 
                 <div id="mission-block" class="app">
-                    <div :class="{nothing:tasks.length>0?false:true}"></div>
+                    <div :class="{nothing:(tasks.length-success)>0?false:true}"></div>
                 <template v-for="(task,index) in tasks">
-                    <div class="mission">
+                    <div class="mission" :class="{mission_show:task.state==3}">
                         <img :src="task.houseworkicon" class="icon" alt="">
                         <div class="name_time">
                             <div class="mission-name">{{task.content}}</div>
                             <div class="mission-text" :class="{state1:task.state==1||task.state==4}">剩餘時間: {{task.remain}}</div>
                             <div class="mission-text" :class="{state2:task.state==2}">審核狀況: 
                                 <template v-for="(member,index) in task.verify">
-                                    <img src="./img/process/yes.png" class="remain_img" :class="{show_img:member.state}">
-                                    <img src="./img/process/no.png" class="remain_img" :class="{show_img:!member.state}">
+                                    <img src="./img/process/yes.png" class="remain_img" :class="{show_img:member.state==1}">
+                                    <img src="./img/process/no.png" class="remain_img" :class="{show_img:member.state==0}">
+                                    <img :src="member.icon" class="show_img shift">
                                 </template>
                             </div>
                         </div>
@@ -339,7 +351,8 @@ function settasks(res,member_num){
     var content = localStorage.getItem('account')
     var accept = 0;
     var refuse = 0;
-    var standard = member_num/2 + 1
+    var standard = member_num/2 + 1;
+    var success = 0;
     for (var i = 0; i < res.length; i++) {
             accept = 0;
             refuse = 0;
@@ -365,9 +378,11 @@ function settasks(res,member_num){
 
                             if(accept >= standard){
                                 res[i]["state"] = 3;
+                                success = success+1
                             }
                             else if(refuse>= standard){
                                 res[i]["state"] = 4;
+                                res[i]["stateimage"] = "https://luffy.ee.ncku.edu.tw:2222/img/process/again.png";
                             }
                             else{
                                 res[i]["stateimage"] = "https://luffy.ee.ncku.edu.tw:2222/img/process/judge.png";
@@ -409,7 +424,8 @@ function settasks(res,member_num){
     }
 
     
-    vueinstance.tasks = res
+    vueinstance.tasks = res;
+    vueinstance.success = success;
 }
 
 function find_objid(content,index){
@@ -426,7 +442,8 @@ function find_objid(content,index){
     var vueinstance = new Vue({
         el: '.app',
         data: {
-            tasks:tasks
+            tasks:tasks,
+            success:0
         },
         methods: {
             changeState: function(index){
@@ -434,9 +451,10 @@ function find_objid(content,index){
                 if(this.tasks[index]["state"] == 1){
                     console.log(find_objid(localStorage.getItem('account'),index))
                     console.log(localStorage.getItem('account'))
-                    $.post('./tasks/changestate', {
+                    $.post('./tasks/changestate:none', {
                             id: find_objid(localStorage.getItem('account'),index),
-                            state:2
+                            state:2,
+                            _id:this.tasks[index]["_id"]
                     }, (res) => {
                         console.log(res)
                         this.tasks[index]["stateimage"] = "./img/process/judge.png"
@@ -445,13 +463,19 @@ function find_objid(content,index){
                     });
                 }
                 else if(this.tasks[index]["state"] == 4){
-                    $.post('./tasks/changestate', {
+                    $.post('./tasks/changestateclear', {
                             id: find_objid(localStorage.getItem('account'),index),
-                            state:2
+                            state:2,
+                            _id:this.tasks[index]["_id"]
                     }, (res) => {
                         console.log(res)
                         this.tasks[index]["stateimage"] = "./img/process/judge.png"
-                        this.tasks[index]["state"] = 2
+                        this.tasks[index]["state"] = 2;
+                        for(var i = 0;i <  this.tasks[index]["verify"].length;i++){
+                            if(this.tasks[index]["verify"][i]["state"]==0)
+                                this.tasks[index]["verify"][i]["state"] = 2;
+                        }
+
                         this.$forceUpdate()
                     });                   
                 }
