@@ -19,6 +19,12 @@ $(document).ready(function() {
                 }, (res) => {
                     $('.alert-mess').text('任務已審核')
                 });
+                $.post('./tasks/checkstate', {
+                    classcode: localStorage.classcode,
+                    account:localStorage.account,
+                }, (res) => {
+                    console.log(res);
+                });
                 this.$delete(this.tasks, index);
                 count = this.tasks.length;
                 buttonunable();
@@ -28,9 +34,15 @@ $(document).ready(function() {
             accept: function(index){
                 $.post('./tasks/verifystate', {
                     id: this.tasks[index]._id,
-                    verify: [{id:localStorage.account,state:1,icon:$('#UserImg').attr('src')}]
+                    verify: [{id:localStorage.account,state:1,icon:$('#UserImg').css('background-image').replace(/(url\(|\)|")/g, '')}]
                 }, (res) => {
                     $('.alert-mess').text('任務已審核')
+                });
+                $.post('./tasks/checkstate', {
+                    classcode: localStorage.classcode,
+                    account:localStorage.account,
+                }, (res) => {
+                    console.log(res);
                 });
                 this.$delete(this.tasks, index);
                 count = this.tasks.length;
@@ -85,10 +97,10 @@ $(document).ready(function() {
                         this.shows[0] = true;
                         if(this.tasks.length > 5){
                             this.hides = [];
-                            for (var i = 0; i < 4; i++) {
+                            for (var i = 0; i <= 4; i++) {
                                 this.hides.push(false);
                             }
-                            for (var i = 4; i < this.tasks.length; i++) {
+                            for (var i = 5; i < this.tasks.length; i++) {
                                 this.hides.push(true);
                             }
                         }
@@ -138,15 +150,23 @@ $(document).ready(function() {
         $.post('./tasks/verify', {
             account:localStorage.getItem("account")
         }, (res) => {
-            console.log(res);
             setTask(res);
         });
         var account = localStorage.getItem("account");
         $.get('./users/find/' + account, {}, (res) => {
-            document.getElementById("UserImg").src = res.icon;
+            document.getElementById("UserImg").style.backgroundImage= `url(${res.icon})`;
             localStorage.setItem("classcode", res.classcode);
         });
         
     };
+    $('#process-btn').click(function(e){
+        location.href = './process.html';
+    })
+    $('#request-btn').click(function(e){
+        location.href = './invite.html';
+    })
+    $('#verify-btn').click(function(e){
+        location.href = './verify.html';
+    })
 });
 

@@ -24,8 +24,44 @@
     margin-left:-9rem;
 }
 body {
-    overflow: hidden;  
+    overflow-x: hidden;
+    overflow-y: hidden;  
   }
+#list {
+    width: 15vw;
+    height: 90vh;
+    background-color: #F7F5E4;
+    position: relative;
+    display: flex;
+    justify-content: start;
+    flex-direction: column;
+    align-items: center;
+}
+#request-btn {
+    cursor: pointer;
+    margin-top: 40%;
+    width: 80%;
+    height: 7%;
+    position: relative;
+    z-index: 5;
+}
+
+#process-btn {
+    cursor: pointer;
+    margin-top: 10%;
+    width: 80%;
+    height: 7%;
+    position: relative;
+    z-index:5;
+}
+#verify-btn {
+    cursor: pointer;
+    margin-top: 8%;
+    width: 87%;
+    height: 9%;
+    position: relative;
+    z-index:5;
+}
 .shadow{
     float:right;
     width: 100%;
@@ -118,8 +154,8 @@ body {
 .message{
     background-color: #f7f6e4;
     height: 65%;
-    margin-top: 5rem;
-    margin-left: 5rem;
+    margin-top: 6rem;
+    margin-left: 16rem;
     display:block;
     position: absolute;
     border-radius: 28px;
@@ -255,7 +291,7 @@ nav>ul {
     margin: 0;
     color: #799FB4;
     padding: 0;
-    bottom: 10px;
+    bottom: 5px;
 }
 
 li {
@@ -263,11 +299,51 @@ li {
 }
 
 .nav-bg {
-    height: 90px;
+    height: 10vh;
     width: 100%;
     background-color: #F7F6E4;
     position: relative;
+    box-shadow: 0 0 10px gray ;
+    z-index: 2;
 }
+.round{
+    position:relative;
+    top:15px;
+    width:50px;height:50px;
+    border-radius:999em;
+    background-color:#799FB4;
+    border-color:#799FB4;
+    border-style:solid;
+    border-width:2px;
+    cursor: pointer;
+  }
+  .menubar{
+    height:30px;
+    width:80px;
+    border-width: 1px;
+    border-color:white;
+    border-style:solid;
+    background:#b8bec4;
+    font-size:1em;
+    font-family:GenJyuuGothic-Medium;
+    color:white;
+    z-index:10;
+    text-align:center;
+    visibility:hidden;
+    cursor: pointer;
+   }
+   #bar1{
+    position: absolute;
+    top:75px;
+    right:90px;
+  
+  
+  }
+  #bar2{
+    position: absolute;
+    top:105px;
+    right:90px;
+  }
 .mask {
     background-color: darkgray;
     opacity: 0.9;

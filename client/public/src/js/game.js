@@ -80,7 +80,7 @@ $(document).ready(function() {
                         $.post('./tasks/participate', {
                             id: this.tasks[index]._id,
                             invite: invite_after,
-                            participate: [{id:localStorage.account,state:1,icon:document.getElementById("UserImg").src}]
+                            participate: [{id:localStorage.account,state:1,icon:$('#UserImg').css('background-image').replace(/(url\(|\)|")/g, '')}]
                         }, (res) => {
                         });
                     }

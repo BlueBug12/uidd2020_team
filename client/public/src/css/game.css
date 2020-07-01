@@ -197,7 +197,7 @@ nav>ul {
     margin: 0;
     color: #799FB4;
     padding: 0;
-    bottom: 10px;
+    bottom: 5px;
 }
 
 li {
@@ -205,10 +205,12 @@ li {
 }
 
 .nav-bg {
-    height: 90px;
+    height: 10vh;
     width: 100%;
     background-color: #F7F6E4;
     position: relative;
+    box-shadow: 0 0 10px gray ;
+    z-index: 2;
 }
 
 .tabContainer .buttonContainer button {
