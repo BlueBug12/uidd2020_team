@@ -422,7 +422,7 @@ li {
             <div id="outmission-block">
 
                 <div id="mission-block" class="app">
-                    <div class="nothing:(tasks.length-success)>0?false:true}"></div>
+                    <div class="exchange"></div>
                 <template v-for="(task,index) in tasks">
                     <div class="mission" :class="{mission_show:task.state==3}">
                         <img :src="task.houseworkicon" class="icon" alt="">
@@ -536,7 +536,6 @@ function settasks(res,member_num){
                 }
             }
 
-
         housework = res[i].content 
         if(housework.includes('洗碗')){
             res[i]["houseworkicon"] =  './img/housework/bowl.png'
@@ -564,7 +563,14 @@ function settasks(res,member_num){
     
     }
 
-    
+    if(res.length-success == 0){
+        $('.exchange').addClass('nothing')
+    }
+    else{
+        if($('.exchange').hasClass('nothing')){
+            $('.exchange').removeClass('nothing')
+        }
+    }
     vueinstance.tasks = res;
     vueinstance.success = success;
 }

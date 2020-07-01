@@ -130,8 +130,12 @@ $(document).ready(function() {
                         //console.log(this.tasks[0].region)
                         showcurrentfloor(this.tasks[0].region)
                         //reg.classList.add('border')
+                        if($('.exchange').hasClass('no_task')){
+                            $('.exchange').removeClass('no_task')
+                        }
                     }
                     else{
+                        $('.exchange').addClass('no_task')
                         this.shows = [];
                         this.countdown = [];
                     }
@@ -456,6 +460,9 @@ $(document).ready(function() {
         }
     });
     $('#solve_btn').click((event) => {
+        if($('.exchange').hasClass('no_task')){
+            $('.exchange').removeClass('no_task')
+        }
         document.getElementById("floors").removeEventListener('mouseenter', onMouseEnterFloor);
         document.getElementById("floors").removeEventListener('mouseleave', onMouseLeaveFloor);
         var floor = document.querySelectorAll("#floors > div").length;
