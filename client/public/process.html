@@ -443,7 +443,7 @@ li {
                                 <template v-for="(member,index) in task.verify">
                                     <img src="./img/process/yes.png" class="remain_img" :class="{show_img:member.state==1}">
                                     <img src="./img/process/no.png" class="remain_img" :class="{show_img:member.state==0}">
-                                    <img :src="member.icon" class="shift" :class="{show_img:member.state==1||member.state==0}">
+                                    <img :src="member.icon"  :class="{show_img:member.state==1||member.state==0,shift:member.state==1||member.state==0}">
                                 </template>
                             </div>
                         </div>
