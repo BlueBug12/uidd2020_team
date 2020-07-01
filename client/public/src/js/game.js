@@ -87,6 +87,9 @@ $(document).ready(function() {
                     invite_after.push({id:invite_before[i].account,state:1})
                 }
                 console.log(invite_after);
+                for(var i = 0;i < this.tasks[index].members.length;i++){
+                    this.$set(this.tasks[index].members[i], 'on', false)                    
+                }
                 $.get('./tasks/isaccepted' , {id:this.tasks[index]._id}, (resup) => {
                     console.log(resup)
                     if (resup.isaccepted == true) {
@@ -101,6 +104,8 @@ $(document).ready(function() {
                         }, (res) => {
                         });
                     }
+
+
                     document.getElementById(this.tasks[index].region).classList.remove('border')
                     this.$delete(this.tasks, index)
                     count = this.tasks.length;
