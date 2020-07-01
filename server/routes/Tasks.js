@@ -300,9 +300,6 @@ router.post('/changestate:clearrefuse',(req,res)=>{
                 return;
             }
             else{
-<<<<<<< HEAD
-                res.status(200).send({ isSuccess: true });
-=======
                 if(req.params.clearrefuse == "clear"){
                     Tasks.findByIdAndUpdate(mongoose.mongo.ObjectID(req.body._id),{'$pull': {
                         'verify': { 'state':0 }}},{upsert: true, new: true},function(err2,doc){
@@ -318,7 +315,6 @@ router.post('/changestate:clearrefuse',(req,res)=>{
                 else{
                     res.status(200).send({ isSuccess: true });
                 }
->>>>>>> e594dc1a610fd1fe23a592b2619d50c4bb59f516
             }
         });
     }catch(err){
