@@ -265,6 +265,7 @@
             left:-30px;
             opacity: 0.5;
             margin-right: -30px;
+            border-radius: 50%;
         }
         .bannerbutton {
     border-radius: 20px;
@@ -424,7 +425,7 @@ li {
             <div id="outmission-block">
 
                 <div id="mission-block" class="app">
-                    <div :class="{nothing:(tasks.length-success)>0?false:true}"></div>
+                    <div class="exchange"></div>
                 <template v-for="(task,index) in tasks">
                     <div class="mission" :class="{mission_show:task.state==3}">
                         <img :src="task.houseworkicon" class="icon" alt="">
@@ -522,68 +523,57 @@ function settasks(res,member_num){
                 if(content == res[i].participate[j].id ){
                     res[i]["state"] = res[i].participate[j].state
                     if(res[i]["state"] == 1){
-                        res[i]["stateimage"] = "https://luffy.ee.ncku.edu.tw:2222/img/process/complete.png"
+                        res[i]["stateimage"] = "./img/process/complete.png"
                     }
                     else if (res[i]["state"] == 2){
                         if( res[i].verify.length==0){
-                            res[i]["stateimage"] = "https://luffy.ee.ncku.edu.tw:2222/img/process/judge.png";
-                        }
-                        for(k = 0;k < res[i].verify.length;k++){
-                            if(res[i].verify[k].state == 0){//拒
-                                refuse = refuse+1
-                            }
-                            else{
-                                accept = accept+1;
-                            }
-
-                            if(accept >= standard){
-                                res[i]["state"] = 3;
-                                success = success+1
-                            }
-                            else if(refuse>= standard){
-                                res[i]["state"] = 4;
-                                res[i]["stateimage"] = "https://luffy.ee.ncku.edu.tw:2222/img/process/again.png";
-                            }
-                            else{
-                                res[i]["stateimage"] = "https://luffy.ee.ncku.edu.tw:2222/img/process/judge.png";
-                            }
+                            res[i]["stateimage"] = "./img/process/judge.png";
                         }
                     }
+                    else if (res[i]["state"] == 3){
+                        success = success+1
+                    }
                     else if (res[i]["state"] == 4){
-                        res[i]["stateimage"] = "https://luffy.ee.ncku.edu.tw:2222/img/process/again.png"
+                        res[i]["stateimage"] = "./img/process/again.png"
                     }
                 }
             }
 
-
         housework = res[i].content 
         if(housework.includes('洗碗')){
-            res[i]["houseworkicon"] =  'https://luffy.ee.ncku.edu.tw:2222/img/housework/bowl.png'
+            res[i]["houseworkicon"] =  './img/housework/bowl.png'
         }
         else if (housework.includes('垃圾')){
-            res[i]["houseworkicon"] = 'https://luffy.ee.ncku.edu.tw:2222/img/housework/garbage.png'       
+            res[i]["houseworkicon"] = './img/housework/garbage.png'       
         }
         else if (housework.includes('衣服')){
-            res[i]["houseworkicon"] = 'https://luffy.ee.ncku.edu.tw:2222/img/housework/cloth.png'       
+            res[i]["houseworkicon"] = './img/housework/cloth.png'       
         }
         else if (housework.includes('掃地')){
-            res[i]["houseworkicon"] = 'https://luffy.ee.ncku.edu.tw:2222/img/housework/sweep.png'       
+            res[i]["houseworkicon"] = './img/housework/sweep.png'       
         }
         else if (housework.includes('拖地')){
-            res[i]["houseworkicon"] = 'https://luffy.ee.ncku.edu.tw:2222/img/housework/mop.png'       
+            res[i]["houseworkicon"] = './img/housework/mop.png'       
         }
         else if (housework.includes('廁所')){
-            res[i]["houseworkicon"] = 'https://luffy.ee.ncku.edu.tw:2222/img/housework/toilet.png'       
+            res[i]["houseworkicon"] = './img/housework/toilet.png'       
         }
         else{
-            res[i]["houseworkicon"] = 'https://luffy.ee.ncku.edu.tw:2222/img/housework/share.png'
+            res[i]["houseworkicon"] = './img/housework/share.png'
         }
 
 
     
     }
 
-    
+    if(res.length-success == 0){
+        $('.exchange').addClass('nothing')
+    }
+    else{
+        if($('.exchange').hasClass('nothing')){
+            $('.exchange').removeClass('nothing')
+        }
+    }
     vueinstance.tasks = res;
     vueinstance.success = success;
 }

@@ -295,6 +295,23 @@ router.post('/progress',(req,res) => {
     }
 });
 
+router.post('/changeallstate',async(req,res)=>{
+    await Tasks.find({"_id":req.body._id}  ).exec((err, res2) => {
+        if (err) {
+            console.log('fail to query:', err)
+            return;
+        }
+        else{
+            console.log(res2[0])
+            res2[0].participate.forEach(function(person){
+                person.state = 4; 
+             });
+             res2[0].save();
+        }
+    })
+})
+
+
 //set participate.state in process page 
 router.post('/changestate:clearrefuse',(req,res)=>{
     try {
@@ -400,7 +417,7 @@ router.post('/checkstate',(req,res)=>{
             }
             else{
                 length = res2.length / 2 + 1;
-                Tasks.find({ "participate.state":2}).exec((err, res3) => {
+                Tasks.find({"participate.state":2}).exec((err, res3) => {
                     if (err) {
                         console.log('fail to query:', err)
                         return;

@@ -1,4 +1,21 @@
 $(document).ready(function() {
+    window.fbAsyncInit = function() {
+        FB.init({
+            appId: myAppId,
+            xfbml: true,
+            version: 'v7.0'
+        });
+        FB.AppEvents.logPageView();
+    };
+    // Load the SDK asynchronously
+    (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) { return; }
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "https://connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
     var tasks = [];
     var vueinstance = new Vue({
         el: '#app',
@@ -113,8 +130,12 @@ $(document).ready(function() {
                         //console.log(this.tasks[0].region)
                         showcurrentfloor(this.tasks[0].region)
                         //reg.classList.add('border')
+                        if($('.exchange').hasClass('no_task')){
+                            $('.exchange').removeClass('no_task')
+                        }
                     }
                     else{
+                        $('.exchange').addClass('no_task')
                         this.shows = [];
                         this.countdown = [];
                     }
@@ -398,7 +419,6 @@ $(document).ready(function() {
 
     $('#task_btn').click((event) => {
         event.preventDefault();
-        console.log($('#UserImg').css('background-image').replace(/(url\(|\)|")/g, ''))
         if (check() == true) {
             $.post('./tasks', {
                 content: $('#addTasks input[name=content]').val(),
@@ -440,6 +460,9 @@ $(document).ready(function() {
         }
     });
     $('#solve_btn').click((event) => {
+        if($('.exchange').hasClass('no_task')){
+            $('.exchange').removeClass('no_task')
+        }
         document.getElementById("floors").removeEventListener('mouseenter', onMouseEnterFloor);
         document.getElementById("floors").removeEventListener('mouseleave', onMouseLeaveFloor);
         var floor = document.querySelectorAll("#floors > div").length;
@@ -500,7 +523,20 @@ $(document).on('mouseenter', '.menubar', function () {
     $(this).css('background','#b8bec4');
     });
 $(document).on('click',"#bar2",function(){
-    localStorage.clear();
+    FB.getLoginStatus(function(response) {
+        if (response.status === 'connected') {
+            FB.logout(function(response) {
+                // this part just clears the $_SESSION var
+                // replace with your own code
+                console.log(response)
+                location.href='./index.html'
+            });
+        }
+        else{
+            localStorage.clear();
+            location.href='./index.html'
+        }
+    });
 })
 function getUser() {
     var account = localStorage.getItem("account");

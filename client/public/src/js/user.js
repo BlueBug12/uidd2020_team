@@ -290,12 +290,17 @@ function work_type(housework){
 function getUser() {
     var account = localStorage.getItem("account");
     $.get('./users/find/' + account, {}, (res) => {
+        console.log(res)
         document.getElementById('name').placeholder=res.name;
         document.getElementById('img-result').style.backgroundImage = 'url('+res.icon+')';
         $('#user').css('background-image','url('+res.icon+')').css('background-size','cover');
         document.getElementById('mail').placeholder = res.mail;
-        document.getElementById('gender').value = (res.gender=='男'? 1:2);
+        document.getElementById('gender').value = (res.gender=='未填'? 0:res.gender=='男'?1:2);
         document.getElementById('datepicker').placeholder = res.birthday;
+
+        if(document.getElementById('gender').value != 0){
+          document.getElementById('gender').options[0].classList.add('hide')
+        }
 
         img_url=res.icon;
         user_name=res.name;
@@ -323,12 +328,12 @@ function getUser() {
             <div class="record_date">${res[i].date}</div>
           </div>
           <div class="record_points item">${res[i].point+'P'}</div>
-          <div class="record_points item">${res[i].point/10+'P'}</div>
+          <div class="record_points item">${Math.round(res[i].point/10)+'P'}</div>
         </div>`
         )
       }
       document.getElementById('coin_score').textContent=coin_score+'P';
-      document.getElementById('cookie_score').textContent=coin_score/10+'P';
+      document.getElementById('cookie_score').textContent=Math.round(coin_score/10)+'P';
 
     });
 }

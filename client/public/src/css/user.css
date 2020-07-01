@@ -831,3 +831,6 @@ div#signin div#logo img {
 .monster_icon{
     margin-right: 5px;
 }
+.hide{
+    display: none;
+}

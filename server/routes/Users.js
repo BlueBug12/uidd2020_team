@@ -104,7 +104,7 @@ router.post('/CheckData',(req,res) => {
                     }`));
                 }
                 else{
-                    Users.findOneAndUpdate({ account: res2.account }, { icon: req.body.url }, err => {
+                    Users.findOneAndUpdate({ account: res2.account }, { icon: req.body.url,mail:req.body.mail }, err => {
                         console.log(err)
                     });
                     res.send(JSON.parse(`{
@@ -184,7 +184,6 @@ router.get('/:id',async(req,res) => {
 // for users to edit their personal information
 router.post('/changedata',(req,res) => {
     var id = (req.body.id);
-    console.log(req.body.gender);
     Users.findOneAndUpdate({ account:id}, { 
         icon:req.body.icon,
         name:req.body.name,
