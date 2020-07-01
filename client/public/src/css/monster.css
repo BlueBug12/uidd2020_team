@@ -540,8 +540,9 @@ div#signin div#logo img {
 }
 #cookie{
     position: absolute;
+    margin-top:-30px;
     right:5vw;
-    margin-top:-1.5vh;
+    
 }
 #top_bar{
     position: relative;
@@ -602,4 +603,41 @@ div#signin div#logo img {
     position:absolute;
     top:0px;
     margin-left: -100px;
+}
+#monster{
+    position: absolute;
+    
+    height:70vh;
+    width:50vw;
+    left:40vw;
+    top:0;
+}
+#moster_body{
+  position:fixed;
+  height:200px;
+  width:200px;
+  top:220px;
+  right:500px;
+}
+.limb{
+  position:fixed;
+  height:40px;
+  width:40px;
+  
+}
+#right_hand{
+  right:645px;
+  top:353px;
+}
+#left_hand{
+  right:481px;
+  top:353px;
+}
+#right_leg{
+  right:629px;
+  top:466px;
+}
+#left_leg{
+  right:510px;
+  top:468px;
 }
