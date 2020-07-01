@@ -18,13 +18,12 @@ router.get('/', async (req,res) => {
 
 
 router.get('/memberlength',(req,resup) => {
-    Users.find({ "classcode":req.body.classcode}).exec((err, res2) => {
+    Users.find({ "classcode":req.query.classcode}).exec((err, res2) => {
         if (err) {
             console.log('fail to query:', err)
             return;
         }
         else{
-            console.log(res2.length)
             resup.send({length:res2.length})
         }
     }) 
@@ -292,7 +291,7 @@ router.post('/progress',(req,res) => {
 });
 
 //set participate.state in process page 
-router.post('/changestate',(req,res)=>{
+router.post('/changestate:clearrefuse',(req,res)=>{
     try {
          Tasks.findOneAndUpdate({ "participate._id":req.body.id},{'$set': {
             'participate.$.state': req.body.state}}, function(err) {
@@ -301,7 +300,25 @@ router.post('/changestate',(req,res)=>{
                 return;
             }
             else{
+<<<<<<< HEAD
                 res.status(200).send({ isSuccess: true });
+=======
+                if(req.params.clearrefuse == "clear"){
+                    Tasks.findByIdAndUpdate(mongoose.mongo.ObjectID(req.body._id),{'$pull': {
+                        'verify': { 'state':0 }}},{upsert: true, new: true},function(err2,doc){
+                        if (err2) {
+                            console.log('fail to query:', err2)
+                            return;
+                        }
+                        else{
+                            res.status(200).send({ isSuccess: true });
+                        }                       
+                    })
+                }
+                else{
+                    res.status(200).send({ isSuccess: true });
+                }
+>>>>>>> e594dc1a610fd1fe23a592b2619d50c4bb59f516
             }
         });
     }catch(err){
@@ -310,7 +327,7 @@ router.post('/changestate',(req,res)=>{
 })
 
 
-
+router
 
 
 //load data to verify page
@@ -353,7 +370,7 @@ router.post('/verify',async(req,res) => {
 //set verify state
 router.post('/verifystate',(req,res)=>{
     try {
-         Tasks.updateOne({ "_id":req.body.id},{'$set': {
+         Tasks.updateOne({ "_id":req.body.id},{'$push': {
             'verify': req.body.verify}}, function(err) {
             if (err) {
                 console.log('fail to query:', err)
