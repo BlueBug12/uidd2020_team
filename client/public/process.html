@@ -540,7 +540,7 @@ function settasks(res,member_num){
     var content = localStorage.getItem('account')
     var accept = 0;
     var refuse = 0;
-    var standard = member_num/2 + 1;
+    var standard = Math.floor(member_num/2) + 1;
     var success = 0;
     for (var i = 0; i < res.length; i++) {
         accept = 0;

@@ -417,7 +417,7 @@ router.post('/checkstate',(req,res)=>{
                 return;
             }
             else{
-                length = res2.length / 2 + 1;
+                length = Math.floor(res2.length / 2) + 1;
                 Tasks.find({"participate.state":2}).exec((err, res3) => {
                     if (err) {
                         console.log('fail to query:', err)
@@ -442,7 +442,7 @@ router.post('/checkstate',(req,res)=>{
                                             return;
                                         }
                                         else{
-                                            res4.point = item.point / item.participate.length;
+                                            res4.point = item.point / item.participate.length + item.point;
                                             res4.save();
                                         }
                                     });
