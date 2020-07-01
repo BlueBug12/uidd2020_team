@@ -160,8 +160,8 @@ function genPanel(floor,buttonenable) {
             .attr({
                 id: `${floor+1}room${key}`,
                 fill: room.color,
-                width: Math.abs(room.corner1.x - room.corner2.x) + gridSize,
-                height: Math.abs(room.corner1.y - room.corner2.y) + gridSize,
+                width: Math.abs(room.corner1.x - room.corner2.x),
+                height: Math.abs(room.corner1.y - room.corner2.y),
                 x: Math.min(room.corner1.x, room.corner2.x) - 100,
                 y: Math.min(room.corner1.y, room.corner2.y),
                 rx: "5px",
@@ -177,8 +177,8 @@ function genPanel(floor,buttonenable) {
                 "font-size": "25px",
                 "font-family": "GenJyuuGothic-Medium"
             }).text(room.text);
-        var width = Math.abs(room.corner1.x - room.corner2.x) + gridSize;
-        var height = Math.abs(room.corner1.y - room.corner2.y) + gridSize;
+        var width = Math.abs(room.corner1.x - room.corner2.x);
+        var height = Math.abs(room.corner1.y - room.corner2.y);
         var x =  Math.min(room.corner1.x, room.corner2.x) - 100;
         var y = Math.min(room.corner1.y, room.corner2.y);
         room_attr = {
@@ -202,8 +202,8 @@ function genPanel(floor,buttonenable) {
                 href: `./img/furnish/item/${item.name}.svg`,
                 width: item.width,
                 height: item.height,
-                x: item.x - 360,
-                y: item.y - 200
+                x: item.x - 250,
+                y: item.y - 180
             });
     });
 

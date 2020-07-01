@@ -1401,32 +1401,6 @@ document.getElementById("submit").addEventListener('click', async () => {
 		});
 		floorplan.push(newFloor);
 	});
-	/*
-		let colors = document.getElementsByClassName("awsome_input_border");
-		rooms[current_floor].forEach(room => {
-			for (let iter = 0; iter < colors.length; ++iter) {
-				function componentToHex(c) {
-					let hex = c.toString(16);
-					return hex.length == 1 ? "0" + hex : hex;
-				}
-				function rgbToHex(r, g, b) {
-					return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
-				}
-				let color = room.color;
-				if (color.startsWith("rgb")) {
-					console.log(colors[iter].style["background-color"], color)
-					if (colors[iter].style["background-color"] === color) {
-						room.text = document.getElementsByClassName("awsome_input")[iter].value;
-					}
-				} else {
-					let rgb = colors[iter].style["background-color"].match(/rgba?\((\d{1,3}), ?(\d{1,3}), ?(\d{1,3})\)?(?:, ?(\d(?:\.\d?))\))?/);
-					if ((rgbToHex(parseInt(rgb[1]), parseInt(rgb[2]), parseInt(rgb[3]))).toUpperCase() === color) {
-						room.text = document.getElementsByClassName("awsome_input")[iter].value;
-					}
-				}
-			};
-		});
-	*/
 	let result = {
 		account: localStorage.getItem("account"),
 		floorplan: floorplan
@@ -1481,4 +1455,42 @@ $(document).on('click',"#bar1",function(){
             location.href='./index.html'
         }
     });
-})
+});
+
+(async function getFloorplan() {
+	let response = await fetch('/readFloorplan', {
+		body: JSON.stringify({ account: localStorage.getItem("account") }),
+		headers: {
+			"Content-Type": "application/json"
+		},
+		method: 'POST'
+	}).then(res => {
+		return res.json();
+	});
+	response = response.floorplan;
+	if (response) {
+		response.forEach((res, key) => {
+			let corners = res.corners;
+			corners.forEach(corner => {
+				panel.floor[key].corners.push(new Point(corner.x, corner.y, 4));
+			});
+			let walls = res.walls;
+			walls.forEach(wall => {
+				panel.floor[key].walls.push(new Line(wall.corner1.x, wall.corner1.y, wall.corner2.x, wall.corner2.y, 2));
+			});
+			let rooms = res.rooms;
+			panel.floor[key].colors.pop();
+			rooms.forEach((room, index) => {
+				panel.floor[key].text.push(room.text);
+				panel.floor[key].colors.push(room.color);
+				panel.floor[key].rooms.push(new Area(room.color, room.corner1.x, room.corner1.y, room.corner2.x, room.corner2.y, 1, index));
+			});
+			panel.floor[key].render();
+			let items = res.items;
+			items.forEach(item => {
+				panel.floor[key].items.push(new Item(item.name, item.x, item.y));
+			});
+			panel.render();
+		});
+	}
+})();
