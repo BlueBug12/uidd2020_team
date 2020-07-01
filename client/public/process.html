@@ -551,11 +551,11 @@ function settasks(res,member_num){
                 if(content == res[i].participate[j].id ){
                     res[i]["state"] = res[i].participate[j].state
                     if(res[i]["state"] == 1){
-                        res[i]["stateimage"] = "https://luffy.ee.ncku.edu.tw:2222/img/process/complete.png"
+                        res[i]["stateimage"] = "./img/process/complete.png"
                     }
                     else if (res[i]["state"] == 2){
                         if( res[i].verify.length==0){
-                            res[i]["stateimage"] = "https://luffy.ee.ncku.edu.tw:2222/img/process/judge.png";
+                            res[i]["stateimage"] = "./img/process/judge.png";
                         }
                         for(k = 0;k < res[i].verify.length;k++){
                             if(res[i].verify[k].state == 0){//拒
@@ -571,7 +571,7 @@ function settasks(res,member_num){
                             }
                             else if(refuse>= standard){
                                 res[i]["state"] = 4;
-                                res[i]["stateimage"] = "https://luffy.ee.ncku.edu.tw:2222/img/process/again.png";
+                                res[i]["stateimage"] = "./img/process/again.png";
                                 $.post('./tasks/changeallstate', {
                                     state:4,
                                     _id:res[i]["_id"]
@@ -581,12 +581,12 @@ function settasks(res,member_num){
                                 
                             }
                             else{
-                                res[i]["stateimage"] = "https://luffy.ee.ncku.edu.tw:2222/img/process/judge.png";
+                                res[i]["stateimage"] = "./img/process/judge.png";
                             }
                         }
                     }
                     else if (res[i]["state"] == 4){
-                        res[i]["stateimage"] = "https://luffy.ee.ncku.edu.tw:2222/img/process/again.png"
+                        res[i]["stateimage"] = "./img/process/again.png"
                     }
                 }
             }
