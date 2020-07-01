@@ -1,3 +1,21 @@
+
+window.fbAsyncInit = function() {
+    FB.init({
+        appId: myAppId,
+        xfbml: true,
+        version: 'v7.0'
+    });
+    FB.AppEvents.logPageView();
+};
+// Load the SDK asynchronously
+(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) { return; }
+    js = d.createElement(s);
+    js.id = id;
+    js.src = "https://connect.facebook.net/en_US/sdk.js";
+    fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
 class Panel {
 
 	constructor() {
@@ -1448,6 +1466,19 @@ async function getUser() {
         document.getElementById("UserImg").src = res.icon;
     });
 }
-$(document).on('click',"#bar2",function(){
-    localStorage.clear();
+$(document).on('click',"#bar1",function(){
+    FB.getLoginStatus(function(response) {
+        if (response.status === 'connected') {
+            FB.logout(function(response) {
+                // this part just clears the $_SESSION var
+                // replace with your own code
+                console.log(response)
+                location.href='./index.html'
+            });
+        }
+        else{
+            localStorage.clear();
+            location.href='./index.html'
+        }
+    });
 })

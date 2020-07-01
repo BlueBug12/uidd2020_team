@@ -33,6 +33,18 @@ router.post('/',(req,res) => {
     }
 });
 
+
+router.get('/monsterstate',(req,res)=>{
+    Users.findOne({account:req.query.account},(err,res2)=>{
+        if (err) {
+            res.status(503).send({ isSuccess: false });
+        } else {
+            res.send(res2.monster);
+        }
+    })
+})
+
+
 //check repeat account
 router.post('/checkaccount',(req,res) => {
     try {
@@ -66,7 +78,8 @@ router.post('/enroll',async(req,res) => {
         gender:req.body.gender,
         birthday:req.body.birthday,
         mail:req.body.mail,
-        point:0
+        point:0,
+        monster:[1,1,1,1]
     });
     try {
         const savePost = await users.save();
@@ -88,6 +101,7 @@ router.post('/CheckData',(req,res) => {
             }
             else{
                 if(res2 == null){
+                    console.log()
                     const users = new Users({
                         account:req.body.account,
                         password:req.body.password,
@@ -96,7 +110,8 @@ router.post('/CheckData',(req,res) => {
                         gender:'未填',
                         birthday:'未填',
                         mail:req.body.mail,
-                        point:0
+                        point:0,
+                        monster:[1,1,1,1]
                     });
                    users.save();
                     res.send(JSON.parse(`{
@@ -104,12 +119,17 @@ router.post('/CheckData',(req,res) => {
                     }`));
                 }
                 else{
-                    Users.findOneAndUpdate({ account: res2.account }, { icon: req.body.url,mail:req.body.mail }, err => {
-                        console.log(err)
+                    Users.findOneAndUpdate({ account: res2.account }, { icon: req.body.url }, (err,res3) => {
+                        if(err)
+                            console.log(err)
+                        else{
+                            res.send(JSON.parse(`{
+                                "first": "false",
+                                "classcode":"${res3.classcode}"
+                            }`));
+                        }
                     });
-                    res.send(JSON.parse(`{
-                        "first": "false"
-                    }`));
+
                 }
             }
         });
@@ -189,7 +209,8 @@ router.post('/changedata',(req,res) => {
         name:req.body.name,
         mail:req.body.mail,
         gender:req.body.gender,
-        birthday:req.body.birthday
+        birthday:req.body.birthday,
+        monster:[1,1,1,1]
     }, err => {
         console.log(err);
         if (!err) {
@@ -199,4 +220,18 @@ router.post('/changedata',(req,res) => {
         }
     });
 });
+
+
+
+
+router.post('/updatemonsterstate',(req,res)=>{
+    console.log('wwww')
+    Users.findOneAndUpdate({account:req.body.account},{monster:req.body.monster},(err,res2)=>{
+        if (!err) {
+            res.status(200).send(res2);
+        } else {
+            res.status(503).send({ isSuccess: false });
+        }
+    })
+})
 module.exports = router;

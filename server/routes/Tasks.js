@@ -16,7 +16,7 @@ router.get('/', async (req,res) => {
 
 });
 
-
+//get classcode member
 router.get('/memberlength',(req,resup) => {
     Users.find({ "classcode":req.query.classcode}).exec((err, res2) => {
         if (err) {
@@ -295,6 +295,7 @@ router.post('/progress',(req,res) => {
     }
 });
 
+//change all state of participate in task
 router.post('/changeallstate',async(req,res)=>{
     await Tasks.find({"_id":req.body._id}  ).exec((err, res2) => {
         if (err) {
@@ -312,7 +313,7 @@ router.post('/changeallstate',async(req,res)=>{
 })
 
 
-//set participate.state in process page 
+//set one user participate.state in process page 
 router.post('/changestate:clearrefuse',(req,res)=>{
     try {
          Tasks.findOneAndUpdate({ "participate._id":req.body.id},{'$set': {

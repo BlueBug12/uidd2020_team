@@ -72,11 +72,13 @@
                     <div class="level">Lv.1</div>
                     <div class="task_name">鍋鏟手</div>
                     <div>
-                        <div class="circle">
+                        <div class="circle" id="left_hand_button">
                             <img src="./img/monster/plus.png">
                         </div>
-                        <div class="scale">
-                            <img src="./img/monster/scale.png" id="scale_img">
+                        <div class="scale ">
+                            <img src="./img/monster/scale.png" id="scale_img" style="z-index:2;">
+                        </div>
+                        <div class="scale_value" id="left_hand_value">
                         </div>
                         
                     </div>
@@ -85,11 +87,13 @@
                     <div class="level">Lv.1</div>
                     <div class="task_name">掃把手</div>
                     <div>
-                        <div class="circle">
+                        <div class="circle" id="right_hand_button">
                             <img src="./img/monster/plus.png">
                         </div>
                         <div class="scale">
-                            <img src="./img/monster/scale.png" id="scale_img">
+                            <img src="./img/monster/scale.png" id="scale_img" style="z-index:2;">
+                        </div>
+                        <div class="scale_value" id="right_hand_value"></div>
                         </div>
                         
                     </div>
@@ -98,11 +102,13 @@
                     <div class="level">Lv.1</div>
                     <div class="task_name">拖把腳</div>
                     <div>
-                        <div class="circle">
+                        <div class="circle" id="right_leg_button">
                             <img src="./img/monster/plus.png">
                         </div>
                         <div class="scale">
-                            <img src="./img/monster/scale.png" id="scale_img">
+                            <img src="./img/monster/scale.png" id="scale_img" style="z-index:2;">
+                        </div>
+                        <div class="scale_value" id="right_leg_value">
                         </div>
                         
                     </div>
@@ -111,11 +117,13 @@
                     <div class="level">Lv.1</div>
                     <div class="task_name">刷子腳</div>
                     <div>
-                        <div class="circle">
+                        <div class="circle" id="left_leg_button">
                             <img src="./img/monster/plus.png">
                         </div>
                         <div class="scale">
-                            <img src="./img/monster/scale.png" id="scale_img">
+                            <img src="./img/monster/scale.png" id="scale_img" style="z-index:2;">
+                        </div>
+                        <div class="scale_value" id="left_leg_value"></div>
                         </div>
                         
                     </div>
@@ -125,10 +133,10 @@
                 <div id="moster_body" >
                     <img src='./img/monster/body.svg'>
                 </div>
-                <div id="right_hand" class="limb">
+                <div id="right_hand" class="limb" style="z-index:1;">
                     <img src='./img/monster/righthand1.svg'>
                 </div>
-                <div id="left_hand" class="limb">
+                <div id="left_hand" class="limb" style="z-index:1;">
                     <img src='./img/monster/lefthand1.svg'>
                 </div>
                 <div id="right_leg" class="limb">
