@@ -593,11 +593,22 @@ div#signin div#logo img {
 .scale{
     position: absolute;
     border-radius: 20px;
-    width:265px;
+    width:280px;
     height:30px;
     left:36%;
     top:30%;
     background: #b1b1b3;
+}
+.scale_value{
+    position: absolute;
+    border-radius: 20px;
+    width:42px;
+    height:30px;
+    left:36%;
+    top:30%;
+    background: #f4df62;
+    z-index: 1;
+    opacity:0.9;
 }
 #scale_img{
     position:absolute;
@@ -616,8 +627,8 @@ div#signin div#logo img {
   position:fixed;
   height:200px;
   width:200px;
-  top:220px;
-  right:500px;
+  top:180px;
+  right:402px;
 }
 .limb{
   position:fixed;
@@ -626,18 +637,18 @@ div#signin div#logo img {
   
 }
 #right_hand{
-  right:645px;
-  top:353px;
+  right:550px;
+  top:312px;
 }
 #left_hand{
-  right:481px;
-  top:353px;
+  right:381px;
+  top:313px;
 }
 #right_leg{
-  right:629px;
-  top:466px;
+  right:529px;
+  top:426px;
 }
 #left_leg{
-  right:510px;
-  top:468px;
+  right:410px;
+  top:426px;
 }
