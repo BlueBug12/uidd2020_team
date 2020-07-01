@@ -174,7 +174,6 @@ router.post('/participate',async(req,res) => {
 //load data to  invite page
 router.post('/invite',async(req,res) => {
     try {
-        var check = 0;
         temp = [];
         Tasks.find({"invite.id":  req.body.account,"expired":0}  ).exec(async (err, res2) => {
             if (err) {
@@ -185,32 +184,25 @@ router.post('/invite',async(req,res) => {
                 const test = async function () {
                     return new Promise(async (resolve, reject) => {
                         res2.forEach(function(item,index){
-                            item.participate.forEach(function(temp){
-                                if(temp.state == 2){
-                                    check = 1;
+                            item.invite.forEach( function(person){
+                                
+                                if(person.id == req.body.account && person.state === 1){
+                                   Users.findOne({"account":item.author} ).exec((err, res4) => {
+                                        if (err) {
+                                            console.log('fail to query:', err)
+                                            return;
+                                        }
+                                        else{
+                                            item.author = res4.nickname;
+                                            if(index == res2.length-1){
+                                                resolve(true);
+                                            }
+                                        }
+                                    });
+
+                                    temp.push(item);
                                 }
                             });
-                            if(!check){
-                                item.invite.forEach( function(person){
-                                    
-                                    if(person.id == req.body.account && person.state === 1){
-                                    Users.findOne({"account":item.author} ).exec((err, res4) => {
-                                            if (err) {
-                                                console.log('fail to query:', err)
-                                                return;
-                                            }
-                                            else{
-                                                item.author = res4.nickname;
-                                                if(index == res2.length-1){
-                                                    resolve(true);
-                                                }
-                                            }
-                                        });
-
-                                        temp.push(item);
-                                    }
-                                });
-                            }
                         });
                         if(temp.length == 0){
                             resolve(false);
@@ -425,7 +417,7 @@ router.post('/checkstate',(req,res)=>{
                 return;
             }
             else{
-                length = Math.floor(res2.length / 2) + 1;
+                length = res2.length / 2 + 1;
                 Tasks.find({"participate.state":2}).exec((err, res3) => {
                     if (err) {
                         console.log('fail to query:', err)
