@@ -217,6 +217,7 @@ li {
   padding-top:3vh;
   border-bottom: #799FB4 solid 3px;
   font-size: 2em;
+  text-align: left;
   font-family:GenJyuuGothic-Medium;
   color:#799FB4;
 }
@@ -551,8 +552,8 @@ div#signin div#logo img {
   width: 150px;
   height: 150px;
   border-radius: 50%;
+  border:3px solid #799fb4;
 
-  color: rgba(0, 0, 0, 0);
 
 }
 .wrapper button {
@@ -679,4 +680,137 @@ div#signin div#logo img {
     background-color: #4b515f;
     text-align: center;
     
+}
+
+.points{
+    top:35%;
+    margin-left: 20px;
+    position: absolute;
+    border-radius: 20px;
+    width:147px;
+    height:26px;
+    background: #6c6a75;
+    font-size: 0.7em;
+    font-family:GenJyuuGothic-Medium;
+    color:white;
+
+    text-align:center;
+}
+
+#cookie{
+    right:180px;
+}
+#cookie span{
+    position: absolute;
+    background-size: contain;
+    background-position: left;
+    display: block;
+    width:55px;
+    height:55px;
+    left:0px;
+    bottom:-10px;
+    margin-left:-10px;
+    background-image:url("../../img/user/cookie.png");
+    
+}
+#coin{
+    right:10px;
+
+}
+#coin>span{
+    position: absolute;
+    background-size: contain;
+    background-position: left;
+    display: block;
+    width:40px;
+    height:40px;
+    left:0px;
+    bottom:-5px;
+    margin-left:-10px;
+    background-image:url("../../img/user/coin.png");
+}
+#coin_score{
+  margin-top:-3px;
+}
+#cookie_score{
+  margin-top:-3px;
+}
+#record{
+    position: absolute;
+    height:75%;
+    width: 45%;
+    padding:15px 20px;
+    overflow-y:scroll;
+    margin-bottom:100px;
+
+}
+.record_row{
+  position:relative;
+  height:28%;
+  
+  margin-left:-5%;
+  margin-right:-10%;
+  margin-bottom:5px;
+}
+
+ .img_containter{
+     width:20%;
+ }
+.record_type{
+  
+  height:50%;
+  width:100%;
+  font-size:1.7em;
+  font-family:GenJyuuGothic-Medium;
+}
+.record_date{
+  display: inherit;
+  height:50%;
+  width:100%;
+  font-size:1em;
+  color:gray;
+  font-family:GenJyuuGothic-Medium;
+}
+.record_text{
+  padding-top:5px;
+  padding-left:20px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: flex-start；
+}
+
+.record_points{
+  position:relative;
+  width:30%;
+  margin-left:7%;
+  text-align:center;
+  margin-top:16px;
+  font-size:1.8em;
+  font-family:GenJyuuGothic-Medium;
+}
+#record_bar{
+  position:relative;
+  width:100%;
+  height:50px;
+  
+}
+.record_icon{
+  position:absolute;
+  height:50px;
+  left:100px;
+}
+#coin_icon{
+  position:absolute;
+  left:54%
+}
+#cookie_icon{
+  position:absolute;
+  left:80%;
+}
+.container{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start；
 }

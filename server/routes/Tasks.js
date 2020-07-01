@@ -16,6 +16,20 @@ router.get('/', async (req,res) => {
 
 });
 
+
+router.get('/memberlength',(req,resup) => {
+    Users.find({ "classcode":req.body.classcode}).exec((err, res2) => {
+        if (err) {
+            console.log('fail to query:', err)
+            return;
+        }
+        else{
+            console.log(res2.length)
+            resup.send({length:res2.length})
+        }
+    }) 
+})
+
 //get whether mission has been accepted
 router.get('/isaccepted',async(req,resup) => {
     var temp;
@@ -295,6 +309,10 @@ router.post('/changestate',(req,res)=>{
     }
 })
 
+
+
+
+
 //load data to verify page
 router.post('/verify',async(req,res) => {
     try {
@@ -416,6 +434,7 @@ router.post('/checkstate',(req,res)=>{
 //get user finish task
 router.post('/finished',(req,res)=>{
     try {
+        console.log(req.body.account);
         Tasks.find({ "participate.id": req.body.account,"participate.state":3}).exec(async (err, res2) => {
             if (err) {
                 console.log('fail to query:', err)
