@@ -55,9 +55,7 @@ $(document).ready(function() {
                 });
                 this.$delete(this.tasks, index);
                 count = this.tasks.length;
-                if(count == 0){
-                    $('#noitem').addClass("active");
-                }
+                
                 buttonunable();
                 $('.check').css("visibility", "visible");
                 $('.mask').css("visibility", "visible");
@@ -66,15 +64,13 @@ $(document).ready(function() {
                 $.post('./tasks/agree', {
                     id: this.tasks[index]._id,
                     account:localStorage.account,
-                    participate: [{id:localStorage.account,state:1,icon:$('#UserImg').src}]
+                    participate: [{id:localStorage.account,state:1,icon:$('#UserImg').css('background-image').replace(/(url\(|\)|")/g, '')}]
                 }, (res) => {
                     $('.alert-mess').text('任務已接受')
                 });
                 this.$delete(this.tasks, index);
                 count = this.tasks.length;
-                if(count == 0){
-                    $('#noitem').addClass("active");
-                }
+                
                 buttonunable();
                 $('.check').css("visibility", "visible");
                 $('.mask').css("visibility", "visible");
@@ -91,6 +87,7 @@ $(document).ready(function() {
                         }
                         this.shows[0] = true;
                         this.remaintime(0);
+                        $('#noitem').removeClass("active");
                     }
                     else{
                         this.shows = [];
@@ -152,13 +149,23 @@ $(document).ready(function() {
         }, (res) => {
             console.log(res);
             setTask(res);
+            console.log(res.length);
         });
         var account = localStorage.getItem("account");
         $.get('./users/find/' + account, {}, (res) => {
-            document.getElementById("UserImg").src = res.icon;
+            document.getElementById("UserImg").style.backgroundImage= `url(${res.icon})`;
             localStorage.setItem("classcode", res.classcode);
         });
         
     };
+    $('#process-btn').click(function(e){
+        location.href = './process.html';
+    })
+    $('#request-btn').click(function(e){
+        location.href = './invite.html';
+    })
+    $('#verify-btn').click(function(e){
+        location.href = './verify.html';
+    })
 });
 

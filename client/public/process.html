@@ -134,7 +134,14 @@
             position: relative;
             z-index:5;
         }
-        
+        #verify-btn {
+            cursor: pointer;
+            margin-top: 8%;
+            width: 87%;
+            height: 9%;
+            position: relative;
+            z-index:5;
+        }
         .mission {
             background-color: #F7F5E4;
             height: 19%;
@@ -260,16 +267,153 @@
             margin-right: -30px;
             border-radius: 50%;
         }
+        .bannerbutton {
+    border-radius: 20px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    background-color: #d0d9dc;
+    font-family: GenJyuuGothic-Medium;
+    color: #F7F6E3;
+    padding: 1.2vh 2.5vh;
+    color: #4B515F;
+    outline: none;
+    border: 0;
+}
+
+.bannerbutton:focus {
+    outline: none;
+}
+
+.bannerbutton.active {
+    background-color: #789fb3;
+    color: #F7F6E3;
+}
+nav {
+    position: absolute;
+    margin-left: 4%;
+    margin-right: 4%;
+    bottom: 15%;
+    z-index: 9;
+    margin-top: 20%;
+}
+
+nav a {
+    color: inherit;
+    font-size: 19.5pt;
+    font-family: GenJyuuGothic-Medium;
+    bottom: 10px;
+    text-decoration: none;
+}
+
+#logo {
+    position: absolute;
+    bottom: 25%;
+}
+
+#navbar {
+    position: absolute;
+    width: 92%;
+    border-bottom: #799FB4 solid 3px;
+    margin: 30px 4% 0px 4%;
+}
+
+nav>ul {
+    position: absolute;
+    list-style: none;
+    right: 0;
+    margin: 0;
+    color: #799FB4;
+    padding: 0;
+    bottom: 5px;
+}
+
+li {
+    margin: 0 10px;
+}
+
+.nav-bg {
+    height: 10vh;
+    width: 100%;
+    background-color: #F7F6E4;
+    position: relative;
+    box-shadow: 0 0 10px gray ;
+    z-index: 2;
+}
+.round{
+    position:relative;
+    top:15px;
+    width:50px;height:50px;
+    border-radius:999em;
+    background-color:#799FB4;
+    border-color:#799FB4;
+    border-style:solid;
+    border-width:2px;
+    cursor: pointer;
+  }
+  .menubar{
+    height:30px;
+    width:80px;
+    border-width: 1px;
+    border-color:white;
+    border-style:solid;
+    background:#b8bec4;
+    font-size:1em;
+    font-family:GenJyuuGothic-Medium;
+    color:white;
+    z-index:10;
+    text-align:center;
+    visibility:hidden;
+    cursor: pointer;
+   }
+   #bar1{
+    position: absolute;
+    top:75px;
+    right:90px;
+  
+  
+  }
+  #bar2{
+    position: absolute;
+    top:105px;
+    right:90px;
+  }
     </style>
 </head>
 
 <body>
-    <div id="banner">
+    <div class="banner">
+        <div class="nav-bg">
+            <nav class="navbar " id="navbar">
+                <a href="index.html" class="navbar-brand">
+                    <span id="logo">
+                        <img src="./img/s_topic.png" class="d-inline-block align-top">
+                    </span>
+                </a>
+                <ul class="list-inline">
+                    <li class="list-inline-item">
+                        <button class="bannerbutton" href="#">任務地圖</button>
+                    </li>
+                    <li class="list-inline-item">
+                        <button class="bannerbutton" href="#">任務總覽</button>
+                    </li>
+                    <li class="list-inline-item">
+                        <button class="bannerbutton" href="#">排行與積分</button>
+                    </li>
+                    <li class="list-inline-item">
+                        <div class="round" id="UserImg" alt=""  style=" border-radius: 50%;width: 50px;height: 50px;"></div>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="menubar" id="bar1" onclick="javascript:location.href='./user.html'">個人資料</div>
+        <div class="menubar" id="bar2" onclick="javascript:location.href='./login.html'">登出</div>
     </div>
     <div id="block">
         <div id="list">
             <img src="./img/process/list-request.png" id="request-btn" alt="">
             <img src="./img/process/list-process.png" id="process-btn" alt=" ">
+            <img src="./img/process/list-verify.png" id="verify-btn" alt=" ">
         </div>
 
         <div id="content">
@@ -323,16 +467,29 @@
 
 
 $('#process-btn').click(function(e){
+        location.href = './process.html';
+    })
+    $('#request-btn').click(function(e){
+        location.href = './invite.html';
+    })
+    $('#verify-btn').click(function(e){
+        location.href = './verify.html';
+    })
+window.onload = function() {
     $.post('./tasks/progress', {
         account:localStorage.getItem('account')
     }, (res) => {
         $.get('./tasks/memberlength',{classcode:localStorage.getItem('classcode')},res2=>{
             settasks(res,res2.length);
         })
-
     });
-})
-
+        var account = localStorage.getItem("account");
+        $.get('./users/find/' + account, {}, (res) => {
+            document.getElementById("UserImg").style.backgroundImage= `url(${res.icon})`;
+            localStorage.setItem("classcode", res.classcode);
+        });
+        
+    };
 
 
 function settasks(res,member_num){

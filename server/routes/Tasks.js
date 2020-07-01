@@ -204,11 +204,16 @@ router.post('/invite',async(req,res) => {
                                 }
                             });
                         });
-                        
+                        if(temp.length == 0){
+                            resolve(false);
+                        }
                     });
                 };
                 test().then(r => {
                     if (r === true) {
+                        res.send(temp);
+                    }
+                    else if(r===false){
                         res.send(temp);
                     }
                 });
@@ -436,7 +441,7 @@ router.post('/checkstate',(req,res)=>{
                                             return;
                                         }
                                         else{
-                                            res4.point = item.point;
+                                            res4.point = item.point / item.participate.length;
                                             res4.save();
                                         }
                                     });
