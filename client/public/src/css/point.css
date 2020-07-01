@@ -261,7 +261,7 @@ input[type=checkbox] {
     position: absolute;
     top: 23.5vh;
     left: 7.4vw;
-    z-index: 100;
+    z-index: 101;
 }
 
 .type {
@@ -286,7 +286,7 @@ input[type=checkbox] {
     height: 31vh;
     top: 34vh;
     left: 27vw;
-    z-index: 100;
+    z-index: 101;
 }
 .item {
     float: left;
