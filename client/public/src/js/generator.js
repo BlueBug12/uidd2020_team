@@ -3,7 +3,19 @@ let floorplan;
 let floor_span = 0;
 let current_floor = 0;
 let choose_region = null;
-prevDiv = null
+prevDiv = null;
+let room_position;
+var timer
+var monster = document.createElement("img");
+monster.src = "./img/monster_jump.gif";
+monster.style.width = "150px";
+monster.style.height = "250px";
+monster.display = "inline";
+monster.id = 'monster'
+var container = document.getElementsByClassName('container-fluid');
+console.log(container)
+container[0].appendChild(monster)
+
 let onMouseEnterFloor = () => {
     for (let iter = 0; iter < floorplan.length; ++iter) {
         $(`#floor_animate${iter}`).css({ transition: "0.5s" });
@@ -45,6 +57,8 @@ document.getElementById("floors").addEventListener('mouseleave', onMouseLeaveFlo
 
 
 function genPanel(floor,buttonenable) {
+    clearInterval(timer)
+    document.getElementById('monster').style.display = "none";
     if (!floor_span) {
         let floors = document.getElementById("floors");
         let content = "";
@@ -143,6 +157,8 @@ function genPanel(floor,buttonenable) {
         });
 
     let rooms = floorplan[floor].rooms;
+    let room_attr_arr = []
+    let room_attr={};
     rooms = rooms? rooms: [];
     rooms.forEach((room, key) => {
         svg.append("rect")
@@ -166,8 +182,22 @@ function genPanel(floor,buttonenable) {
                 "font-size": "25px",
                 "font-family": "GenJyuuGothic-Medium"
             }).text(room.text);
+        var width = Math.abs(room.corner1.x - room.corner2.x) + gridSize;
+        var height = Math.abs(room.corner1.y - room.corner2.y) + gridSize;
+        var x =  Math.min(room.corner1.x, room.corner2.x) - 100;
+        var y = Math.min(room.corner1.y, room.corner2.y);
+        room_attr = {
+            width:width,
+            height:height,
+            pos_x:(x+(width)/2),
+            pos_y:(y+(height)/2)
+        }
+        room_attr_arr.push(room_attr)
+        room_attr = {}
     });
-        
+    room_position={floor:floor,attr:room_attr_arr}
+    document.getElementById('monster').src = "./img/monster_jump.gif";
+    timer = setInterval(jump, 2000,room_position);
     let items = floorplan[floor].items;
     items = items? items: [];
     items.forEach(item => {
@@ -245,4 +275,15 @@ function genPanel(floor,buttonenable) {
             }
         }
     }
+}
+
+
+
+function jump(room_position){
+    document.getElementById('monster').style.display = "inline"
+    index = Math.floor(Math.random() * room_position.attr.length)
+    var monster = document.getElementById('monster')
+    monster.style.position = "absolute"
+    monster.style.left = room_position.attr[index].pos_x+'px'
+    monster.style.top = room_position.attr[index].pos_y+'px';
 }
