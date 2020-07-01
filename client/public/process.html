@@ -410,7 +410,7 @@ li {
             </nav>
         </div>
         <div class="menubar" id="bar1" onclick="javascript:location.href='./user.html'">個人資料</div>
-        <div class="menubar" id="bar2" onclick="javascript:location.href='./login.html'">登出</div>
+        <div class="menubar" id="bar2" >登出</div>
     </div>
     <div id="block">
         <div id="list">
@@ -466,8 +466,25 @@ li {
 </body>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="./src/js/id.js"></script>
 <script>
-
+window.fbAsyncInit = function() {
+        FB.init({
+            appId: myAppId,
+            xfbml: true,
+            version: 'v7.0'
+        });
+        FB.AppEvents.logPageView();
+    };
+    // Load the SDK asynchronously
+    (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) { return; }
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "https://connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
 
 $('#process-btn').click(function(e){
         location.href = './process.html';
@@ -617,7 +634,20 @@ $(document).on('mouseenter', '.menubar', function () {
     $(this).css('background','#b8bec4');
     });
 $(document).on('click',"#bar2",function(){
-    localStorage.clear();
+    FB.getLoginStatus(function(response) {
+            if (response.status === 'connected') {
+                FB.logout(function(response) {
+                    // this part just clears the $_SESSION var
+                    // replace with your own code
+                    console.log(response)
+                    location.href='./index.html'
+                });
+            }
+            else{
+                localStorage.clear();
+                location.href='./index.html'
+            }
+        });
 })
     var tasks = [];
     var vueinstance = new Vue({

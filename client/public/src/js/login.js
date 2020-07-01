@@ -47,7 +47,13 @@ $('#login_btn').click((event) => {
             } else {
                 localStorage.setItem("account", res.account);
                 localStorage.setItem("classcode", res.classcode);
-                location.href = './game.html';
+                console.log(res.classcode)
+                if(res.classcode === 'undefined'){
+                    location.href = './join.html'
+                }
+                else{
+                    location.href = './game.html';
+                }
             }
         });
     }
@@ -147,11 +153,17 @@ $("#fb_btn").click(async function() {
             url: url,
             mail:mail
         }, (res) => {
-            resolve()
+            resolve()            
             if (res.first === "true")
                 location.href = './join.html';
-            else
-                location.href = './game.html';
+            else{
+                if(res.classcode === 'undefined'){
+                    location.href = './join.html'
+                }
+                else{
+                    location.href = './game.html';
+                }
+            }
         }
         )});
 });

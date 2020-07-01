@@ -40,6 +40,10 @@ const UserSchema = mongoose.Schema({
     point:{
         type:Number,
         require:true
+    },
+    monster:{
+        type:[Number],
+        require:true
     }
 },{collection: 'Users'});
 
