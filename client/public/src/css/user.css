@@ -758,7 +758,9 @@ body{
 .record_type{
   
   height:50%;
-  width:100%;
+  width:auto;
+  margin-left: -50px;
+  margin-right: -50px;
   font-size:1.7em;
   font-family:GenJyuuGothic-Medium;
 }

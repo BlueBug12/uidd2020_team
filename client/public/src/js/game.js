@@ -402,7 +402,7 @@ $(document).ready(function() {
             var hour = parseInt(time[0].split(':'));
             var hour = (time[1][0] == 'P') ? hour + 12 : hour;
             var nowTime = new Date();
-            var missiondate = new Date(year, month - 1, day, hour, 20, 00);
+            var missiondate = new Date(year, month - 1, day, hour, 00, 00);
             if (missiondate.getTime() - nowTime.getTime() <= 0) {
                 error_time = true;
                 ans = false;
