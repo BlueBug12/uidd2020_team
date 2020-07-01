@@ -379,6 +379,8 @@ li {
   .monster_icon{
     margin-right: 5px;
 }
+
+
     </style>
 </head>
 
@@ -541,7 +543,7 @@ function settasks(res,member_num){
     var standard = member_num/2 + 1;
     var success = 0;
     for (var i = 0; i < res.length; i++) {
-            accept = 0;
+        accept = 0;
             refuse = 0;
             res[i].date = resultdate[i];
             res[i]["remain"] = 0;
@@ -549,17 +551,42 @@ function settasks(res,member_num){
                 if(content == res[i].participate[j].id ){
                     res[i]["state"] = res[i].participate[j].state
                     if(res[i]["state"] == 1){
-                        res[i]["stateimage"] = "./img/process/complete.png"
+                        res[i]["stateimage"] = "https://luffy.ee.ncku.edu.tw:2222/img/process/complete.png"
                     }
                     else if (res[i]["state"] == 2){
-                        res[i]["stateimage"] = "./img/process/judge.png";
-                        
-                    }
-                    else if (res[i]["state"] == 3){
-                        success = success+1
+                        if( res[i].verify.length==0){
+                            res[i]["stateimage"] = "https://luffy.ee.ncku.edu.tw:2222/img/process/judge.png";
+                        }
+                        for(k = 0;k < res[i].verify.length;k++){
+                            if(res[i].verify[k].state == 0){//拒
+                                refuse = refuse+1
+                            }
+                            else{
+                                accept = accept+1;
+                            }
+
+                            if(accept >= standard){
+                                res[i]["state"] = 3;
+                                success = success+1
+                            }
+                            else if(refuse>= standard){
+                                res[i]["state"] = 4;
+                                res[i]["stateimage"] = "https://luffy.ee.ncku.edu.tw:2222/img/process/again.png";
+                                $.post('./tasks/changeallstate', {
+                                    state:4,
+                                    _id:res[i]["_id"]
+                                }, (res) => {
+                                    
+                                }); 
+                                
+                            }
+                            else{
+                                res[i]["stateimage"] = "https://luffy.ee.ncku.edu.tw:2222/img/process/judge.png";
+                            }
+                        }
                     }
                     else if (res[i]["state"] == 4){
-                        res[i]["stateimage"] = "./img/process/again.png"
+                        res[i]["stateimage"] = "https://luffy.ee.ncku.edu.tw:2222/img/process/again.png"
                     }
                 }
             }
@@ -663,8 +690,10 @@ $(document).on('click',"#bar2",function(){
                         this.tasks[index]["stateimage"] = "./img/process/judge.png"
                         this.tasks[index]["state"] = 2;
                         for(var i = 0;i <  this.tasks[index]["verify"].length;i++){
-                            if(this.tasks[index]["verify"][i]["state"]==0)
+                            if(this.tasks[index]["verify"][i]["state"]==0){
                                 this.tasks[index]["verify"][i]["state"] = 2;
+                                this.tasks[index]["verify"][i]["icon"] = ""
+                            }
                         }
 
                         this.$forceUpdate()
