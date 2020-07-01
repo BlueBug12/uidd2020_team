@@ -10,6 +10,8 @@
 
 #hope-text {
     font-family: GenJyuuGothic-Medium;
+    color:#4B515F;
+    font-size: large;
 }
 
 #banner {
@@ -29,6 +31,8 @@
     margin-top: 40%;
     width: 80%;
     height: 7%;
+    position: relative;
+    z-index: 5;
 }
 
 #process-btn {
@@ -36,6 +40,24 @@
     margin-top: 10%;
     width: 80%;
     height: 7%;
+    position: relative;
+    z-index:5;
+}
+#verify-btn {
+    cursor: pointer;
+    margin-top: 8%;
+    width: 87%;
+    height: 9%;
+    position: relative;
+    z-index:5;
+}
+#point-btn {
+    cursor: pointer;
+    margin-top: 5%;
+    width: 87%;
+    height: 9%;
+    position: relative;
+    z-index:5;
 }
 
 #list {
@@ -110,16 +132,21 @@
     width: 101%;
     margin-left: -0.5%;
     background-color: #F4DF62;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
     z-index: 4;
+    box-shadow: 0 0 10px gray ;
 }
 
 #hope-text {
     position: absolute;
-    right: 5%;
-    font-size: 50px;
-    letter-spacing: 5px;
+    top: 50%;
+    left: 53%;
+    transform: translate(-50%, -50%);
+    color:#4b515f;
+    font-size: x-large;
+    width: max-content;
+    letter-spacing: 6.6px;
 }
 
 #outer-down {
@@ -359,6 +386,7 @@ input[type=checkbox] {
     text-align: center;
     line-height: 4vh;
     font-size: 2vh;
+    cursor: pointer;
 }
 
 .remove {
@@ -389,6 +417,28 @@ input[type=checkbox] {
     z-index: 100;
 }
 
+.bannerbutton {
+    border-radius: 20px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    background-color: #d0d9dc;
+    font-family: GenJyuuGothic-Medium;
+    color: #F7F6E3;
+    padding: 1.2vh 2.5vh;
+    color: #4B515F;
+    outline: none;
+    border: 0;
+}
+
+.bannerbutton:focus {
+    outline: none;
+}
+
+.bannerbutton.active {
+    background-color: #789fb3;
+    color: #F7F6E3;
+}
 nav {
     position: absolute;
     margin-left: 4%;
@@ -442,7 +492,6 @@ li {
 }
 .round{
     position:relative;
-    top:15px;
     width:50px;height:50px;
     border-radius:999em;
     background-color:#799FB4;
@@ -450,34 +499,24 @@ li {
     border-style:solid;
     border-width:2px;
     cursor: pointer;
+  }
+  .nav-link {
+    padding: 0;
 }
 .menubar{
     height:30px;
-    width:80px;
-    border-width: 1px;
-    border-color:white;
-    border-style:solid;
-    background:#b8bec4;
-    font-size:1em;
-    font-family:GenJyuuGothic-Medium;
-    color:white;
-    z-index:10;
-    text-align:center;
-    visibility:hidden;
-    cursor: pointer;
+  width:100px;
+  background:#b8bec4;
+  font-size:1em;
+  font-family:GenJyuuGothic-Medium;
+  color:white !important;
+  z-index:10;
+  text-align:center;
+  cursor: pointer;
 }
-#bar1{
-    position: absolute;
-    top:75px;
-    right:90px;
-  
-  
+.dropdown-toggle::after {
+    display: none;
 }
-#bar2{
-    position: absolute;
-    top:105px;
-    right:90px;
-}
-.monster_icon{
+  .monster_icon{
     margin-right: 5px;
 }

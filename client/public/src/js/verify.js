@@ -170,7 +170,9 @@ $(document).ready(function() {
     $('#verify-btn').click(function(e){
         location.href = './verify.html';
     })
-    
+    $('#point-btn').click(function(e){
+        location.href = './point.html';
+    })
     $(document).on('click',"#bar2",function(){
         localStorage.clear();
     })

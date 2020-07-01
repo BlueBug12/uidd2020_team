@@ -7,10 +7,12 @@
     <title>Document</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
     <link href="./src/css/point.css" rel="stylesheet">
-    <link href="./src/css/prototype.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="./src/css/lib/font-awesome-4.7.0/css/font-awesome.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js " integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k " crossorigin="anonymous "></script>
 </head>
 
-<body>
+<body onload="getUser()">
     <div id="banner">
         <div class="nav-bg">
             <nav class="navbar " id="navbar">
@@ -30,18 +32,26 @@
                         <button class="bannerbutton" href="#"><img src="./img/monster_icon.png" height="20" width="auto" class="monster_icon">家事怪</button>
                     </li>
                     <li class="list-inline-item">
-                        <div class="round" id="UserImg" alt=""  style=" border-radius: 50%;width: 50px;height: 50px;"></div>
+                        <div class="dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                                <img id = "UserImg" class="round" alt="" >
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink" style="min-width: auto; padding: 0;">
+                                <a class="dropdown-item menubar" href="user.html" style="padding: 0;"><i class="fa fa-cog" aria-hidden="true"></i> 個人資料</a>
+                                <a class="dropdown-item menubar" style="padding: 0;" id = "bar2"><i class="fa fa-sign-out" aria-hidden="true"></i> 登出</a>
+                            </div>
+                        </div>
                     </li>
                 </ul>
             </nav>
         </div>
-        <div class="menubar" id="bar1" onclick="javascript:location.href='./user.html'">個人資料</div>
-        <div class="menubar" id="bar2" onclick="javascript:location.href='./login.html'">登出</div>
     </div>
     <div id="block">
         <div id="list">
-            <img src="./img/list-request.png" id="request-btn" alt="">
-            <img src="./img/list-process.png" id="process-btn" alt=" ">
+            <img src="./img/process/list-request.png" id="request-btn" alt="">
+            <img src="./img/process/list-process.png" id="process-btn" alt=" ">
+            <img src="./img/process/list-verify.png" id="verify-btn" alt=" ">
+            <img src="./img/list-point.png" id="point-btn" alt=" ">
         </div>
         <div id="content">
             <div id="outer-board">

@@ -109,3 +109,23 @@ document.getElementById("buy").addEventListener('click', () => {
         document.getElementById("current-point").innerText = nowOwnedPoint - nowTotalPoint + "P";
     }
 });
+$('#process-btn').click(function(e){
+    location.href = './process.html';
+})
+$('#request-btn').click(function(e){
+    location.href = './invite.html';
+})
+$('#verify-btn').click(function(e){
+    location.href = './verify.html';
+})
+$('#point-btn').click(function(e){
+    location.href = './point.html';
+})
+function getUser() {
+    var account = localStorage.getItem("account");
+    $.get('./users/find/' + account, {}, (res) => {
+        //document.getElementById("UserImg").src = res.icon;
+        document.getElementById("UserImg").style.backgroundImage= `url(${res.icon})`;
+        localStorage.setItem("classcode", res.classcode);
+    });
+}

@@ -143,6 +143,14 @@
             position: relative;
             z-index:5;
         }
+        #point-btn {
+            cursor: pointer;
+            margin-top: 5%;
+            width: 87%;
+            height: 9%;
+            position: relative;
+            z-index:5;
+        }
         .mission {
             background-color: #F7F5E4;
             height: 19%;
@@ -413,6 +421,7 @@ li {
             <img src="./img/process/list-request.png" id="request-btn" alt="">
             <img src="./img/process/list-process.png" id="process-btn" alt=" ">
             <img src="./img/process/list-verify.png" id="verify-btn" alt=" ">
+            <img src="./img/list-point.png" id="point-btn" alt=" ">
         </div>
 
         <div id="content">
@@ -474,6 +483,9 @@ $('#process-btn').click(function(e){
     })
     $('#verify-btn').click(function(e){
         location.href = './verify.html';
+    })
+    $('#point-btn').click(function(e){
+        location.href = './point.html';
     })
 window.onload = function() {
     $.post('./tasks/progress', {

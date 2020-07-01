@@ -342,6 +342,14 @@ li {
     position: relative;
     z-index:5;
 }
+#point-btn {
+    cursor: pointer;
+    margin-top: 5%;
+    width: 87%;
+    height: 9%;
+    position: relative;
+    z-index:5;
+}
 .mask {
     background-color: darkgray;
     opacity: 0.9;
