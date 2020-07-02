@@ -113,16 +113,16 @@ document.getElementById("buy").addEventListener('click', async () => {
     if (nowTotalPoint > nowOwnedPoint) {
         return;
     } else {
-        let hopes = await fetch('/readHope', {
-			body: JSON.stringify({ classcode: localStorage.getItem("classcode") }),
-			headers: {
-				"Content-Type": "application/json"
-			},
-			method: 'POST'
-        }).then((res) => {
-            return res.json();
-        })
-        console.log(hopes)
+        // let hopes = await fetch('/readHope', {
+			// body: JSON.stringify({ classcode: localStorage.getItem("classcode") }),
+			// headers: {
+				// "Content-Type": "application/json"
+			// },
+			// method: 'POST'
+        // }).then((res) => {
+            // return res.json();
+        // })
+        // console.log(hopes)
         for (let iter = 0; iter < nowItems.length; ++iter) {
             document.getElementById("down").innerHTML += `
                 <div class="hope-item">
@@ -147,13 +147,13 @@ document.getElementById("buy").addEventListener('click', async () => {
             point:nowTotalPoint
         }, (res) => {
         });
-		fetch('/saveHope', {
-			body: JSON.stringify({ classcode: localStorage.getItem("classcode"), data: hopes }),
-			headers: {
-				"Content-Type": "application/json"
-			},
-			method: 'POST'
-		});
+		// fetch('/saveHope', {
+			// body: JSON.stringify({ classcode: localStorage.getItem("classcode"), data: hopes }),
+			// headers: {
+				// "Content-Type": "application/json"
+			// },
+			// method: 'POST'
+		// });
     }
 });
 $('#process-btn').click(function(e){
